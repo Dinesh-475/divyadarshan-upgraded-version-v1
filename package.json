@@ -1,0 +1,43 @@
+{
+  "name": "divyadarshan",
+  "version": "1.0.0",
+  "description": "DivyaDarshan - Divine Temple Booking and AI Travel Planner",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently -n api,ui -c blue,magenta \"node server.js\" \"vite\"",
+    "dev:api": "node server.js",
+    "dev:ui": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.103.0",
+    "bcryptjs": "^3.0.3",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "framer-motion": "^12.23.12",
+    "ioredis": "^5.8.1",
+    "jsdom": "^29.0.1",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.542.0",
+    "nodemailer": "^8.0.8",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4"
+  }
+}

@@ -1,0 +1,3629 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Divya Darshan Admin Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="../shared/i18n.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#9e3f4e",
+                    "secondary-fixed-dim": "#d6d3d8",
+                    "outline-variant": "#acb3b8",
+                    "inverse-primary": "#929bfa",
+                    "on-secondary-container": "#525155",
+                    "surface-dim": "#d3dbe2",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-bright": "#f9f9fb",
+                    "on-secondary-fixed": "#3f3f43",
+                    "surface-container-high": "#e4e9ee",
+                    "secondary-fixed": "#e4e1e6",
+                    "on-tertiary-fixed": "#333d55",
+                    "primary": "#4c56af",
+                    "surface-variant": "#dde3e9",
+                    "on-primary-fixed": "#2c358e",
+                    "secondary-container": "#e4e1e6",
+                    "background": "#f9f9fb",
+                    "on-surface-variant": "#596065",
+                    "on-primary-fixed-variant": "#4953ac",
+                    "primary-container": "#e0e0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#fff7f7",
+                    "error-dim": "#4f0116",
+                    "tertiary": "#545f78",
+                    "secondary": "#605e62",
+                    "primary-dim": "#4049a2",
+                    "tertiary-dim": "#49536b",
+                    "on-secondary": "#fbf8fc",
+                    "surface": "#f9f9fb",
+                    "on-tertiary-fixed-variant": "#4f5a72",
+                    "error-container": "#ff8b9a",
+                    "surface-container-highest": "#dde3e9",
+                    "inverse-on-surface": "#9c9d9f",
+                    "primary-fixed": "#e0e0ff",
+                    "on-primary-container": "#3f48a1",
+                    "primary-fixed-dim": "#ced1ff",
+                    "on-tertiary": "#f9f8ff",
+                    "tertiary-container": "#d5dffd",
+                    "tertiary-fixed": "#d5dffd",
+                    "on-secondary-fixed-variant": "#5c5b5f",
+                    "on-error-container": "#782232",
+                    "outline": "#757c81",
+                    "on-background": "#2d3338",
+                    "surface-tint": "#4c56af",
+                    "on-tertiary-container": "#455068",
+                    "secondary-dim": "#535256",
+                    "on-surface": "#2d3338",
+                    "inverse-surface": "#0c0e10",
+                    "surface-container": "#ebeef2",
+                    "on-primary": "#f9f6ff",
+                    "tertiary-fixed-dim": "#c7d1ee"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.75rem",
+                    "lg": "1rem",
+                    "xl": "1.25rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9fb; color: #2d3338; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        /* Sections hidden by default — JS controls visibility via showAdminSection() */
+        .admin-section { display: none; }
+
+        /* ── Skeleton shimmer system ───────────────────────────────── */
+        @keyframes dd-shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position: 600px 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg,
+                #e2e8f0 25%,
+                #f1f5f9 50%,
+                #e2e8f0 75%);
+            background-size: 600px 100%;
+            animation: dd-shimmer 1.4s ease-in-out infinite;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton-text  { height: 0.875rem; border-radius: 4px; }
+        .skeleton-title { height: 1.5rem;   border-radius: 6px; }
+        .skeleton-card  { border-radius: 16px; min-height: 120px; }
+        .skeleton-circle { border-radius: 50%; }
+        .skeleton-badge { height: 1.25rem; width: 5rem; border-radius: 999px; }
+        .skeleton-btn   { height: 2rem; border-radius: 8px; }
+        .skeleton-row   { height: 3.5rem; border-radius: 8px; }
+
+        /* ── Smooth section transitions ────────────────────────────── */
+        .admin-section {
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            will-change: opacity, transform;
+        }
+        .admin-section.entering {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        /* ── Temple card delete button ─────────────────────────────── */
+        .temple-card { transition: box-shadow 0.2s ease, transform 0.2s ease; }
+        .temple-card:hover { box-shadow: 0 8px 32px rgba(26,35,126,0.10); }
+        .temple-card.deleting {
+            opacity: 0.5;
+            pointer-events: none;
+            transform: scale(0.97);
+            transition: all 0.25s ease;
+        }
+
+        /* ── Sidebar active state transition ──────────────────────── */
+        .sidebar-link { transition: background 0.15s ease, color 0.15s ease; }
+
+        /* ── Responsive table scrollbar ────────────────────────────── */
+        .dd-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .dd-table-wrap::-webkit-scrollbar { height: 4px; }
+        .dd-table-wrap::-webkit-scrollbar-track { background: #f1f5f9; }
+        .dd-table-wrap::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col h-screen w-64 bg-slate-50 dark:bg-slate-950 sticky top-0 border-r-0 p-4 gap-2">
+<div class="flex items-center gap-3 px-4 py-6">
+<div class="flex items-center justify-center -ml-2">
+<img alt="Divya Darshan Logo" class="h-16 w-auto object-contain scale-110" src="../assets/news/logo.png"/>
+</div>
+<div>
+<h2 class="text-lg font-bold text-indigo-900 dark:text-indigo-50 leading-tight">DD Admin</h2>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Sanctuary Management</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 mt-4">
+<!-- Active State: Dashboard -->
+<a class="sidebar-link flex items-center gap-3 text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 rounded-lg px-4 py-3 font-semibold transition-all duration-300 ease-in-out cursor-pointer" onclick="showAdminSection('dashboard', this)">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-sm font-medium" data-i18n="admin-sidebar-dashboard">Dashboard</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="showAdminSection('crowd-parking', this)">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="text-sm font-medium" data-i18n="admin-sidebar-parking">Crowd & Parking</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="showAdminSection('bookings', this)">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-sm font-medium" data-i18n="admin-sidebar-bookings">Bookings</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="showAdminSection('ticket-control', this)">
+<span class="material-symbols-outlined" data-icon="pause_circle">pause_circle</span>
+<span class="text-sm font-medium" data-i18n="admin-sidebar-settings">Ticket Control</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="showAdminSection('temple-requests', this)">
+<span class="material-symbols-outlined" data-icon="temple_hindu">temple_hindu</span>
+<span class="text-sm font-medium" data-i18n="admin-sidebar-temples">Temple Requests</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="openEmergencyPanel()">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+<span class="text-sm font-medium" data-i18n="admin-sidebar-sos">Emergency</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="showAdminSection('feedback', this)">
+<span class="material-symbols-outlined" data-icon="rate_review">rate_review</span>
+<span class="text-sm font-medium">User Feedback</span>
+</a>
+<a class="sidebar-link flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-all duration-300 ease-in-out cursor-pointer" onclick="openReportsPanel()">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+</nav>
+<div class="mt-auto p-4 bg-slate-100/50 dark:bg-slate-900/50 rounded-xl">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img alt="Admin Profile Avatar" data-alt="close-up portrait of professional male administrator in modern office setting with warm natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB9laeafWLCZcCEHUDZrdyohFZYNMa5-JDUIRNqGpFFyXsjDR0C1EC-KlofVz3LKwg_ybPFniLGMu_3hQDquR9vGYTxIriQzN9M9GMkkf4RRMLJWf73GOGGA2ZpXvse0mWubQGw3LT3RJJlV4Gzeu2qc1ik3SP_tiuchuiSHhqnTkc7gMJtkPHG5nuC8OpIagJkQ43D44bqQf8J2Sj2fLqYIA4VppjuPrfQ6lCDIb6Wg-xc9oIv8N9U6_UlII_1RX0cQBDpz0plQI"/>
+</div>
+<div class="flex-1 min-w-0">
+<p id="sidebar-admin-name" class="text-xs font-bold truncate">Rajesh Kumar</p>
+<p id="sidebar-admin-role" class="text-[10px] text-slate-500">Super Admin</p>
+</div>
+<div class="relative">
+    <button onclick="toggleAdminSettings()" class="material-symbols-outlined text-slate-400 text-sm hover:text-primary transition-colors cursor-pointer block">settings</button>
+    <div id="admin-settings-dropdown" class="hidden absolute bottom-full mb-2 right-0 w-40 bg-white border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.1)] rounded-xl overflow-hidden z-[60]">
+        <button onclick="openPersonalDetails()" class="w-full text-left px-4 py-3 text-xs font-bold text-slate-600 hover:bg-slate-50 border-b border-slate-100 flex items-center gap-2"><span class="material-symbols-outlined text-sm">person</span> Personal Details</button>
+        <button onclick="logoutAdmin()" class="w-full text-left px-4 py-3 text-xs font-bold text-red-600 hover:bg-red-50 flex items-center gap-2"><span class="material-symbols-outlined text-sm">logout</span> Logout</button>
+    </div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+<!-- TopAppBar Component -->
+<header class="sticky top-0 z-40 bg-surface/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm shadow-indigo-900/5 flex justify-between items-center w-full px-8 py-4">
+<div class="flex items-center gap-4">
+<h1 id="admin-header-title" class="text-xl font-black tracking-tight text-indigo-900 dark:text-indigo-100" data-i18n="admin-header-title">Divya Darshan</h1>
+<div class="hidden md:flex items-center bg-surface-container-low px-4 py-2 rounded-full gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 text-slate-600 w-64" placeholder="Search data, bookings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+    <!-- Language Selector Dropdown -->
+    <div class="dd-lang-selector-placeholder flex items-center"></div>
+    
+    <div class="flex items-center gap-4 text-sm font-semibold text-slate-500 relative">
+        <div class="relative flex items-center">
+            <span class="material-symbols-outlined cursor-pointer hover:text-indigo-600 relative" onclick="toggleAdminNotifications()" data-icon="notifications">
+                notifications
+                <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white hidden" id="admin-notif-indicator"></span>
+            </span>
+        
+        <!-- Notifications Dropdown -->
+        <div id="admin-notifications-dropdown" class="hidden absolute top-8 right-0 w-80 bg-white border border-slate-100 shadow-[0_10px_40px_rgba(0,0,0,0.12)] rounded-xl overflow-hidden z-[70] flex flex-col cursor-default">
+            <div class="bg-surface-container-lowest border-b border-slate-100 px-4 py-3 flex justify-between items-center">
+                <h4 class="text-sm font-bold text-indigo-900">Activity Log</h4>
+                <button onclick="clearAdminNotifications()" class="text-[10px] uppercase font-bold tracking-wider text-slate-400 hover:text-red-500">Clear</button>
+            </div>
+            <div id="admin-notifications-list" class="max-h-72 overflow-y-auto flex flex-col bg-slate-50 relative">
+                <!-- Rendered internally -->
+                <div class="p-6 text-center text-slate-400 text-xs py-10 font-medium">No recent activity</div>
+            </div>
+        </div>
+    </div>
+    <span class="material-symbols-outlined cursor-pointer hover:text-red-500" onclick="logoutAdmin()" data-icon="logout">logout</span>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+<!-- 1. Dashboard Overview -->
+<section id="admin-section-dashboard" class="admin-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 group hover:bg-primary-container transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-indigo-50 rounded-lg text-primary group-hover:bg-white/50">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+</div>
+<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">+12%</span>
+</div>
+<p class="text-sm font-medium text-slate-500 mb-1">Total Bookings</p>
+<h3 id="total-bookings-count" class="text-2xl font-black text-indigo-900">1,248</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 group hover:bg-orange-50 transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-orange-50 rounded-lg text-orange-600 group-hover:bg-white/50">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+<span class="text-[10px] font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">Alert</span>
+</div>
+<p class="text-sm font-medium text-slate-500 mb-1">Current Crowd Level</p>
+<h3 class="text-2xl font-black text-orange-600 uppercase">Medium</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 group hover:bg-slate-50 transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-slate-100 rounded-lg text-slate-600 group-hover:bg-white/50">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</div>
+</div>
+<p class="text-sm font-medium text-slate-500 mb-1">Active Time Slots</p>
+<h3 class="text-2xl font-black text-indigo-900">8/12</h3>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 group hover:bg-emerald-50 transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-emerald-50 rounded-lg text-emerald-600 group-hover:bg-white/50">
+<span class="material-symbols-outlined" data-icon="local_parking">local_parking</span>
+</div>
+</div>
+<p class="text-sm font-medium text-slate-500 mb-1">Parking Availability</p>
+<h3 id="parking-availability-kpi" class="text-2xl font-black text-indigo-900">45 Slots</h3>
+</div>
+<div class="md:col-span-2 lg:col-span-4 bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+<div class="space-y-2">
+<div class="flex items-center gap-3 flex-wrap">
+<span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+<span class="material-symbols-outlined text-base text-primary">confirmation_number</span>
+Global Ticket Booking
+</span>
+<span id="dashboard-booking-control-badge" class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700">
+<span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+Active
+</span>
+</div>
+<p id="dashboard-booking-control-copy" class="text-sm text-slate-500 max-w-3xl">Bookings are currently active across the main site and all temple microsites.</p>
+</div>
+<div class="flex items-center gap-3">
+<button onclick="showAdminSection('ticket-control', document.querySelector('[onclick*=&quot;ticket-control&quot;]'))" class="px-5 py-3 rounded-lg bg-primary text-white text-sm font-bold shadow-sm shadow-indigo-900/10 hover:bg-indigo-700 transition-colors">
+Manage Ticket Control
+</button>
+</div>
+</div>
+</section>
+<!-- 2. Live Crowd Control & 4. Emergency/Parking (Integrated Layout) -->
+<div id="admin-section-crowd-parking" class="admin-section grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Update Status Card -->
+<section class="lg:col-span-1">
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 h-full">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-orange-600" data-icon="sensors">sensors</span>
+<h2 class="text-lg font-bold">Update Live Status</h2>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Assigned Temple</label>
+<div class="relative">
+<select id="admin-admin-temple" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm font-bold text-indigo-900 appearance-none outline-none cursor-not-allowed pointer-events-none">
+<option value="tirupati">Tirupati Venkateswara Swamy</option>
+<option value="manjunatha">Dharmasthala Manjunatha</option>
+<option value="krishna">Udupi Krishna</option>
+<option value="kukke">Kukke Subramanya</option>
+</select>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Crowd Intensity</label>
+<div class="grid grid-cols-3 gap-2 p-1 bg-surface-container-low rounded-xl" id="admin-intensity-group">
+<button type="button" onclick="setAdminIntensity('Low', this)" class="intensity-btn py-2 text-xs font-bold rounded-lg text-slate-500 hover:bg-white transition-all">Low</button>
+<button type="button" onclick="setAdminIntensity('Medium', this)" class="intensity-btn py-2 text-xs font-bold rounded-lg bg-white text-orange-600 shadow-sm active-intensity">Medium</button>
+<button type="button" onclick="setAdminIntensity('High', this)" class="intensity-btn py-2 text-xs font-bold rounded-lg text-slate-500 hover:bg-white transition-all">High</button>
+</div>
+</div>
+<button onclick="submitAdminLiveStatus()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 rounded-lg transition-all scale-active-98 shadow-lg shadow-orange-600/20">
+                                Update Status
+                            </button>
+<p id="admin-last-updated" class="text-center text-[10px] font-medium text-slate-400 italic">Last updated: Just now</p>
+</div>
+</div>
+</section>
+<!-- 4. Parking & Emergency -->
+<div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Parking Management -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 flex flex-col">
+<div class="flex items-center justify-between mb-1">
+<h2 class="text-lg font-bold">Parking Management</h2>
+<span class="material-symbols-outlined text-slate-400">local_parking</span>
+</div>
+<p class="text-[11px] text-slate-400 mb-4">Set live slot counts per zone — changes publish instantly to the pilgrim dashboard.</p>
+<div class="mb-4 pb-4 border-b border-slate-100">
+    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Assigned Venue</label>
+    <select id="admin-parking-temple" onchange="updateAdminParking()" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm font-bold text-indigo-900 appearance-none outline-none cursor-not-allowed pointer-events-none">
+        <option value="tirupati">Tirupati Balaji</option>
+        <option value="manjunatha">Dharmasthala Manjunatha</option>
+        <option value="krishna">Udupi Krishna</option>
+        <option value="kukke">Kukke Subramanya</option>
+    </select>
+</div>
+<div id="admin-parking-list" class="space-y-4 flex-1 overflow-y-auto pr-1 max-h-72">
+    <!-- injected dynamically -->
+</div>
+<button onclick="saveAdminParkingSlots()" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined text-[18px]">publish</span>
+    Save &amp; Publish to Users
+</button>
+<p id="parking-save-status" class="text-center text-[11px] font-medium text-emerald-600 mt-2 hidden">✅ Published! User dashboard will update in a few seconds.</p>
+</div>
+
+<!-- Interactive Visual Parking Designer -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 flex flex-col h-full border border-slate-100">
+    <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-bold">Visual Parking Designer</h2>
+        <span class="material-symbols-outlined text-slate-400">layers</span>
+    </div>
+    <p class="text-[11px] text-slate-400 mb-4">Design the layout shape and capacity in real-time. Drag slots to place in Freeform mode.</p>
+    
+    <!-- Controls Toolbar -->
+    <div class="grid grid-cols-2 gap-3 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100/50">
+        <div>
+            <label class="text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1 block">Layout Shape</label>
+            <select id="designer-shape" onchange="adjustDesignerLayout()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold text-indigo-900 outline-none cursor-pointer">
+                <option value="grid">Rectangular Grid</option>
+                <option value="circle">Concentric Circle</option>
+                <option value="diagonal">Angled Diagonal</option>
+                <option value="freeform">Freeform Canvas</option>
+            </select>
+        </div>
+        <div>
+            <label class="text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1 block">Active Zone</label>
+            <select id="designer-zone-select" onchange="switchDesignerZone()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs font-bold text-indigo-900 outline-none cursor-pointer">
+                <!-- injected from JS -->
+            </select>
+        </div>
+        <div class="col-span-2 grid grid-cols-3 gap-2 mt-1">
+            <div>
+                <label class="text-[8px] font-black uppercase text-slate-400 block mb-0.5">Columns</label>
+                <input type="number" id="designer-cols" min="2" max="15" value="6" oninput="adjustDesignerLayout()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 outline-none" />
+            </div>
+            <div>
+                <label class="text-[8px] font-black uppercase text-slate-400 block mb-0.5">Rows</label>
+                <input type="number" id="designer-rows" min="1" max="10" value="4" oninput="adjustDesignerLayout()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 outline-none" />
+            </div>
+            <div>
+                <label class="text-[8px] font-black uppercase text-slate-400 block mb-0.5">Rot Angle</label>
+                <input type="number" id="designer-angle" min="-180" max="180" value="0" step="15" oninput="adjustDesignerLayout()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-700 outline-none" />
+            </div>
+        </div>
+    </div>
+    
+    <!-- Canvas Area -->
+    <div class="relative w-full h-[320px] bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden select-none shadow-inner" id="designer-canvas-container">
+        <!-- Dotted CAD Grid Background -->
+        <div class="absolute inset-0 bg-[radial-gradient(#334155_1.2px,transparent_1.2px)] [background-size:20px_20px] opacity-35"></div>
+        
+        <!-- Live Slots viewport wrapper -->
+        <div id="admin-creative-parking" class="absolute inset-0 p-4 transition-all overflow-hidden">
+            <!-- slots injected absolutely -->
+        </div>
+    </div>
+    
+    <!-- Visual Legend & Info -->
+    <div class="mt-4 flex flex-wrap gap-2 justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+        <span class="text-[9px] font-black uppercase text-slate-400">Click spot to customize properties</span>
+        <button type="button" onclick="addNewDesignerSlot()" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 text-[10px] font-black rounded-lg border border-emerald-200/50 transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[12px]">add</span>Add Spot
+        </button>
+    </div>
+</div>
+
+<!-- Dynamic Slot Property Editor Popover Modal -->
+<div id="slot-editor-modal" class="hidden fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-[1000] flex items-center justify-center transition-all opacity-0">
+    <div class="bg-white rounded-2xl p-6 max-w-xs w-full shadow-2xl transform scale-95 transition-all duration-300 relative border border-slate-100">
+        <h3 class="text-sm font-black text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+            <span class="material-symbols-outlined text-indigo-600">settings</span>
+            Customize Spot <span id="editor-slot-id" class="text-indigo-600">-</span>
+        </h3>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="text-[10px] font-black uppercase text-slate-400 block mb-1">Slot Name/Label</label>
+                <input type="text" id="editor-slot-label" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:ring-2 focus:ring-indigo-400" />
+            </div>
+            <div>
+                <label class="text-[10px] font-black uppercase text-slate-400 block mb-1">Vehicle Type</label>
+                <select id="editor-slot-type" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 outline-none cursor-pointer">
+                    <option value="car">4W Sedan (Car)</option>
+                    <option value="bike">2W Motorbike (Bike)</option>
+                    <option value="ev">Electric Vehicle (EV)</option>
+                    <option value="disabled">Accessible (Disabled)</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-black uppercase text-slate-400 block mb-1">Status</label>
+                <select id="editor-slot-status" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold text-slate-700 outline-none cursor-pointer">
+                    <option value="available">Available (Vacant)</option>
+                    <option value="occupied">Occupied (Filled)</option>
+                    <option value="reserved">VIP Reserved</option>
+                    <option value="walkway">Walkway (Empty Space)</option>
+                    <option value="pillar">Pillar (Structural)</option>
+                </select>
+            </div>
+            <div class="flex gap-2.5 pt-2">
+                <button type="button" onclick="deleteDesignerSlot()" class="flex-1 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold transition-all">Delete Spot</button>
+                <button type="button" onclick="saveDesignerSlotProperties()" class="flex-1 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-md shadow-indigo-600/10">Apply</button>
+            </div>
+        </div>
+        
+        <button type="button" onclick="closeSlotEditor()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
+            <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+<!-- Recent Bookings Summary on Dashboard -->
+<div class="lg:col-span-3 bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 mt-8">
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-bold">Latest Bookings Summary</h2>
+        <button onclick='showAdminSection("bookings", document.querySelector("[onclick*=\"bookings\"]"))' class="text-xs font-bold text-primary hover:underline">View All Records</button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-slate-500 font-black">
+                <tr>
+                    <th class="px-6 py-3">ID</th>
+                    <th class="px-6 py-3">Time Slot</th>
+                    <th class="px-6 py-3 text-center">People</th>
+                    <th class="px-6 py-3 text-right">Status</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard-bookings-summary" class="divide-y divide-surface-container-low">
+                <!-- Injected via syncAdminKPIs -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="lg:col-span-3 bg-surface-container-lowest p-6 rounded-lg shadow-sm shadow-indigo-900/5 mt-8">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="text-lg font-bold">Pending Temple Approvals</h2>
+            <p class="text-sm text-slate-500 mt-1">Approve a temple here to make its micro-site and temple admin access go live.</p>
+        </div>
+        <button onclick="loadAdminTempleRegistrations(true)" class="text-xs font-bold text-primary hover:underline">Refresh Queue</button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-slate-500 font-black">
+                <tr>
+                    <th class="px-6 py-3">Temple</th>
+                    <th class="px-6 py-3">Religion</th>
+                    <th class="px-6 py-3">City</th>
+                    <th class="px-6 py-3">Submitted</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="dashboard-temple-approvals" class="divide-y divide-surface-container-low">
+                <tr>
+                    <td colspan="6" class="px-6 py-8 text-center text-slate-400 text-xs">Loading temple approval queue...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. Manage Bookings (Table Section) -->
+<section id="admin-section-bookings" class="admin-section bg-surface-container-lowest rounded-lg shadow-sm shadow-indigo-900/5 overflow-hidden">
+<div class="px-8 py-6 flex flex-wrap gap-4 items-center justify-between border-b border-surface-container-low">
+<h2 class="text-lg font-bold">Recent Bookings</h2>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-lg gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none text-xs focus:ring-0" placeholder="Search ID..." type="text" onkeydown="if(event.key==='Enter') alert('Search results cleared for: ' + this.value)" />
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg" onclick="alert('Filtering booked records...')">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="border-2 border-indigo-100 text-indigo-900 px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-50 transition-colors" onclick="alert('Add Offline Booking modal triggered')">
+                            Add Offline Booking
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-slate-500 font-black">
+<tr>
+<th class="px-8 py-4">Booking ID</th>
+<th class="px-8 py-4">Temple Name</th>
+<th class="px-8 py-4">Time Slot</th>
+<th class="px-8 py-4 text-center">People</th>
+<th class="px-8 py-4">Source</th>
+<th class="px-8 py-4 text-right">Status & Actions</th>
+</tr>
+</thead>
+<tbody id="admin-bookings-list" class="divide-y divide-surface-container-low">
+    <!-- Rendered via JS -->
+</tbody>
+</table>
+</div>
+</section>
+<section id="admin-section-temple-requests" class="admin-section space-y-8">
+<div class="bg-surface-container-lowest rounded-lg shadow-sm shadow-indigo-900/5 overflow-hidden">
+    <div class="px-8 py-6 border-b border-surface-container-low flex flex-wrap items-start justify-between gap-4">
+        <div>
+            <h2 class="text-lg font-bold text-indigo-900">Temple Approval Requests</h2>
+            <p class="text-sm text-slate-500 mt-1">Approve a registered temple here before its microsite and temple-admin portal go live.</p>
+        </div>
+        <button onclick="loadAdminTempleRegistrations(true)" class="px-4 py-2 rounded-lg bg-primary text-white text-xs font-bold hover:bg-indigo-700 transition-colors">Refresh Queue</button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-slate-500 font-black">
+                <tr>
+                    <th class="px-6 py-3">Temple</th>
+                    <th class="px-6 py-3">Religion</th>
+                    <th class="px-6 py-3">City</th>
+                    <th class="px-6 py-3">Submitted</th>
+                    <th class="px-6 py-3">Status</th>
+                    <th class="px-6 py-3 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="temple-requests-pending-list" class="divide-y divide-surface-container-low">
+                <tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 text-xs">Loading temple approval queue...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="bg-surface-container-lowest rounded-lg shadow-sm shadow-indigo-900/5 p-8">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+            <h2 class="text-lg font-bold text-indigo-900">Approved Temple Admin Portals</h2>
+            <p class="text-sm text-slate-500 mt-1">Once approved, use these links to open the temple microsite or go directly to the temple-admin login portal.</p>
+        </div>
+    </div>
+    <div id="approved-temple-portals" class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div class="col-span-full bg-surface-container-low rounded-2xl p-6 text-sm text-slate-400 text-center">Approved temple admin portals will appear here after approval.</div>
+    </div>
+</div>
+</section>
+<section id="admin-section-ticket-control" data-display="block" class="admin-section bg-surface-container-lowest rounded-lg shadow-sm shadow-indigo-900/5 overflow-hidden">
+<div class="px-8 py-6 border-b border-surface-container-low flex flex-wrap items-start justify-between gap-4">
+<div>
+<h2 class="text-lg font-bold text-indigo-900">Ticket Management</h2>
+<p class="text-sm text-slate-500 mt-1">Control live ticket inventory, booking availability, and platform-wide booking state from one place.</p>
+</div>
+<div id="ticket-control-status-pill" class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700">
+<span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+Bookings Active
+</div>
+</div>
+<div class="p-8 space-y-8 bg-surface-container-lowest">
+<div class="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-8">
+<div class="space-y-6">
+<div class="bg-surface-container-low rounded-2xl p-6 space-y-5">
+<div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+<div>
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Current Platform Status</p>
+<h3 id="ticket-control-hero-title" class="text-2xl font-black text-indigo-900 mt-2">Ticket Booking is Active</h3>
+<p id="ticket-control-hero-copy" class="text-sm text-slate-500 mt-2 max-w-2xl">Pilgrims can continue booking on the main platform and all temple microsites.</p>
+</div>
+<button id="ticket-control-toggle-btn" onclick="handleTicketControlToggle()" class="px-5 py-3 rounded-lg bg-red-600 text-white text-sm font-bold shadow-sm shadow-red-900/10 hover:bg-red-700 transition-colors">
+Pause Ticket Booking
+</button>
+</div>
+<div id="ticket-control-login-hint" class="hidden rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+This control needs a fresh admin login before changes can be saved locally.
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-white rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Pause Reason</p>
+<textarea id="ticket-control-reason" rows="4" class="mt-3 w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none resize-none" placeholder="Optional note shown to pilgrims when booking is paused."></textarea>
+</div>
+<div class="bg-white rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Scheduled Resume</p>
+<input id="ticket-control-resume-at" type="datetime-local" class="mt-3 w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none"/>
+<p class="text-xs text-slate-400 mt-3">Leave empty for a manual resume. If set, the server will auto-resume when the time is reached.</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Current State</p>
+<p id="ticket-control-stat-state" class="text-2xl font-black text-indigo-900 mt-3">Active</p>
+<p class="text-xs text-slate-400 mt-2">Live sync from the booking-control API.</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Last Updated</p>
+<p id="ticket-control-stat-updated" class="text-lg font-black text-indigo-900 mt-3">Just now</p>
+<p class="text-xs text-slate-400 mt-2">Shows when pause or resume was last applied.</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Scheduled Resume</p>
+<p id="ticket-control-stat-resume" class="text-lg font-black text-indigo-900 mt-3">Manual</p>
+<p class="text-xs text-slate-400 mt-2">Blank means admins will resume it themselves.</p>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-surface-container-low rounded-2xl shadow-sm shadow-indigo-900/5 overflow-hidden">
+<div class="px-5 py-4 border-b border-surface-container-low flex items-center justify-between gap-3">
+<div>
+<h3 class="font-bold text-indigo-900">Audit Log</h3>
+<p class="text-xs text-slate-400 mt-1">Recent pause and resume actions across the platform.</p>
+</div>
+<button onclick="loadAdminBookingControl(true)" class="px-4 py-2 rounded-lg bg-white text-xs font-bold text-primary hover:bg-primary/5 transition-colors">Refresh</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-white text-[10px] uppercase tracking-wider text-slate-500 font-black">
+<tr>
+<th class="px-5 py-3">Timestamp</th>
+<th class="px-5 py-3">Admin</th>
+<th class="px-5 py-3">Action</th>
+<th class="px-5 py-3">Reason</th>
+</tr>
+</thead>
+<tbody id="ticket-control-audit-list" class="divide-y divide-surface-container-low">
+<tr>
+<td colspan="4" class="px-5 py-8 text-center text-sm text-slate-400">Loading ticket control history...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">What Stays Live</p>
+<ul class="mt-4 space-y-3 text-sm text-slate-600">
+<li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span><span>Existing bookings, ticket downloads, check-ins, and slot visibility continue to work.</span></li>
+<li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span><span>Main-site browsing, temple microsites, maps, search, and admin tools remain available.</span></li>
+<li class="flex items-start gap-3"><span class="material-symbols-outlined text-primary text-[18px] mt-0.5">check_circle</span><span>Only new booking creation is paused when this control is turned off.</span></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Total Tickets</p>
+<p id="admin-ticket-stat-total" class="text-3xl font-black text-indigo-900 mt-3">0</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Total Bookings</p>
+<p id="admin-ticket-stat-bookings" class="text-3xl font-black text-indigo-900 mt-3">0</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Available Seats</p>
+<p id="admin-ticket-stat-seats" class="text-3xl font-black text-indigo-900 mt-3">0</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Sold Out</p>
+<p id="admin-ticket-stat-soldout" class="text-3xl font-black text-indigo-900 mt-3">0</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Open</p>
+<p id="admin-ticket-stat-open" class="text-3xl font-black text-indigo-900 mt-3">0</p>
+</div>
+<div class="bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5">
+<p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Closed</p>
+<p id="admin-ticket-stat-closed" class="text-3xl font-black text-indigo-900 mt-3">0</p>
+</div>
+</div>
+
+<div class="bg-surface-container-low rounded-2xl shadow-sm shadow-indigo-900/5 overflow-hidden">
+<div class="px-6 py-5 border-b border-surface-container-low flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+<div>
+<h3 class="text-lg font-black text-indigo-900">Live Ticket Inventory</h3>
+<p class="text-sm text-slate-500 mt-1">Create, edit, open, close, block, sell out, and adjust live inventory for your temple tickets.</p>
+</div>
+<div class="flex flex-col md:flex-row gap-3 w-full lg:w-auto">
+<div class="flex items-center bg-white rounded-xl px-4 py-3 gap-2 shadow-sm shadow-indigo-900/5 min-w-[240px]">
+<span class="material-symbols-outlined text-slate-400 text-base">search</span>
+<input id="admin-ticket-search" type="text" placeholder="Search event or ticket type" class="w-full bg-transparent border-none focus:ring-0 text-sm text-slate-700 placeholder:text-slate-400"/>
+</div>
+<select id="admin-ticket-filter" class="bg-white rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 border-none focus:ring-2 focus:ring-primary/20 shadow-sm shadow-indigo-900/5 min-w-[180px]">
+<option value="ALL">All statuses</option>
+<option value="OPEN">Open</option>
+<option value="CLOSED">Closed</option>
+<option value="BLOCKED">Blocked</option>
+<option value="SOLD_OUT">Sold Out</option>
+</select>
+<button onclick="openAdminTicketModal('create')" class="px-5 py-3 rounded-xl bg-primary text-white text-sm font-bold shadow-sm shadow-indigo-900/10 hover:bg-indigo-700 transition-colors whitespace-nowrap">
+Create Ticket
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-white text-[10px] uppercase tracking-wider text-slate-500 font-black">
+<tr>
+<th class="px-6 py-4">Event</th>
+<th class="px-6 py-4">Type</th>
+<th class="px-6 py-4">Seats</th>
+<th class="px-6 py-4">Booked</th>
+<th class="px-6 py-4">Price</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody id="admin-ticket-list" class="divide-y divide-surface-container-low">
+<tr>
+<td colspan="7" class="px-6 py-10 text-center text-sm text-slate-400">Loading ticket inventory...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. System Analytics & Advanced Admin Controls -->
+<section class="pb-12">
+<div class="bg-surface-container-lowest rounded-lg shadow-sm shadow-indigo-900/5 overflow-hidden">
+    <div class="px-6 py-5 flex items-center justify-between border-b border-surface-container-low">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">analytics</span>
+            <div>
+                <h2 class="text-lg font-bold">System Analytics &amp; Platform Controls</h2>
+                <p class="text-xs text-slate-500">Real-time platform health, approval metrics, and advanced admin tools</p>
+            </div>
+        </div>
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700"><span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>Live</span>
+    </div>
+    <!-- Metric Cards Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-y divide-surface-container-low">
+        <div class="p-5 flex flex-col gap-1 hover:bg-indigo-50/50 transition-colors">
+            <span class="material-symbols-outlined text-indigo-400 text-[20px]">app_registration</span>
+            <p class="text-xs text-slate-500 mt-2 font-medium">Total Registered</p>
+            <p id="sysstat-total" class="text-2xl font-black text-indigo-900">–</p>
+            <p class="text-[10px] text-slate-400">All time registrations</p>
+        </div>
+        <div class="p-5 flex flex-col gap-1 hover:bg-amber-50/50 transition-colors">
+            <span class="material-symbols-outlined text-amber-500 text-[20px]">pending_actions</span>
+            <p class="text-xs text-slate-500 mt-2 font-medium">Pending Approval</p>
+            <p id="sysstat-pending" class="text-2xl font-black text-amber-600">–</p>
+            <p class="text-[10px] text-slate-400">Awaiting review</p>
+        </div>
+        <div class="p-5 flex flex-col gap-1 hover:bg-emerald-50/50 transition-colors">
+            <span class="material-symbols-outlined text-emerald-500 text-[20px]">verified</span>
+            <p class="text-xs text-slate-500 mt-2 font-medium">Live on Homepage</p>
+            <p id="sysstat-active" class="text-2xl font-black text-emerald-700">–</p>
+            <p class="text-[10px] text-slate-400">Active microsites</p>
+        </div>
+        <div class="p-5 flex flex-col gap-1 hover:bg-red-50/50 transition-colors">
+            <span class="material-symbols-outlined text-red-400 text-[20px]">block</span>
+            <p class="text-xs text-slate-500 mt-2 font-medium">Suspended</p>
+            <p id="sysstat-suspended" class="text-2xl font-black text-red-600">–</p>
+            <p class="text-[10px] text-slate-400">Removed from homepage</p>
+        </div>
+    </div>
+    <!-- Advanced Controls Row -->
+    <div class="px-6 py-5 border-t border-surface-container-low">
+        <p class="text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 mb-4">Advanced Platform Controls</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <button onclick="simulateSystemAudit()" class="flex items-center gap-3 rounded-xl border border-surface-container-low bg-white p-4 text-left hover:border-indigo-200 hover:bg-indigo-50/40 transition-all group shadow-sm">
+                <span class="material-symbols-outlined text-indigo-500 text-[22px] group-hover:scale-110 transition-transform">fact_check</span>
+                <div>
+                    <p class="text-xs font-bold text-indigo-900">Run Platform Audit</p>
+                    <p class="text-[10px] text-slate-400">Verify all active microsites are reachable</p>
+                </div>
+            </button>
+            <button onclick="toggleOfflineMode()" class="flex items-center gap-3 rounded-xl border border-surface-container-low bg-white p-4 text-left hover:border-orange-200 hover:bg-orange-50/40 transition-all group shadow-sm">
+                <span class="material-symbols-outlined text-orange-500 text-[22px] group-hover:scale-110 transition-transform">cloud_off</span>
+                <div>
+                    <p class="text-xs font-bold text-indigo-900">Simulate Offline Mode</p>
+                    <p class="text-[10px] text-slate-400">Test local fallback behaviour</p>
+                </div>
+            </button>
+            <button onclick="triggerInventoryRefresh()" class="flex items-center gap-3 rounded-xl border border-surface-container-low bg-white p-4 text-left hover:border-emerald-200 hover:bg-emerald-50/40 transition-all group shadow-sm">
+                <span class="material-symbols-outlined text-emerald-500 text-[22px] group-hover:scale-110 transition-transform">sync</span>
+                <div>
+                    <p class="text-xs font-bold text-indigo-900">Refresh Inventory</p>
+                    <p class="text-[10px] text-slate-400">Force-sync slot and ticket data</p>
+                </div>
+            </button>
+        </div>
+    </div>
+    <!-- Audit Log -->
+    <div class="px-6 pb-6 border-t border-surface-container-low pt-5">
+        <p class="text-[11px] font-black uppercase tracking-[0.18em] text-slate-400 mb-3">Recent Admin Actions</p>
+        <ul id="sysstat-audit-log" class="space-y-2 text-xs text-slate-500">
+            <li class="text-slate-300 italic">No recent actions logged.</li>
+        </ul>
+    </div>
+</div>
+</section>
+
+<!-- 6. User Feedback Section -->
+<section id="admin-section-feedback" class="admin-section bg-surface-container-lowest rounded-lg shadow-sm shadow-indigo-900/5 overflow-hidden">
+<div class="px-8 py-6 flex flex-wrap gap-4 items-center justify-between border-b border-surface-container-low">
+<h2 class="text-lg font-bold">Pilgrim Feedback</h2>
+<div class="flex items-center gap-2">
+    <span id="feedback-avg-star" class="text-xl font-bold text-yellow-500">4.8</span>
+    <span class="text-xs text-slate-400">Average Rating</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-[10px] uppercase tracking-wider text-slate-500 font-black">
+<tr>
+<th class="px-8 py-4">User</th>
+<th class="px-8 py-4">Rating</th>
+<th class="px-8 py-4">Comment</th>
+<th class="px-8 py-4">Time</th>
+</tr>
+</thead>
+<tbody id="admin-feedback-list" class="divide-y divide-surface-container-low">
+    <!-- Rendered via JS -->
+</tbody>
+</table>
+</div>
+</section>
+
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-lg flex justify-around py-3 px-6 z-50 shadow-2xl">
+<button class="text-orange-600 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+</button>
+<button class="text-slate-400 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</button>
+<button class="text-slate-400 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="local_parking">local_parking</span>
+</button>
+<button class="text-slate-400 flex flex-col items-center">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+</button>
+</nav>
+<!-- EMERGENCY PANEL -->
+<div id="emergency-panel" class="fixed inset-0 z-[150] bg-slate-900/60 backdrop-blur-sm hidden items-start justify-end" onclick="closePanelIfBg(event, 'emergency-panel')">
+  <div class="h-full w-full max-w-xl bg-white shadow-[0_0_60px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-red-700 to-red-500 p-6 text-white flex-shrink-0">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-[20px] opacity-80">warning</span>
+            <span class="text-xs font-bold uppercase tracking-widest opacity-80">Admin Emergency</span>
+          </div>
+          <h2 class="text-2xl font-extrabold">Live Incident Console</h2>
+          <p class="text-white/60 text-sm mt-1" id="ep-zone-label">Monitoring zone</p>
+        </div>
+        <button onclick="closeEmergencyPanel()" class="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <!-- Dot indicator -->
+      <div class="flex items-center gap-2 mt-4">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping bg-white absolute inline-flex h-full w-full rounded-full opacity-75" id="ep-ping"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+        </span>
+        <span class="text-xs font-bold opacity-80" id="ep-status-label">Scanning for active alerts...</span>
+      </div>
+    </div>
+    <!-- Scrollable body -->
+    <div class="flex-1 overflow-y-auto bg-slate-50 p-6">
+      <div id="ep-emergency-list" class="space-y-3">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="flex-shrink-0 bg-white border-t border-slate-100 px-6 py-4 flex gap-3">
+      <button onclick="closeEmergencyPanel()" class="flex-1 py-3 border-2 border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 transition-colors">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPORTS PANEL MODAL -->
+<div id="reports-panel" class="fixed inset-0 z-[150] bg-slate-900/60 backdrop-blur-sm hidden items-start justify-end" onclick="closePanelIfBg(event, 'reports-panel')">
+  <div class="h-full w-full max-w-2xl bg-white shadow-[0_0_60px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden" id="reports-panel-inner">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-indigo-900 to-indigo-700 p-6 text-white flex-shrink-0">
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="material-symbols-outlined text-[20px] opacity-70">analytics</span>
+            <span class="text-xs font-bold uppercase tracking-widest opacity-70">Admin Reports</span>
+          </div>
+          <h2 class="text-2xl font-extrabold" id="reports-temple-title">Temple Analytics Report</h2>
+          <p class="text-white/60 text-sm mt-1" id="reports-timestamp">Generated now</p>
+        </div>
+        <button onclick="closeReportsPanel()" class="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+      <!-- Quick KPI strip -->
+      <div class="grid grid-cols-3 gap-3 mt-5">
+        <div class="bg-white/10 rounded-xl p-3 text-center">
+          <p class="text-2xl font-black" id="rpt-total-bookings">–</p>
+          <p class="text-[10px] uppercase tracking-wider opacity-70 mt-1">Total Bookings</p>
+        </div>
+        <div class="bg-white/10 rounded-xl p-3 text-center">
+          <p class="text-2xl font-black" id="rpt-sos-count">–</p>
+          <p class="text-[10px] uppercase tracking-wider opacity-70 mt-1">SOS Incidents</p>
+        </div>
+        <div class="bg-white/10 rounded-xl p-3 text-center">
+          <p class="text-2xl font-black" id="rpt-logins">–</p>
+          <p class="text-[10px] uppercase tracking-wider opacity-70 mt-1">User Logins</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="flex-1 overflow-y-auto bg-slate-50 p-6 space-y-6">
+
+      <!-- Booking breakdown -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo-600 text-[18px]">confirmation_number</span>
+          <h3 class="font-bold text-slate-800">Booking Activity</h3>
+        </div>
+        <div class="p-5">
+          <div class="grid grid-cols-2 gap-3 mb-4" id="rpt-booking-cards">
+            <!-- injected -->
+          </div>
+          <!-- Mini timeline -->
+          <div id="rpt-booking-timeline" class="space-y-2 max-h-56 overflow-y-auto">
+            <!-- injected -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Crowd Tempo -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
+          <span class="material-symbols-outlined text-orange-500 text-[18px]">sensors</span>
+          <h3 class="font-bold text-slate-800">Crowd Intensity Snapshot</h3>
+        </div>
+        <div class="p-5">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-black shadow-inner" id="rpt-crowd-circle">–</div>
+            <div>
+              <p class="text-xs text-slate-500 uppercase tracking-wider font-bold">Current Level</p>
+              <p class="text-lg font-black" id="rpt-crowd-label">–</p>
+              <p class="text-xs text-slate-400 mt-1">Updated by admin via Live Status panel</p>
+            </div>
+          </div>
+          <!-- Intensity bar -->
+          <div class="flex gap-2 mt-2">
+            <div class="flex-1 text-center">
+              <div class="h-2 rounded-full bg-green-200 mb-1 overflow-hidden"><div class="h-full bg-green-500 rounded-full" id="rpt-bar-low" style="width:0%"></div></div>
+              <p class="text-[10px] font-bold text-green-700">LOW</p>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-2 rounded-full bg-orange-200 mb-1 overflow-hidden"><div class="h-full bg-orange-500 rounded-full" id="rpt-bar-med" style="width:0%"></div></div>
+              <p class="text-[10px] font-bold text-orange-700">MEDIUM</p>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-2 rounded-full bg-red-200 mb-1 overflow-hidden"><div class="h-full bg-red-500 rounded-full" id="rpt-bar-high" style="width:0%"></div></div>
+              <p class="text-[10px] font-bold text-red-700">HIGH</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOS Incidents -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-500 text-[18px]">warning</span>
+          <h3 class="font-bold text-slate-800">Emergency SOS Log</h3>
+        </div>
+        <div id="rpt-sos-list" class="divide-y divide-slate-50 max-h-52 overflow-y-auto">
+          <!-- injected -->
+        </div>
+      </div>
+
+      <!-- Parking status -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
+          <span class="material-symbols-outlined text-emerald-600 text-[18px]">local_parking</span>
+          <h3 class="font-bold text-slate-800">Current Parking Status</h3>
+        </div>
+        <div id="rpt-parking-status" class="p-5 space-y-3">
+          <!-- injected -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer actions -->
+    <div class="flex-shrink-0 bg-white border-t border-slate-100 px-6 py-4 flex gap-3">
+      <button onclick="exportReport()" class="flex-1 bg-indigo-900 hover:bg-indigo-800 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg shadow-indigo-900/20">
+        <span class="material-symbols-outlined text-[18px]">download</span> Export Report
+      </button>
+      <button onclick="closeReportsPanel()" class="px-6 py-3 border-2 border-slate-200 rounded-xl text-slate-700 font-bold hover:bg-slate-50 transition-colors">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Global Tooltip -->
+<div id="global-tooltip" class="fixed pointer-events-none opacity-0 z-50 bg-indigo-900 text-white text-[10px] font-bold px-3 py-2 rounded-lg shadow-xl shadow-indigo-900/20 transition-opacity duration-200" style="left: 0; top: 0; transform: translate(-50%, -120%);"></div>
+
+<!-- Admin Profile Modal -->
+<div id="admin-profile-modal" class="fixed inset-0 z-[100] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 border border-slate-100">
+        <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-surface-container-lowest">
+            <h3 class="font-bold text-indigo-900 text-lg">Personal Details</h3>
+            <button onclick="closePersonalDetails()" class="text-slate-400 hover:text-red-500 rounded-full p-1"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Full Name</label>
+                <input type="text" id="edit-admin-name" class="w-full bg-surface-container-low border-none rounded-lg px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none" />
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Age</label>
+                <input type="number" id="edit-admin-age" class="w-full bg-surface-container-low border-none rounded-lg px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none" />
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Role</label>
+                <input type="text" id="edit-admin-role" class="w-full bg-surface-container-low border-none rounded-lg px-4 py-2 text-sm font-medium focus:ring-2 focus:ring-primary/20 outline-none" />
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-100 bg-surface-container-low flex justify-end gap-3">
+            <button onclick="closePersonalDetails()" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-700">Cancel</button>
+            <button onclick="savePersonalDetails()" class="px-6 py-2 bg-primary hover:bg-primary-dim text-white text-xs font-bold rounded-lg shadow-md transition-colors">Save Details</button>
+        </div>
+</div>
+</div>
+
+<div id="ticket-control-confirm-modal" onclick="if(event.target===this) closeTicketControlConfirm()" class="fixed inset-0 z-[120] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center opacity-0 transition-opacity duration-300">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="px-6 py-5 bg-surface-container-lowest border-b border-surface-container-low">
+            <div class="flex items-center gap-3">
+                <div class="h-11 w-11 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined">pause_circle</span>
+                </div>
+                <div>
+                    <h3 class="font-black text-lg text-indigo-900">Confirm Ticket Control Update</h3>
+                    <p id="ticket-control-confirm-copy" class="text-sm text-slate-500 mt-1">This will update the booking state across the platform.</p>
+                </div>
+            </div>
+        </div>
+        <div class="px-6 py-5 space-y-4">
+            <div class="rounded-xl bg-surface-container-low p-4 text-sm text-slate-600">
+                Existing bookings are not affected. New bookings on the macro-site and temple microsites will follow this change immediately.
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Reason for pilgrims</p>
+                <p id="ticket-control-confirm-reason" class="text-sm text-slate-700 mt-2">No reason provided.</p>
+            </div>
+            <div>
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Scheduled resume</p>
+                <p id="ticket-control-confirm-resume" class="text-sm text-slate-700 mt-2">Manual resume</p>
+            </div>
+        </div>
+        <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
+            <button onclick="closeTicketControlConfirm()" class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Cancel</button>
+            <button id="ticket-control-confirm-submit" onclick="submitAdminBookingControlChange()" class="px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-bold hover:bg-red-700 transition-colors">Confirm Pause</button>
+        </div>
+    </div>
+</div>
+
+<div id="admin-ticket-modal" onclick="if(event.target===this) closeAdminTicketModal()" class="fixed inset-0 z-[125] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center opacity-0 transition-opacity duration-300 p-4">
+    <div class="bg-white rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="px-6 py-5 bg-surface-container-lowest border-b border-surface-container-low flex items-center justify-between gap-4">
+            <div>
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-500">Ticket Management</p>
+                <h3 id="admin-ticket-modal-title" class="font-black text-xl text-indigo-900 mt-2">Create Ticket</h3>
+            </div>
+            <button onclick="closeAdminTicketModal()" class="w-10 h-10 rounded-full bg-white shadow-sm shadow-indigo-900/5 flex items-center justify-center text-slate-500 hover:text-red-500 transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="admin-ticket-form" class="p-6 space-y-6">
+            <input id="admin-ticket-edit-id" type="hidden"/>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Event Name</label>
+                    <input id="admin-ticket-event-name" type="text" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none" required/>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Ticket Type</label>
+                    <input id="admin-ticket-type-field" type="text" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none" required/>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Price</label>
+                    <input id="admin-ticket-price-field" type="number" min="0" step="1" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none" required/>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Total Seats</label>
+                    <input id="admin-ticket-seats-field" type="number" min="0" step="1" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none" required/>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Booking Limit</label>
+                    <input id="admin-ticket-limit-field" type="number" min="1" step="1" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none" required/>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Status</label>
+                    <select id="admin-ticket-status-field" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none">
+                        <option value="OPEN">Open</option>
+                        <option value="CLOSED">Closed</option>
+                        <option value="BLOCKED">Blocked</option>
+                        <option value="SOLD_OUT">Sold Out</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Event Date</label>
+                    <input id="admin-ticket-date-field" type="date" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none"/>
+                </div>
+                <div>
+                    <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Event Time / Slot</label>
+                    <input id="admin-ticket-time-field" type="text" placeholder="Morning Darshan · 06:00 AM" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none"/>
+                </div>
+            </div>
+            <div>
+                <label class="block text-[11px] uppercase tracking-[0.2em] font-black text-slate-500 mb-2">Description</label>
+                <textarea id="admin-ticket-description-field" rows="4" class="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-primary/20 outline-none resize-none" placeholder="Add event highlights, darshan notes, or booking instructions."></textarea>
+            </div>
+        </form>
+        <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
+            <button onclick="closeAdminTicketModal()" class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Cancel</button>
+            <button id="admin-ticket-form-submit" onclick="submitAdminTicketForm()" class="px-5 py-2.5 rounded-lg bg-primary text-white text-sm font-bold hover:bg-indigo-700 transition-colors">Save Ticket</button>
+        </div>
+    </div>
+</div>
+
+<div id="admin-ticket-delete-modal" onclick="if(event.target===this) closeAdminTicketDeleteModal()" class="fixed inset-0 z-[126] bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center opacity-0 transition-opacity duration-300 p-4">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300">
+        <div class="px-6 py-5 border-b border-surface-container-low bg-surface-container-lowest">
+            <h3 class="font-black text-xl text-indigo-900">Delete Ticket</h3>
+            <p class="text-sm text-slate-500 mt-2">This action permanently removes the ticket if there are no confirmed bookings against it.</p>
+        </div>
+        <div class="px-6 py-5">
+            <p id="admin-ticket-delete-copy" class="text-sm text-slate-700">Are you sure you want to remove this ticket?</p>
+        </div>
+        <div class="px-6 py-4 bg-surface-container-low flex justify-end gap-3">
+            <button onclick="closeAdminTicketDeleteModal()" class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Cancel</button>
+            <button onclick="deleteAdminTicketConfirmed()" class="px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-bold hover:bg-red-700 transition-colors">Delete Ticket</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Default parking baseline — written to localStorage once if not present
+const defaultParkingData = {
+    tirupati: { 
+        name: "Tirupati Balaji", 
+        zones: [
+            { name: "Main Gate East", capacity: 100, filled: 32, distance: "0.5km" },
+            { name: "Hilltop North", capacity: 50, filled: 12, distance: "0.3km" },
+            { name: "Basement P2", capacity: 200, filled: 198, distance: "0.8km" },
+            { name: "VIP Annex", capacity: 30, filled: 25, distance: "0.1km" }
+        ] 
+    },
+    manjunatha: { 
+        name: "Dharmasthala Manjunatha", 
+        zones: [
+            { name: "Netravathi River Bank", capacity: 150, filled: 90, distance: "1.2km" },
+            { name: "Annapoorna Block", capacity: 80, filled: 75, distance: "0.2km" },
+            { name: "South Gate Temp", capacity: 60, filled: 34, distance: "0.4km" }
+        ] 
+    },
+    krishna: { 
+        name: "Udupi Krishna", 
+        zones: [
+            { name: "Car Street Left", capacity: 40, filled: 40, distance: "0.1km" },
+            { name: "Rajangana Parking", capacity: 120, filled: 40, distance: "0.4km" }
+        ] 
+    },
+    kukke: { 
+        name: "Kukke Subramanya", 
+        zones: [
+            { name: "Kumaradhara Snana Ghat", capacity: 200, filled: 50, distance: "1.5km" },
+            { name: "Temple Front Avenue", capacity: 60, filled: 58, distance: "0.2km" }
+        ] 
+    }
+};
+
+// Initialise localStorage with defaults the very first time
+if (!localStorage.getItem('dd_parkingData')) {
+    localStorage.setItem('dd_parkingData', JSON.stringify(defaultParkingData));
+}
+const existingBookings = localStorage.getItem('dd_bookings');
+if (!existingBookings || existingBookings === '[]' || existingBookings === 'null') {
+    const initialBookings = [
+        { id: 'DD-1001', ticketId: 'DD-1001', templeKey: 'tirupati', templeName: 'Tirupati Balaji', date: '05 May 2024', time: 'Morning', pilgrims: 4, phone: '+91 9886012345', status: 'Confirmed', source: 'Online' },
+        { id: 'DD-1002', ticketId: 'DD-1002', templeKey: 'manjunatha', templeName: 'Dharmasthala Manjunatha', date: '06 May 2024', time: 'Afternoon', pilgrims: 2, phone: '+91 9900154321', status: 'Confirmed', source: 'Online' }
+    ];
+    localStorage.setItem('dd_bookings', JSON.stringify(initialBookings));
+}
+
+function getLiveParkingData() {
+    try { return JSON.parse(localStorage.getItem('dd_parkingData')) || defaultParkingData; }
+    catch(e) { return defaultParkingData; }
+}
+
+let currentIntensity = 'Medium';
+let designerActiveZoneIdx = 0;
+let designerSelectedSlotId = null;
+const bookingControlSessionKey = 'divyaAdminControlLocal';
+let adminBookingControlState = {
+    paused: false,
+    reason: '',
+    pausedAt: null,
+    resumeAt: null,
+    adminId: '',
+    audit: []
+};
+let adminBookingControlPendingPausedState = false;
+let adminBookingControlStream = null;
+let adminBookingsStream = null;
+let adminBookingsCache = [];
+let adminBookingsSummary = {
+    totalBookings: 0,
+    confirmed: 0,
+    pending: 0,
+    online: 0,
+    offline: 0
+};
+let adminTicketManagementState = {
+    tickets: [],
+    summary: {
+        totalTickets: 0,
+        totalBookings: 0,
+        availableSeats: 0,
+        soldOutEvents: 0,
+        activeEvents: 0,
+        closedEvents: 0,
+        blockedEvents: 0,
+        revenue: 0
+    },
+    query: '',
+    filter: 'ALL',
+    editingId: null,
+    deletingId: null
+};
+let adminTicketStream = null;
+let adminTempleRegistrationState = {
+    pending: [],
+    approved: []
+};
+
+function getBookingControlSession() {
+    try {
+        return JSON.parse(sessionStorage.getItem(bookingControlSessionKey) || 'null');
+    } catch (error) {
+        return null;
+    }
+}
+
+function bookingControlHeaders() {
+    const session = getBookingControlSession();
+    if (!session?.secret) return null;
+    return {
+        'content-type': 'application/json',
+        'x-booking-pause-secret': session.secret,
+        'x-admin-id': session.identity || 'localadmin'
+    };
+}
+
+function formatAdminDateTime(value) {
+    if (!value) return 'Not set';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Not set';
+    return date.toLocaleString([], {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+    });
+}
+
+function formatAdminDate(value) {
+    if (!value) return 'Pending date';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString([], {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+}
+
+function getAdminTempleName(context) {
+    return context === 'manjunatha' ? 'Dharmasthala Manjunatha' : 'Tirupati Balaji';
+}
+
+function getAdminProtectedHeaders() {
+    return bookingControlHeaders();
+}
+
+function formatCurrency(amount) {
+    return `₹${Number(amount || 0).toLocaleString('en-IN')}`;
+}
+
+function getAdminTicketStatusMeta(status) {
+    const normalized = String(status || 'OPEN').toUpperCase();
+    if (normalized === 'CLOSED') return { label: 'Booking Closed', badge: 'bg-red-50 text-red-700', dot: 'bg-red-500' };
+    if (normalized === 'BLOCKED') return { label: 'Currently Unavailable', badge: 'bg-slate-100 text-slate-600', dot: 'bg-slate-400' };
+    if (normalized === 'SOLD_OUT') return { label: 'Sold Out', badge: 'bg-rose-50 text-rose-700', dot: 'bg-rose-500' };
+    return { label: 'Open', badge: 'bg-emerald-50 text-emerald-700', dot: 'bg-emerald-500' };
+}
+
+function renderAdminTicketSummary(summary) {
+    document.getElementById('admin-ticket-stat-total').textContent = Number(summary.totalTickets || 0).toLocaleString();
+    document.getElementById('admin-ticket-stat-bookings').textContent = Number(summary.totalBookings || 0).toLocaleString();
+    document.getElementById('admin-ticket-stat-seats').textContent = Number(summary.availableSeats || 0).toLocaleString();
+    document.getElementById('admin-ticket-stat-soldout').textContent = Number(summary.soldOutEvents || 0).toLocaleString();
+    document.getElementById('admin-ticket-stat-open').textContent = Number(summary.activeEvents || 0).toLocaleString();
+    document.getElementById('admin-ticket-stat-closed').textContent = Number(summary.closedEvents || 0).toLocaleString();
+}
+
+function getFilteredAdminTickets() {
+    const query = (adminTicketManagementState.query || '').trim().toLowerCase();
+    const filter = adminTicketManagementState.filter || 'ALL';
+    return (adminTicketManagementState.tickets || []).filter((ticket) => {
+        const matchesQuery = !query || [ticket.event_name, ticket.ticket_type, ticket.description, ticket.event_time]
+            .filter(Boolean)
+            .some(value => String(value).toLowerCase().includes(query));
+        const matchesFilter = filter === 'ALL' || String(ticket.status || '').toUpperCase() === filter;
+        return matchesQuery && matchesFilter;
+    });
+}
+
+function renderAdminTicketTable() {
+    const listEl = document.getElementById('admin-ticket-list');
+    if (!listEl) return;
+
+    const tickets = getFilteredAdminTickets();
+    if (!tickets.length) {
+        listEl.innerHTML = '<tr><td colspan="7" class="px-6 py-10 text-center text-sm text-slate-400">No tickets match the current filters yet.</td></tr>';
+        return;
+    }
+
+    listEl.innerHTML = tickets.map((ticket) => {
+        const status = getAdminTicketStatusMeta(ticket.status);
+        const available = Number(ticket.available_seats || 0);
+        const booked = Number(ticket.booked_seats || 0);
+        const total = Number(ticket.total_seats || 0);
+        const actionDisabled = !getAdminProtectedHeaders();
+        return `
+            <tr class="hover:bg-white transition-colors align-top">
+                <td class="px-6 py-5">
+                    <div class="space-y-1">
+                        <p class="font-black text-indigo-900 text-sm">${ticket.event_name}</p>
+                        <p class="text-xs text-slate-500">${formatAdminDate(ticket.event_date)}${ticket.event_time ? ` · ${ticket.event_time}` : ''}</p>
+                        ${ticket.description ? `<p class="text-xs text-slate-400 max-w-xs leading-relaxed">${ticket.description}</p>` : ''}
+                    </div>
+                </td>
+                <td class="px-6 py-5 text-sm font-semibold text-slate-700">${ticket.ticket_type}</td>
+                <td class="px-6 py-5">
+                    <div class="space-y-2">
+                        <p class="text-sm font-black text-indigo-900">${available} / ${total}</p>
+                        <div class="flex items-center gap-2">
+                            <button ${actionDisabled ? 'disabled' : ''} onclick="adjustAdminTicketSeats('${ticket.id}', 'decrease', 1)" class="h-8 w-8 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors disabled:opacity-40">-</button>
+                            <button ${actionDisabled ? 'disabled' : ''} onclick="adjustAdminTicketSeats('${ticket.id}', 'increase', 1)" class="h-8 w-8 rounded-lg bg-primary/10 text-primary hover:bg-primary/15 transition-colors disabled:opacity-40">+</button>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-5">
+                    <p class="text-sm font-black text-indigo-900">${booked}</p>
+                    <p class="text-xs text-slate-400">Limit ${ticket.booking_limit || 1}/booking</p>
+                </td>
+                <td class="px-6 py-5 text-sm font-black text-indigo-900">${formatCurrency(ticket.price || 0)}</td>
+                <td class="px-6 py-5">
+                    <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold ${status.badge}">
+                        <span class="h-2 w-2 rounded-full ${status.dot}"></span>${status.label}
+                    </span>
+                </td>
+                <td class="px-6 py-5">
+                    <div class="flex flex-wrap justify-end gap-2">
+                        <button ${actionDisabled ? 'disabled' : ''} onclick="changeAdminTicketStatus('${ticket.id}', 'OPEN')" class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-bold hover:bg-emerald-100 transition-colors disabled:opacity-40">Open</button>
+                        <button ${actionDisabled ? 'disabled' : ''} onclick="changeAdminTicketStatus('${ticket.id}', 'CLOSED')" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 text-[11px] font-bold hover:bg-red-100 transition-colors disabled:opacity-40">Close</button>
+                        <button ${actionDisabled ? 'disabled' : ''} onclick="changeAdminTicketStatus('${ticket.id}', 'BLOCKED')" class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-[11px] font-bold hover:bg-slate-200 transition-colors disabled:opacity-40">Block</button>
+                        <button ${actionDisabled ? 'disabled' : ''} onclick="changeAdminTicketStatus('${ticket.id}', 'SOLD_OUT')" class="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-700 text-[11px] font-bold hover:bg-rose-100 transition-colors disabled:opacity-40">Sold Out</button>
+                        <button ${actionDisabled ? 'disabled' : ''} onclick="openAdminTicketModal('edit', '${ticket.id}')" class="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-[11px] font-bold hover:bg-primary/15 transition-colors disabled:opacity-40">Edit</button>
+                        <button ${actionDisabled ? 'disabled' : ''} onclick="openAdminTicketDeleteModal('${ticket.id}')" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 text-[11px] font-bold hover:bg-red-100 transition-colors disabled:opacity-40">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderAdminTicketManagement() {
+    renderAdminTicketSummary(adminTicketManagementState.summary || {});
+    renderAdminTicketTable();
+}
+
+function renderAdminTempleRegistrations() {
+    const items = Array.isArray(adminTempleRegistrationState.pending) ? adminTempleRegistrationState.pending : [];
+    const headers = getAdminProtectedHeaders();
+    const rows = !items.length
+        ? '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 text-xs">No pending temple registrations right now.</td></tr>'
+        : items.map((temple) => {
+        const status = String(temple.status || 'pending').toLowerCase();
+        const badgeClass = status === 'active'
+            ? 'bg-emerald-50 text-emerald-700'
+            : status === 'suspended'
+              ? 'bg-slate-100 text-slate-600'
+              : 'bg-amber-50 text-amber-700';
+        return `
+            <tr class="hover:bg-slate-50 transition-colors" id="pending-row-${temple.slug}">
+                <td class="px-6 py-4">
+                    <p class="font-bold text-indigo-900 text-sm">${temple.temple_name || temple.slug}</p>
+                    <p class="text-xs text-slate-400 mt-1">${temple.admin_email || 'No admin email'}</p>
+                </td>
+                <td class="px-6 py-4 text-xs text-slate-600">${temple.deity_name || temple.religion || 'Temple registration'}</td>
+                <td class="px-6 py-4 text-xs text-slate-600">${[temple.city, temple.state].filter(Boolean).join(', ') || 'Location pending'}</td>
+                <td class="px-6 py-4 text-xs text-slate-500">${formatAdminDateTime(temple.created_at)}</td>
+                <td class="px-6 py-4"><span class="inline-flex rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider ${badgeClass}">${status}</span></td>
+                <td class="px-6 py-4">
+                    <div class="flex justify-end gap-2 flex-wrap">
+                        <button ${headers ? '' : 'disabled'} onclick="updateTempleRegistrationStatus('${temple.slug}', 'active')" class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-bold hover:bg-emerald-100 transition-colors disabled:opacity-40">Approve</button>
+                        <button ${headers ? '' : 'disabled'} onclick="updateTempleRegistrationStatus('${temple.slug}', 'suspended')" class="px-3 py-1.5 rounded-lg bg-slate-50 text-slate-600 text-[11px] font-bold hover:bg-slate-100 transition-colors disabled:opacity-40">Hold</button>
+                        <button ${headers ? '' : 'disabled'} onclick="deleteTempleRegistration('${temple.slug}', true)" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 text-[11px] font-bold hover:bg-red-100 transition-colors disabled:opacity-40">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+
+    const tables = ['dashboard-temple-approvals', 'temple-requests-pending-list'];
+    tables.forEach((id) => {
+        const listEl = document.getElementById(id);
+        if (listEl) listEl.innerHTML = rows;
+    });
+
+    const approvedEl = document.getElementById('approved-temple-portals');
+    if (approvedEl) {
+        const approved = Array.isArray(adminTempleRegistrationState.approved) ? adminTempleRegistrationState.approved : [];
+        approvedEl.innerHTML = approved.length
+            ? approved.map((temple) => `
+                <article class="temple-card bg-surface-container-low rounded-2xl p-5 shadow-sm shadow-indigo-900/5 flex flex-col" data-slug="${temple.slug}" id="temple-card-${temple.slug}">
+                    <p class="text-[11px] uppercase tracking-[0.2em] font-black text-emerald-600">✓ Approved &amp; Live</p>
+                    <h3 class="text-lg font-black text-indigo-900 mt-3">${temple.temple_name || temple.slug}</h3>
+                    <p class="text-sm text-slate-500 mt-2">${[temple.city, temple.state].filter(Boolean).join(', ') || 'Location pending'}${temple.religion ? ` • ${temple.religion}` : ''}</p>
+                    <p class="text-xs text-slate-400 mt-2">${temple.admin_email || 'No admin email'}</p>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        <a href="/temple/${temple.slug}" target="_blank" class="px-3 py-2 rounded-lg bg-primary text-white text-xs font-bold hover:bg-indigo-700 transition-colors">Open Microsite</a>
+                        <a href="/temple/${temple.slug}/admin/login" target="_blank" class="px-3 py-2 rounded-lg bg-white text-primary text-xs font-bold shadow-sm shadow-indigo-900/5 hover:bg-primary/5 transition-colors">Temple Admin</a>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-2 border-t border-surface-container-low pt-3">
+                        <button onclick="updateTempleRegistrationStatus('${temple.slug}', 'suspended')" class="flex-1 px-3 py-2 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold hover:bg-amber-100 transition-colors">Remove from Homepage</button>
+                        <button onclick="deleteTempleRegistration('${temple.slug}')" class="flex-1 px-3 py-2 rounded-lg bg-red-50 text-red-700 text-xs font-bold hover:bg-red-100 transition-colors flex items-center justify-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">delete</span> Delete
+                        </button>
+                    </div>
+                </article>
+            `).join('')
+            : '<div class="col-span-full bg-surface-container-low rounded-2xl p-6 text-sm text-slate-400 text-center">Approved temple admin portals will appear here after approval.</div>';
+    }
+}
+
+async function loadAdminTempleRegistrations(showToast) {
+    const headers = getAdminProtectedHeaders();
+    const pendingEls = ['dashboard-temple-approvals', 'temple-requests-pending-list'];
+    if (!headers) {
+        pendingEls.forEach((id) => {
+            const listEl = document.getElementById(id);
+            if (listEl) listEl.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 text-xs">Log in again to review pending temple requests.</td></tr>';
+        });
+        return;
+    }
+
+    // ── Inject skeletons while fetching ──────────────────────────────────
+    const skeletonRow = `
+        <tr>
+            <td class="px-6 py-4"><div class="skeleton skeleton-text w-32 mb-2"></div><div class="skeleton skeleton-text w-48 opacity-60"></div></td>
+            <td class="px-6 py-4"><div class="skeleton skeleton-text w-20"></div></td>
+            <td class="px-6 py-4"><div class="skeleton skeleton-text w-28"></div></td>
+            <td class="px-6 py-4"><div class="skeleton skeleton-text w-24"></div></td>
+            <td class="px-6 py-4"><div class="skeleton skeleton-badge"></div></td>
+            <td class="px-6 py-4"><div class="flex gap-2"><div class="skeleton skeleton-btn w-20"></div><div class="skeleton skeleton-btn w-16"></div></div></td>
+        </tr>`.repeat(3);
+
+    if (showToast) {
+        pendingEls.forEach((id) => {
+            const listEl = document.getElementById(id);
+            if (listEl && !listEl.querySelector('.skeleton')) listEl.innerHTML = skeletonRow;
+        });
+        const approvedEl = document.getElementById('approved-temple-portals');
+        if (approvedEl && !approvedEl.querySelector('.skeleton')) {
+            approvedEl.innerHTML = [1,2,3].map(() => `
+                <div class="skeleton skeleton-card p-5">
+                    <div class="skeleton skeleton-badge mb-4" style="background:none"></div>
+                    <div class="skeleton skeleton-title w-40 mb-2" style="background:none"></div>
+                    <div class="skeleton skeleton-text w-56 mb-1" style="background:none"></div>
+                    <div class="skeleton skeleton-text w-36" style="background:none"></div>
+                </div>
+            `).join('');
+        }
+    }
+
+    try {
+        const [pendingResponse, approvedResponse] = await Promise.all([
+            fetch('/api/admin/temple-registrations?status=pending', { headers }),
+            fetch('/api/admin/temple-registrations?status=active', { headers })
+        ]);
+        const pendingPayload = await pendingResponse.json();
+        const approvedPayload = await approvedResponse.json();
+        if (!pendingResponse.ok) throw new Error(pendingPayload.error || 'Unable to load temple registrations');
+        if (!approvedResponse.ok) throw new Error(approvedPayload.error || 'Unable to load approved temples');
+        adminTempleRegistrationState.pending = Array.isArray(pendingPayload.temples) ? pendingPayload.temples : [];
+        adminTempleRegistrationState.approved = Array.isArray(approvedPayload.temples) ? approvedPayload.temples : [];
+        renderAdminTempleRegistrations();
+        if (showToast) showAdminInfoToast('Temple approval queue refreshed.');
+    } catch (error) {
+        pendingEls.forEach((id) => {
+            const listEl = document.getElementById(id);
+            if (listEl) listEl.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-red-400 text-xs">${error.message || 'Unable to load temple registrations.'}</td></tr>`;
+        });
+    }
+}
+
+async function updateTempleRegistrationStatus(slug, status) {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) {
+        alert('Please log in again before approving temples.');
+        return;
+    }
+    try {
+        const response = await fetch(`/api/admin/temple-registrations/${encodeURIComponent(slug)}/status`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ status })
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Unable to update temple status');
+        await loadAdminTempleRegistrations(false);
+        updateSystemStats();
+        const msg = status === 'active' ? 'Temple approved — microsite is now live on the homepage.' :
+                    status === 'suspended' ? 'Temple removed from homepage (microsite URL still works).' :
+                    'Temple status updated.';
+        showAdminInfoToast(msg);
+        appendAuditLog(`${status === 'active' ? 'Approved' : status === 'suspended' ? 'Suspended' : 'Updated'} temple: ${slug}`);
+    } catch (error) {
+        alert(error.message || 'Unable to update temple status.');
+    }
+}
+
+async function deleteTempleRegistration(slug, isPendingRow = false) {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) {
+        alert('Please log in again before deleting temples.');
+        return;
+    }
+    const name = isPendingRow
+        ? (document.querySelector(`#pending-row-${slug} td:first-child p`)?.textContent || slug)
+        : (document.querySelector(`#temple-card-${slug} h3`)?.textContent || slug);
+    if (!confirm(`Permanently delete "${name}"?\n\nThis will remove the temple from the homepage, all booking records, and the admin queue.\n\nThis CANNOT be undone.`)) return;
+
+    // ── Optimistic UI: instantly gray out / remove the element ──────────
+    const cardEl = isPendingRow
+        ? document.getElementById(`pending-row-${slug}`)
+        : document.getElementById(`temple-card-${slug}`);
+    if (cardEl) cardEl.classList.add('deleting');
+
+    try {
+        const response = await fetch(`/api/admin/temple-registrations/${encodeURIComponent(slug)}`, {
+            method: 'DELETE',
+            headers
+        });
+        const payload = await response.json();
+        if (!response.ok) {
+            // Revert optimistic update on error
+            if (cardEl) cardEl.classList.remove('deleting');
+            throw new Error(payload.error || 'Unable to delete temple');
+        }
+        // Animate removal then reload list
+        if (cardEl) {
+            cardEl.style.transition = 'all 0.3s ease';
+            cardEl.style.opacity = '0';
+            cardEl.style.transform = isPendingRow ? 'translateX(-20px)' : 'scale(0.92)';
+            cardEl.style.maxHeight = cardEl.scrollHeight + 'px';
+            setTimeout(() => {
+                cardEl.style.maxHeight = '0';
+                cardEl.style.padding = '0';
+                cardEl.style.margin = '0';
+                cardEl.style.overflow = 'hidden';
+            }, 200);
+            setTimeout(() => cardEl.remove(), 500);
+        }
+        await loadAdminTempleRegistrations(false);
+        updateSystemStats();
+        showAdminInfoToast(`Temple "${name}" permanently deleted.`);
+        appendAuditLog(`Permanently deleted temple: ${slug}`);
+    } catch (error) {
+        if (cardEl) cardEl.classList.remove('deleting');
+        showAdminInfoToast(`❌ Delete failed: ${error.message}`);
+    }
+}
+
+// ── System Analytics helpers ───────────────────────────────────────────────
+async function updateSystemStats() {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) return;
+    try {
+        const [pendingRes, activeRes, suspendedRes, allRes] = await Promise.all([
+            fetch('/api/admin/temple-registrations?status=pending', { headers }),
+            fetch('/api/admin/temple-registrations?status=active', { headers }),
+            fetch('/api/admin/temple-registrations?status=suspended', { headers }),
+            fetch('/api/admin/temple-registrations', { headers }),
+        ]);
+        const [pendingData, activeData, suspendedData, allData] = await Promise.all([
+            pendingRes.json(), activeRes.json(), suspendedRes.json(), allRes.json()
+        ]);
+        const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        setText('sysstat-pending',   Array.isArray(pendingData.temples)   ? pendingData.temples.length   : '–');
+        setText('sysstat-active',    Array.isArray(activeData.temples)    ? activeData.temples.length    : '–');
+        setText('sysstat-suspended', Array.isArray(suspendedData.temples) ? suspendedData.temples.length : '–');
+        setText('sysstat-total',     Array.isArray(allData.temples)       ? allData.temples.length       : '–');
+    } catch (_) { /* stats are non-critical, silently skip */ }
+}
+
+function appendAuditLog(msg) {
+    const logEl = document.getElementById('sysstat-audit-log');
+    if (!logEl) return;
+    const now = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    const li = document.createElement('li');
+    li.className = 'flex items-start gap-2';
+    li.innerHTML = `<span class="text-slate-300 shrink-0">${now}</span><span>${msg}</span>`;
+    // Remove placeholder if present
+    const placeholder = logEl.querySelector('.italic');
+    if (placeholder) placeholder.remove();
+    logEl.prepend(li);
+    // Keep last 10 entries
+    while (logEl.children.length > 10) logEl.lastChild.remove();
+}
+
+async function simulateSystemAudit() {
+    const headers = getAdminProtectedHeaders();
+    showAdminInfoToast('Running platform audit…');
+    appendAuditLog('Platform audit initiated.');
+    try {
+        const res = await fetch('/api/admin/temple-registrations?status=active', { headers });
+        const data = await res.json();
+        const temples = Array.isArray(data.temples) ? data.temples : [];
+        appendAuditLog(`Audit complete: ${temples.length} active microsite${temples.length !== 1 ? 's' : ''} verified.`);
+        showAdminInfoToast(`Audit done — ${temples.length} active microsites reachable.`);
+    } catch (e) {
+        appendAuditLog('Audit failed: ' + (e.message || 'Network error'));
+        showAdminInfoToast('Audit failed — check server connectivity.');
+    }
+}
+
+function toggleOfflineMode() {
+    const flag = localStorage.getItem('dd_admin_offline_sim') === '1';
+    localStorage.setItem('dd_admin_offline_sim', flag ? '0' : '1');
+    const label = flag ? 'disabled' : 'enabled';
+    showAdminInfoToast(`Offline simulation mode ${label}.`);
+    appendAuditLog(`Offline mode simulation ${label}.`);
+}
+
+function triggerInventoryRefresh() {
+    loadAdminTickets(true);
+    loadAdminTempleRegistrations(true);
+    updateSystemStats();
+    appendAuditLog('Manual inventory refresh triggered.');
+}
+
+async function loadAdminTickets(showToast) {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) {
+        renderAdminTicketSummary(adminTicketManagementState.summary || {});
+        renderAdminTicketTable();
+        return;
+    }
+
+    // ── Show skeleton while loading ──────────────────────────────────────
+    if (showToast) {
+        const listEl = document.getElementById('admin-ticket-list');
+        if (listEl && !listEl.querySelector('.skeleton')) {
+            listEl.innerHTML = Array(4).fill(`
+                <tr>
+                    <td class="px-6 py-4"><div class="skeleton skeleton-text w-24"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton skeleton-text w-32"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton skeleton-text w-16"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton skeleton-badge"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton skeleton-text w-20"></div></td>
+                    <td class="px-6 py-4"><div class="skeleton skeleton-text w-20"></div></td>
+                    <td class="px-6 py-4"><div class="flex gap-2"><div class="skeleton skeleton-btn w-16"></div><div class="skeleton skeleton-btn w-12"></div></div></td>
+                </tr>`).join('');
+        }
+    }
+
+    const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+    try {
+        const response = await fetch(`/api/admin/tickets?temple_key=${encodeURIComponent(adminContext)}`, { headers });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Unable to load ticket inventory');
+        adminTicketManagementState.tickets = Array.isArray(payload.tickets) ? payload.tickets : [];
+        adminTicketManagementState.summary = payload.summary || adminTicketManagementState.summary;
+        renderAdminTicketManagement();
+        if (showToast) showAdminInfoToast('Ticket inventory refreshed.');
+    } catch (error) {
+        const listEl = document.getElementById('admin-ticket-list');
+        if (listEl) {
+            listEl.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-sm text-red-400">${error.message || 'Unable to load ticket inventory.'}</td></tr>`;
+        }
+    }
+}
+
+function bindAdminTicketStream() {
+    if (adminTicketStream || typeof EventSource === 'undefined') return;
+    adminTicketStream = new EventSource('/api/tickets/stream');
+    adminTicketStream.addEventListener('ticket-update', (event) => {
+        try {
+            const payload = JSON.parse(event.data || '{}');
+            const ticket = payload.ticket;
+            const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+            if (payload.type === 'ready') return;
+            if (ticket?.temple_key && ticket.temple_key !== adminContext) return;
+            loadAdminTickets(false);
+        } catch (error) {}
+    });
+}
+
+function openAdminTicketModal(mode, ticketId) {
+    const modal = document.getElementById('admin-ticket-modal');
+    const title = document.getElementById('admin-ticket-modal-title');
+    const submit = document.getElementById('admin-ticket-form-submit');
+    const ticket = (adminTicketManagementState.tickets || []).find(item => item.id === ticketId);
+    adminTicketManagementState.editingId = mode === 'edit' ? ticketId : null;
+
+    document.getElementById('admin-ticket-edit-id').value = ticketId || '';
+    document.getElementById('admin-ticket-event-name').value = ticket?.event_name || '';
+    document.getElementById('admin-ticket-type-field').value = ticket?.ticket_type || '';
+    document.getElementById('admin-ticket-price-field').value = ticket?.price ?? 0;
+    document.getElementById('admin-ticket-seats-field').value = ticket?.total_seats ?? 0;
+    document.getElementById('admin-ticket-limit-field').value = ticket?.booking_limit ?? 1;
+    document.getElementById('admin-ticket-status-field').value = ticket?.status || 'OPEN';
+    document.getElementById('admin-ticket-date-field').value = ticket?.event_date || '';
+    document.getElementById('admin-ticket-time-field').value = ticket?.event_time || '';
+    document.getElementById('admin-ticket-description-field').value = ticket?.description || '';
+
+    title.textContent = mode === 'edit' ? 'Edit Ticket' : 'Create Ticket';
+    submit.textContent = mode === 'edit' ? 'Save Changes' : 'Create Ticket';
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('.transform')?.classList.remove('scale-95');
+    }, 10);
+}
+
+function closeAdminTicketModal() {
+    const modal = document.getElementById('admin-ticket-modal');
+    modal.classList.add('opacity-0');
+    modal.querySelector('.transform')?.classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 250);
+}
+
+async function submitAdminTicketForm() {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) {
+        alert('Please log in again before managing tickets.');
+        return;
+    }
+
+    const ticketId = document.getElementById('admin-ticket-edit-id').value;
+    const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+    const body = {
+        temple_key: adminContext,
+        event_name: document.getElementById('admin-ticket-event-name').value.trim(),
+        ticket_type: document.getElementById('admin-ticket-type-field').value.trim(),
+        price: Number(document.getElementById('admin-ticket-price-field').value || 0),
+        total_seats: Number(document.getElementById('admin-ticket-seats-field').value || 0),
+        booking_limit: Number(document.getElementById('admin-ticket-limit-field').value || 1),
+        status: document.getElementById('admin-ticket-status-field').value,
+        event_date: document.getElementById('admin-ticket-date-field').value || null,
+        event_time: document.getElementById('admin-ticket-time-field').value.trim() || null,
+        description: document.getElementById('admin-ticket-description-field').value.trim() || null
+    };
+
+    const endpoint = ticketId ? `/api/admin/tickets/${encodeURIComponent(ticketId)}` : '/api/admin/tickets';
+    const method = ticketId ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(endpoint, {
+            method,
+            headers,
+            body: JSON.stringify(body)
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Unable to save ticket');
+        closeAdminTicketModal();
+        await loadAdminTickets(false);
+        showAdminInfoToast(ticketId ? 'Ticket updated successfully.' : 'Ticket created successfully.');
+    } catch (error) {
+        alert(error.message || 'Unable to save ticket.');
+    }
+}
+
+async function changeAdminTicketStatus(ticketId, status) {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) {
+        alert('Please log in again before managing tickets.');
+        return;
+    }
+    try {
+        const response = await fetch(`/api/admin/tickets/${encodeURIComponent(ticketId)}/status`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ status })
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Unable to update ticket status');
+        await loadAdminTickets(false);
+        showAdminInfoToast(`Ticket marked as ${status.replace('_', ' ').toLowerCase()}.`);
+    } catch (error) {
+        alert(error.message || 'Unable to update ticket status.');
+    }
+}
+
+async function adjustAdminTicketSeats(ticketId, mode, delta) {
+    const headers = getAdminProtectedHeaders();
+    if (!headers) {
+        alert('Please log in again before managing tickets.');
+        return;
+    }
+    try {
+        const response = await fetch(`/api/admin/tickets/${encodeURIComponent(ticketId)}/seats`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ mode, delta })
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Unable to update ticket seats');
+        await loadAdminTickets(false);
+    } catch (error) {
+        alert(error.message || 'Unable to update seat inventory.');
+    }
+}
+
+function openAdminTicketDeleteModal(ticketId) {
+    const modal = document.getElementById('admin-ticket-delete-modal');
+    const ticket = (adminTicketManagementState.tickets || []).find(item => item.id === ticketId);
+    adminTicketManagementState.deletingId = ticketId;
+    document.getElementById('admin-ticket-delete-copy').textContent = ticket
+        ? `Are you sure you want to delete "${ticket.event_name}" (${ticket.ticket_type})?`
+        : 'Are you sure you want to delete this ticket?';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('.transform')?.classList.remove('scale-95');
+    }, 10);
+}
+
+function closeAdminTicketDeleteModal() {
+    const modal = document.getElementById('admin-ticket-delete-modal');
+    modal.classList.add('opacity-0');
+    modal.querySelector('.transform')?.classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 250);
+}
+
+async function deleteAdminTicketConfirmed() {
+    const headers = getAdminProtectedHeaders();
+    if (!headers || !adminTicketManagementState.deletingId) {
+        closeAdminTicketDeleteModal();
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/admin/tickets/${encodeURIComponent(adminTicketManagementState.deletingId)}`, {
+            method: 'DELETE',
+            headers
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Unable to delete ticket');
+        closeAdminTicketDeleteModal();
+        await loadAdminTickets(false);
+        showAdminInfoToast('Ticket deleted successfully.');
+    } catch (error) {
+        alert(error.message || 'Unable to delete ticket.');
+    }
+}
+
+function getAdminBookingsFallback() {
+    const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+    const allBookings = JSON.parse(localStorage.getItem('dd_bookings') || '[]');
+    return allBookings
+        .filter(b => b.templeKey === adminContext)
+        .map(b => ({
+            id: b.id,
+            ticket_id: b.ticketId || b.id,
+            temple_key: b.templeKey,
+            temple_name: b.templeName || getAdminTempleName(adminContext),
+            visit_date: b.date,
+            slot: b.time,
+            qty: b.pilgrims || 1,
+            phone: b.phone || null,
+            source: b.source || 'Online',
+            status: b.status || 'Confirmed',
+            created_at: b.created_at || new Date().toISOString()
+        }));
+}
+
+function renderAdminBookingSummaryRows(records) {
+    const summaryEl = document.getElementById('dashboard-bookings-summary');
+    if (!summaryEl) return;
+    summaryEl.innerHTML = records.slice(0, 5).map(b => `
+        <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-6 py-3 font-bold text-indigo-900 text-xs">#${b.ticket_id || b.id || 'N/A'}</td>
+            <td class="px-6 py-3 text-slate-600 text-xs">${b.slot || 'Slot pending'}</td>
+            <td class="px-6 py-3 text-center text-slate-600 text-xs font-bold">${b.qty || 1}</td>
+            <td class="px-6 py-3 text-right">
+                <span class="text-[9px] font-bold ${String(b.status || '').toLowerCase() === 'confirmed' ? 'text-emerald-600 bg-emerald-50' : 'text-orange-600 bg-orange-50'} px-2 py-0.5 rounded-full border ${String(b.status || '').toLowerCase() === 'confirmed' ? 'border-emerald-100' : 'border-orange-100'}">${b.status || 'Pending'}</span>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="4" class="px-6 py-8 text-center text-slate-400 text-xs">No recent bookings.</td></tr>';
+}
+
+async function loadAdminBookingsData(silent) {
+    const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+    try {
+        const [bookingsRes, summaryRes] = await Promise.all([
+            fetch(`/api/bookings?temple_key=${encodeURIComponent(adminContext)}&limit=100`),
+            fetch(`/api/admin/summary?temple_key=${encodeURIComponent(adminContext)}`)
+        ]);
+
+        if (!bookingsRes.ok || !summaryRes.ok) {
+            throw new Error('Unable to load backend booking data');
+        }
+
+        const bookingsPayload = await bookingsRes.json();
+        const summaryPayload = await summaryRes.json();
+        adminBookingsCache = Array.isArray(bookingsPayload.bookings) ? bookingsPayload.bookings : [];
+        adminBookingsSummary = {
+            ...adminBookingsSummary,
+            ...summaryPayload
+        };
+    } catch (error) {
+        adminBookingsCache = getAdminBookingsFallback();
+        adminBookingsSummary = {
+            totalBookings: adminBookingsCache.length,
+            confirmed: adminBookingsCache.filter(b => String(b.status || '').toLowerCase() === 'confirmed').length,
+            pending: adminBookingsCache.filter(b => String(b.status || '').toLowerCase() !== 'confirmed').length,
+            online: adminBookingsCache.filter(b => String(b.source || '').toLowerCase() === 'online').length,
+            offline: adminBookingsCache.filter(b => String(b.source || '').toLowerCase() === 'offline').length
+        };
+        if (!silent) {
+            console.warn('Falling back to local booking cache because backend booking data is unavailable.');
+        }
+    }
+
+    const totalBkEl = document.getElementById('total-bookings-count');
+    if (totalBkEl) totalBkEl.textContent = Number(adminBookingsSummary.totalBookings || adminBookingsCache.length || 0).toLocaleString();
+    renderAdminBookingSummaryRows(adminBookingsCache);
+    renderAdminBookings();
+}
+
+function bindAdminBookingsStream() {
+    if (adminBookingsStream || typeof EventSource === 'undefined') return;
+    adminBookingsStream = new EventSource('/api/admin/bookings/stream');
+    adminBookingsStream.addEventListener('booking-update', (event) => {
+        try {
+            const payload = JSON.parse(event.data || '{}');
+            const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+            const booking = payload.booking || {};
+            if (payload.type === 'ready') return;
+            if (booking.temple_key && booking.temple_key !== adminContext) return;
+            loadAdminBookingsData(true);
+            if (payload.type === 'created') {
+                showAdminInfoToast(`New booking received for ${booking.temple_name || getAdminTempleName(adminContext)}.`);
+            }
+        } catch (error) {}
+    });
+    adminBookingsStream.onerror = () => {};
+}
+
+function updateDashboardBookingControlSummary(state) {
+    const badge = document.getElementById('dashboard-booking-control-badge');
+    const copy = document.getElementById('dashboard-booking-control-copy');
+    if (!badge || !copy) return;
+
+    const paused = Boolean(state?.paused);
+    badge.className = paused
+        ? 'inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-[11px] font-bold text-red-700'
+        : 'inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-700';
+    badge.innerHTML = paused
+        ? '<span class="h-2 w-2 rounded-full bg-red-500"></span>Paused'
+        : '<span class="h-2 w-2 rounded-full bg-emerald-500"></span>Active';
+
+    copy.textContent = paused
+        ? `New bookings are temporarily paused${state.reason ? ': ' + state.reason : ' across the platform.'}`
+        : 'Bookings are currently active across the main site and all temple microsites.';
+}
+
+function renderAdminBookingAudit(audit) {
+    const listEl = document.getElementById('ticket-control-audit-list');
+    if (!listEl) return;
+
+    if (!Array.isArray(audit) || audit.length === 0) {
+        listEl.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-sm text-slate-400">No ticket-control actions recorded yet.</td></tr>';
+        return;
+    }
+
+    listEl.innerHTML = audit.map(entry => `
+        <tr class="hover:bg-white transition-colors">
+            <td class="px-5 py-4 text-xs font-semibold text-slate-600">${formatAdminDateTime(entry.created_at || entry.updated_at)}</td>
+            <td class="px-5 py-4 text-xs text-slate-600">${entry.admin_id || entry.adminId || 'system'}</td>
+            <td class="px-5 py-4">
+                <span class="${(entry.action || '').toLowerCase() === 'paused' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'} inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider">
+                    ${entry.action || 'updated'}
+                </span>
+            </td>
+            <td class="px-5 py-4 text-xs text-slate-500">${entry.reason || '<span class="text-slate-300">No reason</span>'}</td>
+        </tr>
+    `).join('');
+}
+
+function renderAdminBookingControl() {
+    const state = adminBookingControlState || {};
+    const paused = Boolean(state.paused);
+    const hasSession = Boolean(getBookingControlSession()?.secret);
+    const statusPill = document.getElementById('ticket-control-status-pill');
+    const heroTitle = document.getElementById('ticket-control-hero-title');
+    const heroCopy = document.getElementById('ticket-control-hero-copy');
+    const toggleBtn = document.getElementById('ticket-control-toggle-btn');
+    const loginHint = document.getElementById('ticket-control-login-hint');
+    const statState = document.getElementById('ticket-control-stat-state');
+    const statUpdated = document.getElementById('ticket-control-stat-updated');
+    const statResume = document.getElementById('ticket-control-stat-resume');
+    const reasonInput = document.getElementById('ticket-control-reason');
+    const resumeInput = document.getElementById('ticket-control-resume-at');
+    const dashboardButton = document.querySelector('[onclick*="ticket-control"]');
+
+    if (statusPill) {
+        statusPill.className = paused
+            ? 'inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-xs font-bold text-red-700'
+            : 'inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700';
+        statusPill.innerHTML = paused
+            ? '<span class="h-2.5 w-2.5 rounded-full bg-red-500"></span>Bookings Paused'
+            : '<span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Bookings Active';
+    }
+
+    if (heroTitle) heroTitle.textContent = paused ? 'Ticket Booking is Paused' : 'Ticket Booking is Active';
+    if (heroCopy) {
+        heroCopy.textContent = paused
+            ? (state.reason || 'New bookings are paused across the main site and all temple microsites.')
+            : 'Pilgrims can continue booking on the main platform and all temple microsites.';
+    }
+
+    if (toggleBtn) {
+        toggleBtn.textContent = paused ? 'Resume Ticket Booking' : 'Pause Ticket Booking';
+        toggleBtn.className = paused
+            ? 'px-5 py-3 rounded-lg bg-emerald-600 text-white text-sm font-bold shadow-sm shadow-emerald-900/10 hover:bg-emerald-700 transition-colors'
+            : 'px-5 py-3 rounded-lg bg-red-600 text-white text-sm font-bold shadow-sm shadow-red-900/10 hover:bg-red-700 transition-colors';
+        toggleBtn.disabled = !hasSession;
+        toggleBtn.classList.toggle('opacity-50', !hasSession);
+        toggleBtn.classList.toggle('cursor-not-allowed', !hasSession);
+    }
+
+    if (loginHint) loginHint.classList.toggle('hidden', hasSession);
+    if (statState) statState.textContent = paused ? 'Paused' : 'Active';
+    if (statUpdated) statUpdated.textContent = formatAdminDateTime(paused ? state.pausedAt : state.resumeAt || state.pausedAt);
+    if (statResume) statResume.textContent = state.resumeAt ? formatAdminDateTime(state.resumeAt) : 'Manual';
+    if (reasonInput && document.activeElement !== reasonInput) reasonInput.value = state.reason || '';
+    if (resumeInput && document.activeElement !== resumeInput) resumeInput.value = state.resumeAt ? new Date(state.resumeAt).toISOString().slice(0, 16) : '';
+    if (dashboardButton) dashboardButton.setAttribute('aria-label', 'Open ticket control section');
+
+    updateDashboardBookingControlSummary(state);
+    renderAdminBookingAudit(state.audit || []);
+}
+
+async function loadAdminBookingControl(showToast) {
+    try {
+        const response = await fetch('/api/admin/booking-control?includeAudit=true');
+        if (!response.ok) throw new Error('Unable to load booking control state');
+        const payload = await response.json();
+        adminBookingControlState = {
+            ...adminBookingControlState,
+            ...payload,
+            audit: Array.isArray(payload.audit) ? payload.audit : adminBookingControlState.audit
+        };
+        renderAdminBookingControl();
+        if (showToast) showAdminInfoToast('Ticket control status refreshed.');
+    } catch (error) {
+        const listEl = document.getElementById('ticket-control-audit-list');
+        if (listEl) {
+            listEl.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-sm text-red-400">Unable to load booking control data right now.</td></tr>';
+        }
+    }
+}
+
+function openTicketControlConfirm(paused) {
+    const modal = document.getElementById('ticket-control-confirm-modal');
+    const copy = document.getElementById('ticket-control-confirm-copy');
+    const reason = document.getElementById('ticket-control-confirm-reason');
+    const resume = document.getElementById('ticket-control-confirm-resume');
+    const submit = document.getElementById('ticket-control-confirm-submit');
+    const reasonValue = document.getElementById('ticket-control-reason')?.value.trim() || '';
+    const resumeValue = document.getElementById('ticket-control-resume-at')?.value || '';
+
+    adminBookingControlPendingPausedState = paused;
+    if (copy) {
+        copy.textContent = paused
+            ? 'This will immediately stop new ticket bookings across the entire platform.'
+            : 'This will allow new ticket bookings across the main site and temple microsites again.';
+    }
+    if (reason) reason.textContent = reasonValue || 'No reason provided.';
+    if (resume) resume.textContent = resumeValue ? formatAdminDateTime(resumeValue) : 'Manual resume';
+    if (submit) {
+        submit.textContent = paused ? 'Confirm Pause' : 'Confirm Resume';
+        submit.className = paused
+            ? 'px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-bold hover:bg-red-700 transition-colors'
+            : 'px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition-colors';
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('.transform')?.classList.remove('scale-95');
+    }, 10);
+}
+
+function closeTicketControlConfirm() {
+    const modal = document.getElementById('ticket-control-confirm-modal');
+    modal.classList.add('opacity-0');
+    modal.querySelector('.transform')?.classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 250);
+}
+
+function handleTicketControlToggle() {
+    const hasSession = Boolean(getBookingControlSession()?.secret);
+    if (!hasSession) {
+        alert('Please log in through the admin portal again to update ticket control.');
+        return;
+    }
+
+    openTicketControlConfirm(!adminBookingControlState.paused);
+}
+
+async function submitAdminBookingControlChange() {
+    const headers = bookingControlHeaders();
+    if (!headers) {
+        closeTicketControlConfirm();
+        alert('Admin access expired. Please log in again.');
+        return;
+    }
+
+    const toggleBtn = document.getElementById('ticket-control-toggle-btn');
+    const confirmBtn = document.getElementById('ticket-control-confirm-submit');
+    const reason = document.getElementById('ticket-control-reason')?.value.trim() || '';
+    const resumeInput = document.getElementById('ticket-control-resume-at')?.value || '';
+    const resumeAt = resumeInput ? new Date(resumeInput).toISOString() : null;
+
+    if (toggleBtn) toggleBtn.disabled = true;
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = adminBookingControlPendingPausedState ? 'Pausing...' : 'Resuming...';
+    }
+
+    try {
+        const response = await fetch('/api/admin/booking-control', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                paused: adminBookingControlPendingPausedState,
+                reason,
+                resumeAt
+            })
+        });
+
+        if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            throw new Error(payload.error || 'Unable to update booking control');
+        }
+
+        const payload = await response.json();
+        adminBookingControlState = {
+            ...adminBookingControlState,
+            ...payload,
+            audit: Array.isArray(payload.audit) ? payload.audit : adminBookingControlState.audit
+        };
+        renderAdminBookingControl();
+        closeTicketControlConfirm();
+        showAdminInfoToast(adminBookingControlPendingPausedState ? 'New bookings are now paused.' : 'Ticket booking is active again.');
+    } catch (error) {
+        alert(error.message || 'Unable to update ticket control.');
+    } finally {
+        if (toggleBtn) toggleBtn.disabled = false;
+        if (confirmBtn) confirmBtn.disabled = false;
+        renderAdminBookingControl();
+    }
+}
+
+function bindAdminBookingControlStream() {
+    if (adminBookingControlStream || typeof EventSource === 'undefined') return;
+    adminBookingControlStream = new EventSource('/api/admin/booking-control/stream');
+    adminBookingControlStream.addEventListener('booking-control', (event) => {
+        try {
+            const payload = JSON.parse(event.data || '{}');
+            if (!payload?.state) return;
+            adminBookingControlState = {
+                ...adminBookingControlState,
+                ...payload.state
+            };
+            renderAdminBookingControl();
+            loadAdminBookingControl(false);
+        } catch (error) {}
+    });
+    adminBookingControlStream.onerror = () => {};
+}
+
+function showAdminSection(id, link) {
+    // Hide all sections
+    document.querySelectorAll('.admin-section').forEach(s => {
+        s.classList.add('hidden');
+        s.style.display = 'none';
+    });
+    
+    // Show selected section with smooth entrance
+    const target = document.getElementById('admin-section-' + id);
+    if (target) {
+        target.classList.remove('hidden');
+        const displayMode = target.dataset.display || (id === 'dashboard' ? 'grid' : (id === 'bookings' ? 'block' : 'grid'));
+        target.style.display = displayMode;
+        // Micro-animation entrance
+        target.classList.add('entering');
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                target.classList.remove('entering');
+            });
+        });
+    }
+
+    // Update sidebar active state
+    document.querySelectorAll('.sidebar-link').forEach(l => {
+        l.classList.remove('text-orange-600', 'bg-orange-50', 'font-semibold');
+        l.classList.add('text-slate-600');
+    });
+    link.classList.add('text-orange-600', 'bg-orange-50', 'font-semibold');
+    link.classList.remove('text-slate-600');
+    
+    // Load data when relevant section opens (with skeleton on manual open)
+    if (id === 'bookings') loadAdminBookingsData(true);
+    if (id === 'crowd-parking') updateAdminParking();
+    if (id === 'ticket-control') {
+        loadAdminBookingControl(false);
+        loadAdminTickets(true);
+    }
+    if (id === 'temple-requests') loadAdminTempleRegistrations(true);
+}
+
+function setAdminIntensity(level, btn) {
+    currentIntensity = level;
+    document.querySelectorAll('.intensity-btn').forEach(b => {
+        b.classList.remove('bg-white', 'text-orange-600', 'shadow-sm', 'active-intensity');
+        b.classList.add('text-slate-500');
+    });
+    btn.classList.add('bg-white', 'text-orange-600', 'shadow-sm', 'active-intensity');
+    btn.classList.remove('text-slate-500');
+}
+
+function submitAdminLiveStatus() {
+    const templeKey = document.getElementById('admin-admin-temple').value;
+    const status = {
+        templeKey: templeKey,
+        intensity: currentIntensity,
+        timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('dd_crowdStatus_' + templeKey, JSON.stringify(status));
+    
+    // Update global activity log
+    const notes = JSON.parse(localStorage.getItem('globalNotifications') || '[]');
+    notes.unshift({
+        type: 'alert',
+        msg: `Crowd level for ${templeKey} updated to ${currentIntensity}`,
+        time: new Date().toLocaleTimeString(),
+        targetContext: templeKey
+    });
+    localStorage.setItem('globalNotifications', JSON.stringify(notes.slice(0, 30)));
+    renderAdminNotifications();
+    
+    document.getElementById('admin-last-updated').innerText = 'Last updated: ' + new Date().toLocaleTimeString();
+    alert(`Status updated: ${templeKey} is now ${currentIntensity}`);
+}
+
+function renderAdminBookings() {
+    const listEl = document.getElementById('admin-bookings-list');
+    if (!listEl) return;
+
+    const records = Array.isArray(adminBookingsCache) && adminBookingsCache.length
+        ? adminBookingsCache
+        : getAdminBookingsFallback();
+
+    if (records.length === 0) {
+        listEl.innerHTML = '<tr><td colspan="6" class="px-8 py-10 text-center text-slate-400 font-medium">No active bookings found for this temple.</td></tr>';
+        return;
+    }
+
+    listEl.innerHTML = records.map(b => `
+        <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-8 py-4 font-bold text-indigo-900">#${b.ticket_id || b.ticketId || b.id || 'N/A'}</td>
+            <td class="px-8 py-4 text-slate-600 font-medium">${b.temple_name || b.templeName || 'Temple Booking'}</td>
+            <td class="px-8 py-4 text-slate-600">${formatAdminDate(b.visit_date || b.date || b.created_at)} · ${b.slot || b.time || 'Slot pending'}</td>
+            <td class="px-8 py-4 text-center text-slate-600 font-bold">${b.qty || b.pilgrims || 1}</td>
+            <td class="px-8 py-4">
+                <span class="text-[10px] font-black px-2 py-1 bg-indigo-50 text-indigo-600 rounded uppercase tracking-widest">${b.source || 'Online'}</span>
+            </td>
+            <td class="px-8 py-4 text-right">
+                <div class="flex items-center justify-end gap-2 flex-wrap">
+                    <span class="text-xs font-bold ${String(b.status || '').toLowerCase() === 'confirmed' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' : 'text-orange-600 bg-orange-50 border-orange-100'} px-3 py-1 rounded-full border">${b.status || 'Pending'}</span>
+                    ${String(b.status || '').toLowerCase() === 'confirmed' ? '' : `<button onclick="confirmBooking('${b.id}')" class="px-3 py-1 rounded-lg bg-primary/10 text-primary text-[11px] font-bold hover:bg-primary/15 transition-colors">Confirm</button>`}
+                    <button onclick="deleteBooking('${b.id}')" class="px-3 py-1 rounded-lg bg-red-50 text-red-600 text-[11px] font-bold hover:bg-red-100 transition-colors">Delete</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function renderAdminFeedback() {
+    const listEl = document.getElementById('admin-feedback-list');
+    if (!listEl) return;
+    
+    const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+    const allFeed = JSON.parse(localStorage.getItem('dd_feedback') || '[]');
+    const myFeed = allFeed.filter(f => f.templeKey === adminContext);
+    
+    if (myFeed.length === 0) {
+        listEl.innerHTML = '<tr><td colspan="4" class="px-8 py-10 text-center text-slate-400 text-sm">No feedback received yet.</td></tr>';
+        return;
+    }
+
+    listEl.innerHTML = myFeed.map(f => {
+        const stars = '★'.repeat(f.rating) + '☆'.repeat(5 - f.rating);
+        return `
+            <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-8 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">${f.name[0]}</div>
+                        <span class="text-sm font-bold text-indigo-900">${f.name}</span>
+                    </div>
+                </td>
+                <td class="px-8 py-4">
+                    <span class="text-yellow-500 font-bold">${stars}</span>
+                </td>
+                <td class="px-8 py-4 text-xs text-slate-600 max-w-md italic">"${f.thoughts || 'No comment provided'}"</td>
+                <td class="px-8 py-4 text-[10px] text-slate-400 font-bold uppercase">${new Date(f.time).toLocaleTimeString()}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function updateAdminParking() {
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveParkingData = getLiveParkingData();
+    const zones = liveParkingData[templeKey]?.zones || [];
+    const listEl = document.getElementById('admin-parking-list');
+    listEl.innerHTML = '';
+    
+    // Populate Visual Designer active zone select dropdown
+    const zoneSelect = document.getElementById('designer-zone-select');
+    if (zoneSelect) {
+        zoneSelect.innerHTML = zones.map((z, idx) => `<option value="${idx}">${z.name}</option>`).join('');
+        if (designerActiveZoneIdx >= zones.length) designerActiveZoneIdx = 0;
+        zoneSelect.value = designerActiveZoneIdx;
+    }
+    
+    zones.forEach((zone, idx) => {
+        const available = zone.capacity - zone.filled;
+        const percentage = Math.round((zone.filled / zone.capacity) * 100);
+        let barColor = 'bg-emerald-500';
+        if (percentage >= 90) barColor = 'bg-red-500';
+        else if (percentage >= 70) barColor = 'bg-orange-500';
+        
+        listEl.innerHTML += `
+            <div class="p-4 bg-surface-container-low rounded-xl border border-slate-100">
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-sm font-bold text-slate-800">${zone.name}</p>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        available === 0 ? 'text-red-600 bg-red-50' : 
+                        available < 10  ? 'text-orange-600 bg-orange-50' : 
+                                          'text-emerald-600 bg-emerald-50'
+                    }">${available === 0 ? 'FULL' : available + ' free'}</span>
+                </div>
+
+                <!-- Editable Inputs -->
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 block">Total Slots</label>
+                        <input type="number" min="1" max="9999"
+                            id="parking-capacity-${templeKey}-${idx}"
+                            value="${zone.capacity}"
+                            class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        />
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 block">Filled Slots</label>
+                        <input type="number" min="0" max="9999"
+                            id="parking-filled-${templeKey}-${idx}"
+                            value="${zone.filled}"
+                            class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        />
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                    <div id="parking-bar-${templeKey}-${idx}" class="${barColor} h-full transition-all" style="width: ${percentage}%"></div>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">${zone.distance} away</p>
+            </div>
+        `;
+    });
+    
+    // Also update creative map
+    renderCreativeParkingMap(templeKey, zones);
+}
+
+function saveAdminParkingSlots() {
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    let data = getLiveParkingData();
+    const zones = data[templeKey]?.zones || [];
+    
+    let valid = true;
+    zones.forEach((zone, idx) => {
+        const capacityEl = document.getElementById(`parking-capacity-${templeKey}-${idx}`);
+        const filledEl   = document.getElementById(`parking-filled-${templeKey}-${idx}`);
+        if (!capacityEl || !filledEl) return;
+        
+        const capacity = parseInt(capacityEl.value);
+        const filled   = parseInt(filledEl.value);
+        
+        if (isNaN(capacity) || capacity < 1) { alert(`Zone "${zone.name}": Total Slots must be at least 1.`); valid = false; return; }
+        if (isNaN(filled)   || filled < 0)   { alert(`Zone "${zone.name}": Filled Slots cannot be negative.`); valid = false; return; }
+        if (filled > capacity)               { alert(`Zone "${zone.name}": Filled (${filled}) cannot exceed Total (${capacity}).`); valid = false; return; }
+        
+        data[templeKey].zones[idx].capacity = capacity;
+        data[templeKey].zones[idx].filled   = filled;
+    });
+    
+    if (!valid) return;
+    
+    // Persist to localStorage — user page reads this every 4s
+    localStorage.setItem('dd_parkingData', JSON.stringify(data));
+    
+    // Re-render admin view
+    updateAdminParking();
+    updateAdminParkingKPI();
+    
+    // Show success toast
+    const statusEl = document.getElementById('parking-save-status');
+    if (statusEl) {
+        statusEl.classList.remove('hidden');
+        setTimeout(() => statusEl.classList.add('hidden'), 4000);
+    }
+    
+    // Log to notifications
+    const notes = JSON.parse(localStorage.getItem('globalNotifications') || '[]');
+    notes.unshift({
+        type: 'info',
+        msg: `Parking updated for ${templeKey}: ${zones.map(z => z.name + ' (' + (z.capacity - z.filled) + ' free)').join(', ')}`,
+        time: new Date().toLocaleTimeString(),
+        targetContext: templeKey
+    });
+    localStorage.setItem('globalNotifications', JSON.stringify(notes.slice(0, 30)));
+    renderAdminNotifications();
+}
+
+function adminFreeSlot(templeKey, zoneIdx) {
+    let data = getLiveParkingData();
+    if (data[templeKey]?.zones[zoneIdx] && data[templeKey].zones[zoneIdx].filled > 0) {
+        data[templeKey].zones[zoneIdx].filled--;
+        localStorage.setItem('dd_parkingData', JSON.stringify(data));
+        updateAdminParking();
+        updateAdminParkingKPI();
+    }
+}
+
+// ==============================================
+// VISUAL PARKING DESIGNER ENGINE
+// ==============================================
+
+function switchDesignerZone() {
+    const zoneSelect = document.getElementById('designer-zone-select');
+    if (!zoneSelect) return;
+    designerActiveZoneIdx = parseInt(zoneSelect.value) || 0;
+    
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    const zones = liveData[templeKey]?.zones || [];
+    const zone = zones[designerActiveZoneIdx];
+    if (!zone) return;
+    
+    // Sync UI inputs with zone settings
+    document.getElementById('designer-shape').value = zone.shape || 'grid';
+    document.getElementById('designer-cols').value = zone.cols || 6;
+    document.getElementById('designer-rows').value = zone.rows || 4;
+    document.getElementById('designer-angle').value = zone.angle || 0;
+    
+    renderCreativeParkingMap(templeKey, zones);
+}
+
+function adjustDesignerLayout() {
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    const zones = liveData[templeKey]?.zones || [];
+    const zone = zones[designerActiveZoneIdx];
+    if (!zone) return;
+    
+    const shape = document.getElementById('designer-shape').value;
+    const cols = parseInt(document.getElementById('designer-cols').value) || 6;
+    const rows = parseInt(document.getElementById('designer-rows').value) || 4;
+    const angle = parseInt(document.getElementById('designer-angle').value) || 0;
+    
+    zone.shape = shape;
+    zone.cols = cols;
+    zone.rows = rows;
+    zone.angle = angle;
+    
+    // Auto-generate slot details if mismatch with capacity
+    let slots = zone.slots || [];
+    const capacity = zone.capacity;
+    if (slots.length < capacity) {
+        for (let i = slots.length; i < capacity; i++) {
+            const rowChar = String.fromCharCode(65 + Math.floor(i / cols));
+            const colNum = (i % cols) + 1;
+            slots.push({
+                id: `${rowChar}${colNum}`,
+                status: 'available',
+                type: 'car',
+                label: `Spot ${rowChar}-${colNum}`
+            });
+        }
+    } else if (slots.length > capacity) {
+        slots = slots.slice(0, capacity);
+    }
+    
+    // Apply position allocations depending on selected layout shape style
+    if (shape === 'grid') {
+        slots.forEach((slot, i) => {
+            const r = Math.floor(i / cols);
+            const c = i % cols;
+            slot.x = Math.round(15 + (c / Math.max(1, cols - 1)) * 70);
+            slot.y = Math.round(20 + (r / Math.max(1, rows - 1)) * 60);
+            slot.angle = angle;
+        });
+    } else if (shape === 'circle') {
+        slots.forEach((slot, i) => {
+            const total = slots.length;
+            const theta = (i / total) * 2.0 * Math.PI;
+            const radius = 35; // circular percentage bounds
+            slot.x = Math.round(50 + radius * Math.cos(theta));
+            slot.y = Math.round(50 + radius * Math.sin(theta));
+            // orient pointing towards center
+            slot.angle = Math.round((theta * 180) / Math.PI) + 90 + angle;
+        });
+    } else if (shape === 'diagonal') {
+        slots.forEach((slot, i) => {
+            const r = Math.floor(i / cols);
+            const c = i % cols;
+            const offset = r * 4; 
+            slot.x = Math.round(10 + (c / Math.max(1, cols - 1)) * 70 + offset) % 95;
+            if (slot.x < 5) slot.x += 8;
+            slot.y = Math.round(20 + (r / Math.max(1, rows - 1)) * 60);
+            slot.angle = 45 + angle;
+        });
+    } else if (shape === 'freeform') {
+        slots.forEach((slot, i) => {
+            if (slot.x === undefined || slot.y === undefined) {
+                const r = Math.floor(i / cols);
+                const c = i % cols;
+                slot.x = Math.round(15 + (c / Math.max(1, cols - 1)) * 70);
+                slot.y = Math.round(20 + (r / Math.max(1, rows - 1)) * 60);
+                slot.angle = angle;
+            }
+        });
+    }
+    
+    zone.slots = slots;
+    localStorage.setItem('dd_parkingData', JSON.stringify(liveData));
+    renderCreativeParkingMap(templeKey, zones);
+}
+
+function renderCreativeParkingMap(templeKey, zones) {
+    const mapEl = document.getElementById('admin-creative-parking');
+    if (!mapEl) return;
+    
+    const zone = zones[designerActiveZoneIdx];
+    if (!zone) {
+        mapEl.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs font-semibold">Select a zone to start designing</div>';
+        return;
+    }
+    
+    // Auto-bootstrap zone designer properties if missing
+    if (!zone.shape) zone.shape = 'grid';
+    if (!zone.cols) zone.cols = 6;
+    if (!zone.rows) zone.rows = 4;
+    if (!zone.angle) zone.angle = 0;
+    if (!zone.slots || zone.slots.length === 0) {
+        zone.slots = Array.from({ length: zone.capacity }, (_, i) => {
+            const rowChar = String.fromCharCode(65 + Math.floor(i / zone.cols));
+            const colNum = (i % zone.cols) + 1;
+            return {
+                id: `${rowChar}${colNum}`,
+                status: 'available',
+                type: 'car',
+                label: `Spot ${rowChar}-${colNum}`
+            };
+        });
+    }
+    
+    // Recalculate basic coords to ensure clean boot if they lack properties
+    zone.slots.forEach((slot, i) => {
+        if (slot.x === undefined || slot.y === undefined) {
+            const r = Math.floor(i / zone.cols);
+            const c = i % zone.cols;
+            slot.x = Math.round(15 + (c / Math.max(1, zone.cols - 1)) * 70);
+            slot.y = Math.round(20 + (r / Math.max(1, zone.rows - 1)) * 60);
+            slot.angle = zone.angle;
+        }
+    });
+    
+    let html = '<div class="absolute inset-0 bg-[radial-gradient(#334155_1.2px,transparent_1.2px)] [background-size:20px_20px] opacity-35 pointer-events-none"></div>';
+    
+    zone.slots.forEach(slot => {
+        let bgClass = 'border border-dashed border-slate-700 bg-slate-800/40 hover:bg-slate-800/80';
+        let colorClass = 'text-indigo-400';
+        let icon = 'directions_car';
+        
+        if (slot.type === 'bike') icon = 'two_wheeler';
+        else if (slot.type === 'ev') icon = 'electric_car';
+        else if (slot.type === 'disabled') icon = 'accessible';
+        
+        if (slot.status === 'occupied') {
+            bgClass = 'bg-slate-900 border border-slate-800 opacity-90 text-slate-500';
+            colorClass = 'text-slate-600';
+        } else if (slot.status === 'reserved') {
+            bgClass = 'bg-amber-500/10 border border-amber-500/35 text-amber-500';
+            colorClass = 'text-amber-500';
+        } else if (slot.status === 'walkway') {
+            bgClass = 'bg-transparent border border-dashed border-slate-800/20';
+            colorClass = 'text-slate-800';
+            icon = 'space_dashboard';
+        } else if (slot.status === 'pillar') {
+            bgClass = 'bg-slate-800 border border-slate-700 shadow-inner text-slate-600';
+            icon = 'grid_view';
+        } else {
+            if (slot.type === 'ev') {
+                bgClass = 'border border-emerald-500/50 bg-emerald-950/20 text-emerald-400';
+                colorClass = 'text-emerald-400';
+            } else {
+                bgClass = 'border border-primary/50 bg-slate-800/20 text-primary hover:border-primary';
+                colorClass = 'text-primary';
+            }
+        }
+        
+        const isSelected = designerSelectedSlotId === slot.id;
+        const activeBorder = isSelected ? 'ring-2 ring-orange-500 border-orange-500 shadow-[0_0_12px_#f97316] z-50' : 'z-20';
+        const cursorStyle = zone.shape === 'freeform' ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer';
+        
+        html += `
+            <div data-slot-id="${slot.id}" 
+                 onclick="openSlotEditor('${slot.id}')"
+                 class="absolute flex flex-col items-center justify-center rounded-xl p-1 w-10 h-12 md:w-11 md:h-13 transition-all select-none ${bgClass} ${activeBorder} ${cursorStyle}"
+                 style="left: ${slot.x}%; top: ${slot.y}%; transform: translate(-50%, -50%) rotate(${slot.angle || 0}deg);">
+                <span class="material-symbols-outlined text-[13px] md:text-[14px] ${colorClass}">${icon}</span>
+                <span class="text-[6.5px] font-bold mt-0.5 text-slate-400 tabular-nums">${slot.id}</span>
+            </div>
+        `;
+    });
+    
+    mapEl.innerHTML = html;
+    
+    if (zone.shape === 'freeform') {
+        setupDragListeners();
+    }
+}
+
+// Pointer Events Drag & Drop inside canvas coordinates
+let isDragging = false;
+let currentDragSlotId = null;
+let canvasRect = null;
+
+function setupDragListeners() {
+    const canvas = document.getElementById('admin-creative-parking');
+    if (!canvas) return;
+    
+    canvas.querySelectorAll('[data-slot-id]').forEach(slotEl => {
+        slotEl.addEventListener('pointerdown', (e) => {
+            const templeKey = document.getElementById('admin-parking-temple').value;
+            const liveData = getLiveParkingData();
+            const zone = liveData[templeKey]?.zones[designerActiveZoneIdx];
+            if (!zone || zone.shape !== 'freeform') return;
+            
+            e.stopPropagation();
+            isDragging = true;
+            currentDragSlotId = slotEl.getAttribute('data-slot-id');
+            designerSelectedSlotId = currentDragSlotId;
+            canvasRect = canvas.getBoundingClientRect();
+            slotEl.setPointerCapture(e.pointerId);
+            slotEl.classList.remove('z-20');
+            slotEl.classList.add('z-50');
+        });
+        
+        slotEl.addEventListener('pointermove', (e) => {
+            if (!isDragging || currentDragSlotId !== slotEl.getAttribute('data-slot-id')) return;
+            
+            const xPx = e.clientX - canvasRect.left;
+            const yPx = e.clientY - canvasRect.top;
+            
+            let xPct = Math.round((xPx / canvasRect.width) * 100);
+            let yPct = Math.round((yPx / canvasRect.height) * 100);
+            
+            xPct = Math.max(4, Math.min(96, xPct));
+            yPct = Math.max(4, Math.min(96, yPct));
+            
+            slotEl.style.left = xPct + '%';
+            slotEl.style.top = yPct + '%';
+        });
+        
+        slotEl.addEventListener('pointerup', (e) => {
+            if (!isDragging || currentDragSlotId !== slotEl.getAttribute('data-slot-id')) return;
+            isDragging = false;
+            
+            const xPx = e.clientX - canvasRect.left;
+            const yPx = e.clientY - canvasRect.top;
+            let xPct = Math.round((xPx / canvasRect.width) * 100);
+            let yPct = Math.round((yPx / canvasRect.height) * 100);
+            xPct = Math.max(4, Math.min(96, xPct));
+            yPct = Math.max(4, Math.min(96, yPct));
+            
+            slotEl.releasePointerCapture(e.pointerId);
+            
+            const templeKey = document.getElementById('admin-parking-temple').value;
+            const liveData = getLiveParkingData();
+            const zone = liveData[templeKey]?.zones[designerActiveZoneIdx];
+            if (zone) {
+                const slot = zone.slots.find(s => s.id === currentDragSlotId);
+                if (slot) {
+                    slot.x = xPct;
+                    slot.y = yPct;
+                    localStorage.setItem('dd_parkingData', JSON.stringify(liveData));
+                }
+            }
+            currentDragSlotId = null;
+        });
+    });
+}
+
+function openSlotEditor(slotId) {
+    if (isDragging) return;
+    
+    designerSelectedSlotId = slotId;
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    const zone = liveData[templeKey]?.zones[designerActiveZoneIdx];
+    if (!zone) return;
+    
+    const slot = zone.slots.find(s => s.id === slotId);
+    if (!slot) return;
+    
+    document.getElementById('editor-slot-id').textContent = slotId;
+    document.getElementById('editor-slot-label').value = slot.label || `Spot ${slotId}`;
+    document.getElementById('editor-slot-type').value = slot.type || 'car';
+    document.getElementById('editor-slot-status').value = slot.status || 'available';
+    
+    // Highlight spot
+    renderCreativeParkingMap(templeKey, liveData[templeKey]?.zones);
+    
+    // Show modal
+    const modal = document.getElementById('slot-editor-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('.transform').classList.remove('scale-95');
+    }, 10);
+}
+
+function closeSlotEditor() {
+    designerSelectedSlotId = null;
+    const modal = document.getElementById('slot-editor-modal');
+    modal.classList.add('opacity-0');
+    modal.querySelector('.transform').classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }, 200);
+    
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    renderCreativeParkingMap(templeKey, liveData[templeKey]?.zones);
+}
+
+function saveDesignerSlotProperties() {
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    const zone = liveData[templeKey]?.zones[designerActiveZoneIdx];
+    if (!zone) return;
+    
+    const slot = zone.slots.find(s => s.id === designerSelectedSlotId);
+    if (slot) {
+        slot.label = document.getElementById('editor-slot-label').value.trim() || `Spot ${designerSelectedSlotId}`;
+        slot.type = document.getElementById('editor-slot-type').value;
+        
+        const oldStatus = slot.status;
+        const newStatus = document.getElementById('editor-slot-status').value;
+        slot.status = newStatus;
+        
+        // Recalculate filled slots automatically!
+        if (oldStatus !== 'occupied' && newStatus === 'occupied') {
+            zone.filled = Math.min(zone.capacity, (zone.filled || 0) + 1);
+        } else if (oldStatus === 'occupied' && newStatus !== 'occupied') {
+            zone.filled = Math.max(0, (zone.filled || 0) - 1);
+        }
+        
+        localStorage.setItem('dd_parkingData', JSON.stringify(liveData));
+    }
+    
+    closeSlotEditor();
+    updateAdminParking();
+}
+
+function deleteDesignerSlot() {
+    if (!confirm('Are you sure you want to delete this parking spot from the layout?')) return;
+    
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    const zone = liveData[templeKey]?.zones[designerActiveZoneIdx];
+    if (!zone) return;
+    
+    const oldSlots = zone.slots || [];
+    const targetSlot = oldSlots.find(s => s.id === designerSelectedSlotId);
+    
+    zone.slots = oldSlots.filter(s => s.id !== designerSelectedSlotId);
+    zone.capacity = Math.max(1, zone.slots.length);
+    
+    if (targetSlot && targetSlot.status === 'occupied') {
+        zone.filled = Math.max(0, (zone.filled || 0) - 1);
+    }
+    
+    localStorage.setItem('dd_parkingData', JSON.stringify(liveData));
+    closeSlotEditor();
+    updateAdminParking();
+}
+
+function addNewDesignerSlot() {
+    const templeKey = document.getElementById('admin-parking-temple').value;
+    const liveData = getLiveParkingData();
+    const zone = liveData[templeKey]?.zones[designerActiveZoneIdx];
+    if (!zone) return;
+    
+    const slots = zone.slots || [];
+    
+    // Auto increment identifier
+    const nextIdx = slots.length + 1;
+    const nextId = `P${nextIdx}`;
+    
+    slots.push({
+        id: nextId,
+        status: 'available',
+        type: 'car',
+        label: `Spot ${nextId}`,
+        x: 50,
+        y: 50,
+        angle: zone.angle || 0
+    });
+    
+    zone.slots = slots;
+    zone.capacity = slots.length;
+    
+    localStorage.setItem('dd_parkingData', JSON.stringify(liveData));
+    updateAdminParking();
+    openSlotEditor(nextId);
+}
+
+
+function updateAdminParkingKPI() {
+    const kpiEl = document.getElementById('parking-availability-kpi');
+    if (!kpiEl) return;
+    const adminContext = localStorage.getItem('adminContext') || 'tirupati';
+    const liveParkingData = getLiveParkingData();
+    const zones = liveParkingData[adminContext]?.zones || [];
+    const totalFree = zones.reduce((sum, z) => sum + Math.max(0, z.capacity - z.filled), 0);
+    kpiEl.textContent = totalFree + ' Slots';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialise section visibility — show dashboard, hide the rest
+    document.querySelectorAll('.admin-section').forEach(s => {
+        s.classList.add('hidden');
+        s.style.display = 'none';
+    });
+    const dashEl = document.getElementById('admin-section-dashboard');
+    if (dashEl) {
+        dashEl.classList.remove('hidden');
+        dashEl.style.display = 'grid';
+    }
+
+    // 1. Context parsing logic
+    const adminContext = localStorage.getItem('adminContext');
+    if (!adminContext) {
+        window.location.href = '../dashboard/admin_login.html';
+        return;
+    }
+    
+    // Auto-bootstrap profile
+    const defaultAdminProfiles = {
+        'tirupati': { name: 'Tirupati Executive', age: 45, role: 'Super Admin' },
+        'manjunatha': { name: 'Dharmasthala Executive', age: 52, role: 'Chief Admin' }
+    };
+    const profileKey = 'adminProfile_' + adminContext;
+    let savedProfile = JSON.parse(localStorage.getItem(profileKey));
+    if (!savedProfile && adminContext && defaultAdminProfiles[adminContext]) savedProfile = defaultAdminProfiles[adminContext];
+    if (!savedProfile) savedProfile = { name: 'Guest Admin', age: 30, role: 'Viewer' };
+    
+    document.getElementById('sidebar-admin-name').innerText = savedProfile.name;
+    document.getElementById('sidebar-admin-role').innerText = savedProfile.role;
+
+    if (adminContext === 'manjunatha') {
+        const titleEl = document.getElementById('admin-header-title');
+        if (titleEl) titleEl.innerText = "Sri Dharmasthala Admin";
+        
+        const statSelect = document.getElementById('admin-admin-temple');
+        if (statSelect) { statSelect.value = 'manjunatha'; statSelect.disabled = true; }
+        
+        const parkSelect = document.getElementById('admin-parking-temple');
+        if (parkSelect) { parkSelect.value = 'manjunatha'; parkSelect.disabled = true; }
+    } else if (adminContext === 'tirupati') {
+        const titleEl = document.getElementById('admin-header-title');
+        if (titleEl) titleEl.innerText = "Tirupati Admin";
+        
+        const statSelect = document.getElementById('admin-admin-temple');
+        if (statSelect) { statSelect.value = 'tirupati'; statSelect.disabled = true; }
+        
+        const parkSelect = document.getElementById('admin-parking-temple');
+        if (parkSelect) { parkSelect.value = 'tirupati'; parkSelect.disabled = true; }
+    }
+    
+    function syncAdminKPIs() {
+        const bookingRecords = Array.isArray(adminBookingsCache) && adminBookingsCache.length ? adminBookingsCache : getAdminBookingsFallback();
+        renderAdminBookingSummaryRows(bookingRecords);
+        renderAdminBookings();
+        renderAdminNotifications();
+        updateAdminParkingKPI();
+        updateAdminParking();
+        renderAdminEmergencies();
+        renderAdminFeedback();
+
+        // Auto-Toast for NEW SOS alerts
+        const notes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+        const latestSOS = notes.find(n => n.type === 'alert' && n.targetContext === adminContext);
+        if (latestSOS && !window._lastSOSId && (Date.now() - new Date(latestSOS.time).getTime() < 10000)) {
+             window._lastSOSId = latestSOS.id;
+             showAdminToast(latestSOS.msg);
+        }
+    }
+    
+    syncAdminKPIs();
+    loadAdminBookingsData(true);
+    loadAdminBookingControl(false);
+    loadAdminTickets(true);
+    loadAdminTempleRegistrations(true); // true = show skeleton on first load
+    updateSystemStats();
+    bindAdminBookingControlStream();
+    bindAdminBookingsStream();
+    bindAdminTicketStream();
+    // Live polling for a "linked" experience
+    setInterval(syncAdminKPIs, 5000);
+    setInterval(() => loadAdminBookingsData(true), 8000);
+    setInterval(() => loadAdminTickets(false), 12000);
+    setInterval(() => loadAdminTempleRegistrations(false), 15000);
+    setInterval(updateSystemStats, 30000);
+
+    document.getElementById('admin-ticket-search')?.addEventListener('input', (event) => {
+        adminTicketManagementState.query = event.target.value || '';
+        renderAdminTicketTable();
+    });
+    document.getElementById('admin-ticket-filter')?.addEventListener('change', (event) => {
+        adminTicketManagementState.filter = event.target.value || 'ALL';
+        renderAdminTicketTable();
+    });
+
+    // Load Temple Map based on context
+    const mapInfos = {
+        tirupati: {
+            title: 'Tirupati Venkateswara Swamy Temple',
+            subtitle: 'Tirumala, Andhra Pradesh — Live Map View',
+            badge: 'Tirupati Venkateswara Swamy',
+            src: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.3!2d79.3490!3d13.6830!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b9d3d3b3c3d%3A0x1!2sTirupati+Venkateswara+Temple!5e0!3m2!1sen!2sin!4v1699000000000!5m2!1sen!2sin',
+            mapsUrl: 'https://www.google.com/maps/search/Tirupati+Venkateswara+Temple,+Tirumala,+Andhra+Pradesh'
+        },
+        manjunatha: {
+            title: 'Dharmasthala Sri Manjunatha Temple',
+            subtitle: 'Dharmasthala, Karnataka — Live Map View',
+            badge: 'Dharmasthala Manjunatha Temple',
+            src: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.5!2d75.3791!3d12.9600!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba4702b59e6a8a5%3A0xb618f39b57e6e0f7!2sDharmasthala+Temple!5e0!3m2!1sen!2sin!4v1699000000000!5m2!1sen!2sin',
+            mapsUrl: 'https://www.google.com/maps/search/Dharmasthala+Manjunatha+Temple,+Karnataka'
+        }
+    };
+
+    const mapCtx = mapInfos[adminContext] || mapInfos['tirupati'];
+    const mapEl = document.getElementById('admin-temple-map');
+    if (mapEl) mapEl.src = mapCtx.src;
+    const mapTitle = document.getElementById('map-section-title');
+    if (mapTitle) mapTitle.textContent = mapCtx.title;
+    const mapSubtitle = document.getElementById('map-section-subtitle');
+    if (mapSubtitle) mapSubtitle.textContent = mapCtx.subtitle;
+    const mapBadge = document.getElementById('map-badge-text');
+    if (mapBadge) mapBadge.textContent = mapCtx.badge;
+    const mapLink = document.getElementById('map-open-link');
+    if (mapLink) mapLink.href = mapCtx.mapsUrl;
+    
+    // Live polling for SOS incidents across open contexts
+    let seenAlertIds = new Set();
+    const initialNotes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+    initialNotes.forEach(n => { if (n.id) seenAlertIds.add(n.id); });
+    
+    setInterval(() => {
+        let currentNotes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+        let hasNew = false;
+        
+        currentNotes.forEach(n => {
+            if (n.type === 'alert' && n.targetContext === adminContext && n.id && !seenAlertIds.has(n.id)) {
+                hasNew = true;
+                seenAlertIds.add(n.id);
+                showAdminToast(n.msg);
+                
+                // Play an alert sound automatically if supported without extreme interaction rules
+                try {
+                	const audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'); 
+                	audio.play().catch(e => {}); 
+                } catch(e) {}
+            }
+        });
+        
+        if (hasNew) {
+            renderAdminNotifications();
+            
+            // Only re-render emergencies if panel might be open
+            const emergencyPanel = document.getElementById('emergency-panel');
+            if (emergencyPanel && !emergencyPanel.classList.contains('hidden')) {
+                renderAdminEmergencies();
+            }
+        }
+    }, 1500);
+});
+
+function showAdminToast(msg) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-6 right-6 lg:right-10 bg-red-600 text-white px-6 py-4 rounded-xl shadow-2xl font-bold flex items-center gap-4 z-[1000] border-2 border-red-400 transition-all duration-500 ease-out translate-x-[120%] opacity-0';
+    toast.innerHTML = `<span class="material-symbols-outlined text-[32px] animate-pulse">warning</span> <div class="flex-1"><p class="text-[10px] uppercase tracking-wider opacity-80 mb-0.5">Critical SOS Incident</p><p class="text-sm font-black leading-tight">${msg.split('SOS: ')[1] || msg}</p></div>`;
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-[120%]', 'opacity-0');
+        toast.classList.add('translate-x-0', 'opacity-100');
+    }, 50);
+    
+    // Animate out
+    setTimeout(() => {
+        toast.classList.remove('translate-x-0', 'opacity-100');
+        toast.classList.add('translate-x-[120%]', 'opacity-0');
+        setTimeout(() => toast.remove(), 500);
+    }, 7000);
+}
+
+function showAdminInfoToast(msg) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-6 right-6 lg:right-10 bg-indigo-900 text-white px-5 py-4 rounded-xl shadow-2xl shadow-indigo-900/15 font-bold flex items-center gap-3 z-[1000] transition-all duration-500 ease-out translate-y-[120%] opacity-0';
+    toast.innerHTML = `<span class="material-symbols-outlined text-[22px]">info</span><p class="text-sm leading-tight">${msg}</p>`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.remove('translate-y-[120%]', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+    }, 50);
+
+    setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[120%]', 'opacity-0');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}
+
+
+async function confirmBooking(id) {
+    try {
+        const response = await fetch(`/api/bookings/${encodeURIComponent(id)}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'Confirmed' })
+        });
+        if (!response.ok) throw new Error('Unable to confirm booking');
+        await loadAdminBookingsData(true);
+        showAdminInfoToast('Booking marked as confirmed.');
+    } catch (error) {
+        let bookings = JSON.parse(localStorage.getItem('dd_bookings') || '[]');
+        const idx = bookings.findIndex(b => b.id === id);
+        if (idx > -1) {
+            bookings[idx].status = 'Confirmed';
+            localStorage.setItem('dd_bookings', JSON.stringify(bookings));
+            adminBookingsCache = getAdminBookingsFallback();
+            renderAdminBookings();
+        }
+    }
+}
+
+async function deleteBooking(id) {
+    if (!confirm('Delete this booking?')) return;
+    try {
+        const response = await fetch(`/api/bookings/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Unable to delete booking');
+        await loadAdminBookingsData(true);
+        showAdminInfoToast('Booking deleted.');
+    } catch (error) {
+        let bookings = JSON.parse(localStorage.getItem('dd_bookings') || '[]');
+        bookings = bookings.filter(b => b.id !== id);
+        localStorage.setItem('dd_bookings', JSON.stringify(bookings));
+        adminBookingsCache = getAdminBookingsFallback();
+        renderAdminBookings();
+    }
+}
+
+
+// --- TOOLTIP LOGIC ---
+let tooltipTimeout;
+function showGlobalTooltip(e, text) {
+    const tooltipEl = document.getElementById('global-tooltip');
+    if (!tooltipEl) return;
+    tooltipEl.innerText = text;
+    tooltipEl.style.opacity = '1';
+    tooltipEl.style.left = e.clientX + 'px';
+    tooltipEl.style.top = e.clientY + 'px';
+    clearTimeout(tooltipTimeout);
+}
+
+function hideGlobalTooltip() {
+    const tooltipEl = document.getElementById('global-tooltip');
+    if (!tooltipEl) return;
+    tooltipTimeout = setTimeout(() => { tooltipEl.style.opacity = '0'; }, 100);
+}
+
+function handleAreaChartHover(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    
+    let time = "06:00 AM";
+    let vol = "Low Crowd";
+    
+    if (percentage > 0.8) { time = "10:00 PM"; vol = "Minimal"; }
+    else if (percentage > 0.6) { time = "06:00 PM"; vol = "Medium"; }
+    else if (percentage > 0.4) { time = "02:00 PM"; vol = "High Rush"; }
+    else if (percentage > 0.2) { time = "11:30 AM"; vol = "Peak Surge"; }
+    else if (percentage > 0.1) { time = "08:00 AM"; vol = "Medium"; }
+    
+    showGlobalTooltip(e, `Last 24hrs Focus: ${time} | Est. ${vol}`);
+}
+
+// --- ADMIN SIDEBAR PROFILE LOGIC ---
+function toggleAdminSettings() {
+    const dropdown = document.getElementById('admin-settings-dropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+function logoutAdmin() {
+    localStorage.removeItem('adminContext');
+    sessionStorage.removeItem(bookingControlSessionKey);
+    try { adminBookingControlStream?.close(); } catch (error) {}
+    try { adminBookingsStream?.close(); } catch (error) {}
+    try { adminTicketStream?.close(); } catch (error) {}
+    window.location.href = '../dashboard/admin_login.html';
+}
+
+function openPersonalDetails() {
+    document.getElementById('admin-settings-dropdown').classList.add('hidden'); // close dropdown
+    const modal = document.getElementById('admin-profile-modal');
+    modal.classList.remove('hidden');
+    // Frame step animation
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('.transform').classList.remove('scale-95');
+    }, 10);
+    
+    const adminContext = localStorage.getItem('adminContext');
+    let profile = JSON.parse(localStorage.getItem('adminProfile_' + adminContext));
+    if (!profile) {
+        if (adminContext === 'manjunatha') profile = { name: 'Dharmasthala Executive', age: 52, role: 'Chief Admin' };
+        else profile = { name: 'Tirupati Executive', age: 45, role: 'Super Admin' };
+    }
+    
+    document.getElementById('edit-admin-name').value = profile.name || '';
+    document.getElementById('edit-admin-age').value = profile.age || '';
+    document.getElementById('edit-admin-role').value = profile.role || '';
+}
+
+function closePersonalDetails() {
+    const modal = document.getElementById('admin-profile-modal');
+    modal.classList.add('opacity-0');
+    modal.querySelector('.transform').classList.add('scale-95');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+function savePersonalDetails() {
+    const adminContext = localStorage.getItem('adminContext');
+    const newProfile = {
+        name: document.getElementById('edit-admin-name').value.trim() || 'Admin',
+        age: document.getElementById('edit-admin-age').value,
+        role: document.getElementById('edit-admin-role').value.trim() || 'Admin'
+    };
+    
+    localStorage.setItem('adminProfile_' + adminContext, JSON.stringify(newProfile));
+    
+    document.getElementById('sidebar-admin-name').innerText = newProfile.name;
+    document.getElementById('sidebar-admin-role').innerText = newProfile.role;
+    
+    closePersonalDetails();
+}
+
+// --- NOTIFICATION LOGIC ---
+function toggleAdminNotifications() {
+    document.getElementById('admin-notifications-dropdown').classList.toggle('hidden');
+}
+
+function clearAdminNotifications() {
+    if(!confirm("Erase all logged activity?")) return;
+    localStorage.removeItem('globalNotifications');
+    renderAdminNotifications();
+}
+
+function renderAdminNotifications() {
+    const listEl = document.getElementById('admin-notifications-list');
+    const indicator = document.getElementById('admin-notif-indicator');
+    if (!listEl) return;
+    
+    let notes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+    const adminContext = localStorage.getItem('adminContext');
+    
+    // Cross-filtering
+    notes = notes.filter(n => {
+        if (n.type === 'alert' && n.targetContext) {
+            if (adminContext === 'manjunatha' && n.targetContext !== 'manjunatha') return false;
+            if (adminContext === 'tirupati' && n.targetContext !== 'tirupati') return false;
+        }
+        return true;
+    });
+    
+    if (notes.length === 0) {
+        listEl.innerHTML = '<div class="p-6 text-center text-slate-400 text-xs py-10 font-medium">No recent activity detected.</div>';
+        if(indicator) indicator.classList.add('hidden');
+        return;
+    }
+    
+    if(indicator) indicator.classList.remove('hidden');
+    
+    listEl.innerHTML = notes.map(n => {
+        let icon = 'notifications';
+        let bg = 'bg-slate-100/50';
+        let iconColor = 'text-slate-500';
+        
+        if (n.type === 'alert') { icon = 'warning'; bg = 'bg-red-50/80 border-b border-white'; iconColor = 'text-red-500'; }
+        else if (n.type === 'booking') { icon = 'confirmation_number'; bg = 'bg-emerald-50/80 border-b border-white'; iconColor = 'text-emerald-600'; }
+        else if (n.type === 'login') { icon = 'person'; bg = 'bg-indigo-50/80 border-b border-white'; iconColor = 'text-indigo-500'; }
+        
+        return `<div class="p-4 hover:bg-slate-100 transition-colors flex gap-3 items-start ${bg}">
+            <span class="material-symbols-outlined text-[18px] ${iconColor} mt-0.5">${icon}</span>
+            <div class="flex-1">
+                <p class="text-[11px] font-bold text-slate-700 leading-snug">${n.msg}</p>
+                <p class="text-[9px] text-slate-400 font-bold mt-1 tracking-wider uppercase">${n.time}</p>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function renderAdminEmergencies() {
+    const listEl = document.getElementById('ep-emergency-list');
+    const zoneLabel = document.getElementById('ep-zone-label');
+    const statusLabel = document.getElementById('ep-status-label');
+    if (!listEl) return;
+    
+    const adminContext = localStorage.getItem('adminContext');
+    const jurisdiction = adminContext === 'manjunatha' ? 'Dharmasthala Jurisdiction' : 'Tirupati Jurisdiction';
+    if(zoneLabel) zoneLabel.textContent = jurisdiction;
+    
+    let allNotes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+    
+    const alerts = allNotes.filter(n => {
+        if (n.type !== 'alert') return false;
+        if (adminContext === 'manjunatha' && n.targetContext !== 'manjunatha') return false;
+        if (adminContext === 'tirupati' && n.targetContext !== 'tirupati') return false;
+        return true;
+    });
+    
+    if (alerts.length === 0) {
+        if(statusLabel) statusLabel.textContent = 'All Clear — No Active Incidents';
+        listEl.innerHTML = `<div class="p-8 text-center border border-dashed border-slate-200 rounded-2xl bg-white">
+            <span class="material-symbols-outlined text-4xl text-green-400 mb-3 block">check_circle</span>
+            <p class="font-bold text-slate-600">No Active Emergencies</p>
+            <p class="text-xs text-slate-400 mt-1">All systems normal in ${jurisdiction}</p>
+        </div>`;
+        return;
+    }
+    
+    if(statusLabel) statusLabel.textContent = `${alerts.length} Active Incident${alerts.length > 1 ? 's' : ''} — Immediate Action Required`;
+    listEl.innerHTML = alerts.map((a, i) => {
+        let coordsLoc = a.msg.split(' at ')[1] || 'Unknown Origin';
+        let alertType = a.msg.split('SOS: ')[1]?.split(' at ')[0] || 'Unidentified Event';
+        
+        let mapUrl = '';
+        let navBtn = '';
+        
+        if (a.lat && a.lon) {
+            mapUrl = `https://maps.google.com/maps?q=${a.lat},${a.lon}&z=16&output=embed`;
+            navBtn = `<a href="https://www.google.com/maps/dir/?api=1&destination=${a.lat},${a.lon}" target="_blank" class="text-[10px] bg-indigo-600 font-bold text-white hover:bg-indigo-700 px-4 py-2 rounded-lg transition-colors uppercase tracking-wider shadow-sm flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">navigation</span> Start GPS Route</a>`;
+        } else {
+            mapUrl = adminContext === 'manjunatha' ? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15555.20!2d75.3700!3d12.9600!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDU3JzM2LjAiTiA3NcKwMjInMTIuMCJF!5e0!3m2!1sen!2sin!4v1699000000000!5m2!1sen!2sin' : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15516.43!2d79.3395!3d13.6832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQwJzU5LjUiTiA3OcKwMjAnMjIuMiJF!5e0!3m2!1sen!2sin!4v1699000000000!5m2!1sen!2sin';
+            navBtn = `<button onclick="alert('Dispatching secondary enforcement...')" class="text-[10px] font-bold text-red-800 hover:text-red-900 border-b border-transparent hover:border-red-900">Escalate Situation</button>`;
+        }
+        
+        return `<div class="p-4 bg-red-50 border border-red-200 rounded-xl flex flex-col gap-3 group shadow-sm transition-all hover:shadow-md">
+            <div class="flex items-center justify-between">
+                <span class="bg-red-600 text-white text-[10px] uppercase font-black tracking-wider px-2 py-1 rounded shadow-sm flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white opacity-90 animate-pulse"></span> ${alertType}</span>
+                <span class="text-[9px] text-red-500 font-bold tracking-wider">${a.time.split(',')[1] || a.time}</span>
+            </div>
+            
+            <div class="flex gap-4 items-start">
+                <div class="w-24 h-24 rounded-lg overflow-hidden border border-red-200/60 shadow-inner flex-shrink-0 relative">
+                    <iframe src="${mapUrl}" width="100%" height="100%" style="border:0;" loading="lazy"></iframe>
+                    <div class="absolute inset-0 border-2 border-red-500 border-opacity-40 rounded-lg pointer-events-none animate-pulse"></div>
+                </div>
+                <div class="flex-1 flex flex-col gap-1">
+                    <p class="text-xs font-bold text-slate-700 leading-tight">Live Alert Location</p>
+                    <p class="text-[10px] font-medium text-slate-600 flex flex-wrap gap-1 leading-normal mb-1">
+                        ${coordsLoc}
+                    </p>
+                    <p class="text-[9px] text-red-500 font-bold uppercase tracking-widest mt-auto"><span class="ext-red-600 material-symbols-outlined text-[10px]">cell_tower</span> Security Tracking Active</p>
+                </div>
+            </div>
+            
+            <div class="pt-3 border-t border-red-200 flex justify-between items-center opacity-85 group-hover:opacity-100 transition-opacity">
+                <button onclick="resolveEmergency(${i})" class="text-[10px] font-bold text-red-600 hover:bg-red-100/80 px-4 py-2 rounded-lg transition-colors uppercase tracking-wider border border-red-200 shadow-sm bg-red-100/50 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">done_all</span> Mark Resolved</button>
+                ${navBtn}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function resolveEmergency(filterIndex) {
+    if(!confirm("Mark this incident as securely resolved? This removes it from live tracking.")) return;
+    
+    const adminContext = localStorage.getItem('adminContext');
+    let allNotes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+    
+    const alerts = allNotes.filter(n => {
+        if (n.type !== 'alert') return false;
+        if (adminContext === 'manjunatha' && n.targetContext !== 'manjunatha') return false;
+        if (adminContext === 'tirupati' && n.targetContext !== 'tirupati') return false;
+        return true;
+    });
+    
+    const targetAlert = alerts[filterIndex];
+    if (targetAlert) {
+        const globalIndex = allNotes.indexOf(targetAlert);
+        if (globalIndex > -1) {
+            allNotes.splice(globalIndex, 1);
+            localStorage.setItem('globalNotifications', JSON.stringify(allNotes));
+            renderAdminEmergencies();
+            renderAdminNotifications();
+        }
+    }
+}
+
+// ===== EMERGENCY PANEL LOGIC =====
+function openEmergencyPanel() {
+    const panel = document.getElementById('emergency-panel');
+    panel.classList.remove('hidden');
+    panel.classList.add('flex');
+    renderAdminEmergencies();
+}
+
+function closeEmergencyPanel() {
+    const panel = document.getElementById('emergency-panel');
+    panel.classList.add('hidden');
+    panel.classList.remove('flex');
+}
+
+// ===== REPORTS PANEL LOGIC =====
+function openReportsPanel() {
+    const panel = document.getElementById('reports-panel');
+    panel.classList.remove('hidden');
+    panel.classList.add('flex');
+    renderReportsPanel();
+}
+
+function closeReportsPanel() {
+    const panel = document.getElementById('reports-panel');
+    panel.classList.add('hidden');
+    panel.classList.remove('flex');
+}
+
+function closePanelIfBg(e, id) {
+    if (e.target === document.getElementById(id)) {
+        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id).classList.remove('flex');
+    }
+}
+
+function renderReportsPanel() {
+    const adminContext = localStorage.getItem('adminContext');
+    const templeName = adminContext === 'manjunatha' ? 'Sri Dharmasthala Manjunatha' : 'Tirupati Venkateswara Swamy';
+    
+    // Header
+    document.getElementById('reports-temple-title').textContent = templeName + ' — Report';
+    document.getElementById('reports-timestamp').textContent = 'Generated: ' + new Date().toLocaleString('en-IN', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    // Pull data
+    const allNotes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+    const allBookings = JSON.parse(localStorage.getItem('dd_bookings')) || [];
+    const totalBookingsRaw = parseInt(localStorage.getItem('totalBookings') || '1248');
+    const crowdLevel = localStorage.getItem('crowd_' + adminContext) || 'Medium';
+    const parkingInfo = (typeof parkingData !== 'undefined') ? parkingData[adminContext] : null;
+
+    // Context filter
+    const myBookings = allBookings.filter(b => b.templeKey === adminContext);
+
+    const myAlerts = allNotes.filter(n => n.type === 'alert' && n.targetContext === adminContext);
+    const myLogins = allNotes.filter(n => n.type === 'login');
+
+    // KPIs
+    document.getElementById('rpt-total-bookings').textContent = myBookings.length || totalBookingsRaw.toLocaleString();
+    document.getElementById('rpt-sos-count').textContent = myAlerts.length;
+    document.getElementById('rpt-logins').textContent = myLogins.length;
+
+    // Booking cards
+    const confirmed = myBookings.filter(b => b.status === 'Confirmed').length;
+    const pending = myBookings.filter(b => b.status === 'Pending').length;
+    const online = myBookings.filter(b => b.type === 'Online').length;
+    const offline = myBookings.filter(b => b.type === 'Offline').length;
+    document.getElementById('rpt-booking-cards').innerHTML = [
+        { label: 'Confirmed', value: confirmed, color: 'emerald', icon: 'check_circle' },
+        { label: 'Pending', value: pending, color: 'orange', icon: 'pending' },
+        { label: 'Online', value: online, color: 'indigo', icon: 'smartphone' },
+        { label: 'Offline / Counters', value: offline, color: 'slate', icon: 'storefront' }
+    ].map(card => `
+        <div class="bg-${card.color}-50 border border-${card.color}-100 rounded-xl p-3 flex items-center gap-3">
+            <span class="material-symbols-outlined text-${card.color}-600 text-[22px]">${card.icon}</span>
+            <div>
+                <p class="text-xl font-black text-${card.color}-700">${card.value}</p>
+                <p class="text-[10px] font-bold text-${card.color}-500 uppercase tracking-wider">${card.label}</p>
+            </div>
+        </div>`).join('');
+
+    // Booking timeline (recent 5)
+    const recentBk = myBookings.slice(0, 5);
+    document.getElementById('rpt-booking-timeline').innerHTML = recentBk.length === 0
+        ? '<p class="text-xs text-slate-400 text-center py-4">No bookings recorded for this temple yet.</p>'
+        : recentBk.map(b => `
+        <div class="flex items-center gap-3 py-2 border-b border-dashed border-slate-100 last:border-0">
+            <span class="material-symbols-outlined text-[16px] text-indigo-400">confirmation_number</span>
+            <div class="flex-1">
+                <p class="text-xs font-bold text-slate-700">#${b.id} · ${b.time}</p>
+                <p class="text-[10px] text-slate-400">${b.qty} pilgrim(s) · ${b.type}</p>
+            </div>
+            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${b.status === 'Confirmed' ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-700'}">${b.status}</span>
+        </div>`).join('');
+
+    // Crowd ring
+    const crowdColors = { Low: { bg: 'bg-green-100', text: 'text-green-700', barLow: '100%', barMed: '0%', barHigh: '0%' }, Medium: { bg: 'bg-orange-100', text: 'text-orange-700', barLow: '40%', barMed: '100%', barHigh: '0%' }, High: { bg: 'bg-red-100', text: 'text-red-700', barLow: '20%', barMed: '60%', barHigh: '100%' } };
+    const cc = crowdColors[crowdLevel] || crowdColors['Medium'];
+    const circle = document.getElementById('rpt-crowd-circle');
+    circle.className = `w-16 h-16 rounded-full flex items-center justify-center text-2xl font-black shadow-inner ${cc.bg} ${cc.text}`;
+    circle.textContent = crowdLevel === 'Low' ? '😌' : crowdLevel === 'Medium' ? '😐' : '🔴';
+    document.getElementById('rpt-crowd-label').textContent = crowdLevel;
+    document.getElementById('rpt-crowd-label').className = `text-lg font-black ${cc.text}`;
+    document.getElementById('rpt-bar-low').style.width = cc.barLow;
+    document.getElementById('rpt-bar-med').style.width = cc.barMed;
+    document.getElementById('rpt-bar-high').style.width = cc.barHigh;
+
+    // SOS incidents
+    document.getElementById('rpt-sos-list').innerHTML = myAlerts.length === 0
+        ? '<div class="p-5 text-center text-xs text-slate-400 font-medium">✅ No SOS incidents recorded.</div>'
+        : myAlerts.map(a => `
+        <div class="flex items-start gap-3 px-5 py-3">
+            <span class="material-symbols-outlined text-red-500 text-[18px] mt-0.5">warning</span>
+            <div class="flex-1">
+                <p class="text-xs font-bold text-slate-700">${a.msg}</p>
+                <p class="text-[9px] text-slate-400 mt-0.5 uppercase tracking-wider">${a.time}</p>
+            </div>
+        </div>`).join('');
+
+    // Parking
+    if (parkingInfo && parkingInfo.areas) {
+        document.getElementById('rpt-parking-status').innerHTML = parkingInfo.areas.map(area => {
+            const pct = Math.round((area.filled / area.capacity) * 100);
+            const barColor = pct > 85 ? 'bg-red-500' : pct > 50 ? 'bg-orange-500' : 'bg-emerald-500';
+            return `<div>
+                <div class="flex justify-between items-center mb-1">
+                    <p class="text-xs font-bold text-slate-700">${area.name}</p>
+                    <p class="text-[10px] font-bold text-slate-500">${area.filled}/${area.capacity} (${pct}%)</p>
+                </div>
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full ${barColor} rounded-full transition-all" style="width: ${pct}%"></div>
+                </div>
+            </div>`;
+        }).join('');
+    } else {
+        document.getElementById('rpt-parking-status').innerHTML = '<p class="text-xs text-slate-400">Parking data not available.</p>';
+    }
+}
+
+function exportReport() {
+    const adminContext = localStorage.getItem('adminContext');
+    const templeName = adminContext === 'manjunatha' ? 'Sri Dharmasthala Manjunatha' : 'Tirupati Venkateswara Swamy';
+    const allBookings = JSON.parse(localStorage.getItem('dd_bookings')) || [];
+    const myBookings = allBookings.filter(b => b.templeKey === adminContext);
+    const allNotes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+    const myAlerts = allNotes.filter(n => n.type === 'alert' && n.targetContext === adminContext);
+    const crowdLevel = localStorage.getItem('crowd_' + adminContext) || 'Medium';
+
+    const lines = [
+        `DIVYA DARSHAN — ADMIN REPORT`,
+        `Temple: ${templeName}`,
+        `Generated: ${new Date().toLocaleString()}`,
+        ``,
+        `=== SUMMARY ===`,
+        `Total Bookings (this temple): ${myBookings.length}`,
+        `Confirmed: ${myBookings.filter(b => b.status === 'Confirmed').length}`,
+        `Pending: ${myBookings.filter(b => b.status === 'Pending').length}`,
+        `Online: ${myBookings.filter(b => b.type === 'Online').length}`,
+        `Current Crowd Level: ${crowdLevel}`,
+        `SOS Incidents: ${myAlerts.length}`,
+        ``,
+        `=== RECENT BOOKINGS ===`,
+        ...myBookings.map(b => `#${b.id} | ${b.temple} | ${b.time} | ${b.qty} people | ${b.type} | ${b.status}`),
+        ``,
+        `=== SOS INCIDENT LOG ===`,
+        ...myAlerts.map(a => `${a.time} | ${a.msg}`),
+    ];
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${adminContext}_admin_report_${new Date().toISOString().split('T')[0]}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+</script>
+</body></html>

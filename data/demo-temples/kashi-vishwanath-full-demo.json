@@ -1,0 +1,163 @@
+{
+  "slug": "kashi-vishwanath-full-demo",
+  "status": "active",
+  "created_at": "2026-05-08T11:00:00.000Z",
+  "updated_at": "2026-05-08T11:00:00.000Z",
+  "temple_name": "Kashi Vishwanath Temple",
+  "religion": "Hinduism",
+  "temple_type": "Jyotirlinga",
+  "deity_name": "Shri Kashi Vishwanath",
+  "sect_denomination": "Shaivism",
+  "established_year": 1780,
+  "trust_name": "Shri Kashi Vishwanath Temple Trust",
+  "tagline": "The eternal Jyotirlinga on the banks of the sacred Ganga — book darshan, prasadam, and sevas online.",
+  "historical_significance": "Kashi Vishwanath, one of the twelve Jyotirlingas, is among the most revered Shiva temples in the world. Situated in Varanasi, the oldest living city, it has drawn millions of pilgrims across millennia. The current temple structure was rebuilt by Rani Ahilyabai Holkar in 1780.",
+  "address_line1": "Vishwanath Gali",
+  "address_line2": "Godowlia",
+  "city": "Varanasi",
+  "state": "Uttar Pradesh",
+  "pincode": "221001",
+  "country": "India",
+  "latitude": 25.3109,
+  "longitude": 83.0107,
+  "google_maps_url": "https://maps.google.com/?q=Kashi+Vishwanath+Temple",
+  "nearest_railway": "Varanasi Junction (3 km)",
+  "nearest_airport": "Lal Bahadur Shastri International Airport (26 km)",
+  "nearest_bus_stop": "Godowlia Bus Stand (0.5 km)",
+  "admin_email": "kashi.demo@divyadarshan.local",
+  "admin_phone": "+91 00000 00002",
+  "admin_password_hash": "$2b$12$v24qA6a5d/TgagoPi1UfV.N.hLWcBQqqpshbjYdfjWa2/F.ExCEAK",
+  "website_url": "",
+  "social_facebook": "",
+  "social_instagram": "",
+  "social_youtube": "",
+  "theme_preset": "Sacred Saffron",
+  "background_style": "River Dawn",
+  "primary_color": "#9A3412",
+  "secondary_color": "#F59E0B",
+  "accent_color": "#0F766E",
+  "logo_url": "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=300&auto=format&fit=crop",
+  "hero_image_url": "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=1600&auto=format&fit=crop",
+  "gallery_urls": [
+    "https://images.unsplash.com/photo-1561361513-2d000a50f0db?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=1200&auto=format&fit=crop"
+  ],
+  "darshan_timings": [
+    { "day": "Sunday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] },
+    { "day": "Monday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] },
+    { "day": "Tuesday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] },
+    { "day": "Wednesday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] },
+    { "day": "Thursday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] },
+    { "day": "Friday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] },
+    { "day": "Saturday", "open": "04:00", "close": "23:00", "closed": false, "sessions": [ { "label": "Mangala Darshan", "start": "04:00", "end": "05:30" }, { "label": "General Darshan", "start": "06:00", "end": "18:00" }, { "label": "Evening Darshan", "start": "19:00", "end": "23:00" } ] }
+  ],
+  "special_days": [
+    { "date": "2026-08-10", "name": "Shravan Somvar", "extended_hours": "Extended darshan timings with additional slots to manage pilgrim flow." }
+  ],
+  "closed_days": [],
+  "entry_fee_general": 0,
+  "entry_fee_vip": 300,
+  "entry_fee_child": 0,
+  "entry_fee_currency": "INR",
+  "dress_code_mode": "Traditional Preferred",
+  "dress_code": "Traditional or modest clothing is recommended. Carry valid ID proof. Bags and electronics are subject to security check.",
+  "special_entry_rules": "Arrive 15 minutes before your selected slot. Carry your e-ticket QR for gate verification. Shoes must be left at the entrance.",
+  "service_languages": ["Hindi", "English", "Sanskrit"],
+  "id_required": true,
+  "photography_allowed": false,
+  "mobile_allowed": false,
+  "sevas": [
+    { "name": "Rudrabhishek", "description": "Sacred abhishek of Shiva Linga with Ganga jal, milk, bel patra, and chanting of Rudra mantras.", "price": 1100, "duration_min": 45, "slots_per_day": 8 },
+    { "name": "Archana", "description": "Name-and-gotra based archana with flowers, kumkum, and dhoop offering.", "price": 251, "duration_min": 20, "slots_per_day": 24 }
+  ],
+  "prasadam_items": [
+    { "name": "Mahaprasad Thali", "price": 151, "unit": "box", "available": true, "image_url": "" },
+    { "name": "Laddu Prasadam", "price": 101, "unit": "pack", "available": true, "image_url": "" }
+  ],
+  "prasadam_counter_open": true,
+  "prasadam_online_order": true,
+  "facilities": {
+    "parking": true,
+    "wheelchair": true,
+    "annadanam": true,
+    "accommodation": true,
+    "drinking_water": true,
+    "restrooms": true,
+    "medical": true,
+    "cloak_room": true,
+    "ev_charging": false,
+    "atm": true
+  },
+  "parking_capacity": 160,
+  "parking_fee_2w": 20,
+  "parking_fee_4w": 80,
+  "accommodation_details": "Dharamshala and guest house facilities available nearby. Temple trust provides pilgrim lodging — contact admin for booking.",
+  "annadanam_timings": "12:00 PM – 2:30 PM daily",
+  "features_enabled": {
+    "darshan_booking": true,
+    "prasadam_order": true,
+    "donation": true,
+    "travel_planner": true,
+    "live_crowd": true,
+    "virtual_tour": true,
+    "news_updates": true,
+    "volunteer_signup": true,
+    "events_calendar": true
+  },
+  "booking_enabled": true,
+  "slot_duration": 30,
+  "max_visitors_per_slot": 90,
+  "advance_booking_window": 21,
+  "special_puja_bookings": [
+    { "name": "Shravan Somvar Puja", "duration_min": 60, "fee": 2100, "max_participants": 5 },
+    { "name": "Family Sankalp Puja", "duration_min": 30, "fee": 501, "max_participants": 6 }
+  ],
+  "live_stream_url": "",
+  "virtual_tour_url": "",
+  "donation_enabled": true,
+  "donation_upi_id": "kashivishwanath@upi",
+  "donation_bank_name": "State Bank of India",
+  "donation_account_no": "10987654321",
+  "donation_ifsc": "SBIN0001234",
+  "donation_causes": [
+    { "name": "Annadanam Seva", "target_amount": 500000, "raised": 385000 },
+    { "name": "Pilgrim Queue Comfort", "target_amount": 700000, "raised": 540000 },
+    { "name": "Festival Illumination", "target_amount": 900000, "raised": 720000 }
+  ],
+  "major_annual_festivals": [
+    { "name": "Maha Shivaratri", "month": "February/March" },
+    { "name": "Shravan Somvar", "month": "July/August" },
+    { "name": "Dev Deepawali", "month": "November" }
+  ],
+  "weekly_special_prayers": [
+    { "day": "Monday", "time": "05:30" },
+    { "day": "Saturday", "time": "19:00" }
+  ],
+  "special_events_text": "Kashi Vishwanath hosts grand festivals across the year with thousands of devotees attending special abhishek, deepotsav, and cultural programs.",
+  "events": [
+    { "title": "Shravan Somvar Special Darshan", "date": "2026-08-10", "description": "Extended darshan hours with slot-wise crowd management and live queue updates.", "image_url": "" },
+    { "title": "Dev Deepawali — Festival of Lights", "date": "2026-11-24", "description": "Thousands of diyas lit along the Ganga ghats. Special evening darshan and cultural programs.", "image_url": "" }
+  ],
+  "faqs": [
+    { "question": "What is the best time to visit Kashi Vishwanath?", "answer": "Early morning (04:00–06:00 AM) during Mangala Darshan offers the most serene experience with shorter queues." },
+    { "question": "Is photography allowed inside the temple?", "answer": "No. Photography and mobile phones are strictly prohibited inside the inner sanctum." },
+    { "question": "How do I book darshan online?", "answer": "Use the Darshan Booking section on this microsite to select your date, slot, and number of pilgrims." },
+    { "question": "Are there facilities for senior citizens?", "answer": "Yes. Wheelchair assistance is available. Contact the temple office for priority access arrangements." }
+  ],
+  "visit_plan_title": "Plan Your Pilgrimage to Kashi",
+  "visit_highlights": [
+    { "label": "Book", "title": "Reserve your darshan slot", "description": "Choose a date and time slot online. Receive a QR e-ticket instantly on your phone." },
+    { "label": "Arrive", "title": "Navigate with ease", "description": "Use the location guide for transport, parking, and route planning from your city." },
+    { "label": "After Darshan", "title": "Prasadam, Seva & Donate", "description": "Order prasadam, book additional sevas, or contribute to temple causes — all from this portal." }
+  ],
+  "visitor_advisories": [
+    { "title": "Security Check", "description": "All visitors pass through security. Bags, electronics, and leather items are not permitted inside." },
+    { "title": "Dress Code", "description": "Wear traditional or modest attire. Avoid shorts, sleeveless tops, and torn clothing." },
+    { "title": "VIP Darshan", "description": "VIP darshan tickets (₹300) provide faster access. Book online in advance to guarantee availability." }
+  ],
+  "qr_code_url": "https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=https%3A%2F%2F127.0.0.1%3A3001%2Ftemple%2Fkashi-vishwanath-full-demo",
+  "total_scans": 18420,
+  "total_bookings": 52600,
+  "total_donations": 16450000
+}

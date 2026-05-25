@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Divya Darshan | Booking Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#E65100",
+                        surface: "#f9f9fb",
+                        ink: "#2d3338",
+                        muted: "#596065",
+                    },
+                    boxShadow: {
+                        divine: "0px 12px 32px rgba(230,81,0,0.06)",
+                    },
+                    fontFamily: {
+                        headline: ["Manrope"],
+                        body: ["Inter"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(230,81,0,0.14), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(76,86,175,0.10), transparent 24%),
+                linear-gradient(180deg, #fffaf8 0%, #f9f9fb 100%);
+        }
+        .glass-nav {
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(24px);
+        }
+        .surface-card {
+            background: rgba(255,255,255,0.94);
+            backdrop-filter: blur(18px);
+            box-shadow: 0px 12px 32px rgba(230,81,0,0.06);
+        }
+        .field {
+            width: 100%;
+            border: 0;
+            border-radius: 0.9rem;
+            background: #f5f6fb;
+            padding: 0.95rem 1rem;
+            color: #2d3338;
+            outline: none;
+        }
+        .field:focus {
+            box-shadow: 0 0 0 4px rgba(230,81,0,0.10);
+        }
+        .toast {
+            animation: toastIn 180ms ease;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-ink">
+    <header class="glass-nav sticky top-0 z-40 shadow-divine">
+        <div class="max-w-6xl mx-auto px-4 md:px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Local Admin Console</p>
+                <h1 class="text-3xl font-extrabold font-headline mt-2">Ticket Booking Control</h1>
+                <p class="text-sm text-muted mt-2">Pause or resume all new ticket bookings across the main site and temple microsites.</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="index.html" class="bg-white text-primary px-4 py-3 rounded-xl font-semibold shadow-divine">Return to Dashboard</a>
+                <button id="logoutBtn" type="button" class="bg-primary text-white px-4 py-3 rounded-xl font-semibold shadow-divine">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8">
+        <div id="authGuard" class="hidden surface-card rounded-[28px] p-8 text-center">
+            <span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings:'FILL' 1;">admin_panel_settings</span>
+            <h2 class="text-2xl font-extrabold mt-4">Admin login required</h2>
+            <p class="text-sm text-muted mt-3">Sign in from the admin login page to use ticket blocking controls locally.</p>
+            <a href="admin_login.html" class="inline-flex mt-6 bg-primary text-white px-5 py-3 rounded-xl font-semibold shadow-divine">Open Admin Login</a>
+        </div>
+
+        <section id="controlShell" class="hidden space-y-6">
+            <div id="messageBar" class="hidden rounded-[24px] px-5 py-4 text-sm font-medium"></div>
+
+            <div class="grid lg:grid-cols-[1.15fr_0.85fr] gap-6">
+                <div class="surface-card rounded-[28px] p-6 md:p-8">
+                    <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Global Toggle</p>
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mt-4">
+                        <div>
+                            <h2 class="text-3xl font-extrabold">Ticket Booking: <span id="statusLabel">ACTIVE</span></h2>
+                            <p id="statusSubtitle" class="text-sm text-muted mt-3">New bookings are currently accepted across all booking surfaces.</p>
+                        </div>
+                        <button id="toggleBtn" type="button" class="bg-rose-500 text-white px-5 py-4 rounded-2xl font-bold shadow-divine">Pause Bookings</button>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 mt-6">
+                        <div class="rounded-[24px] bg-[#f5f6fb] p-5">
+                            <p class="text-xs uppercase tracking-[0.24em] text-primary font-bold">Current Reason</p>
+                            <p id="currentReason" class="mt-3 text-sm text-ink">No active pause reason.</p>
+                        </div>
+                        <div class="rounded-[24px] bg-[#f5f6fb] p-5">
+                            <p class="text-xs uppercase tracking-[0.24em] text-primary font-bold">Scheduled Resume</p>
+                            <p id="currentResume" class="mt-3 text-sm text-ink">No auto-resume scheduled.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4 mt-6">
+                        <label class="grid gap-2">
+                            <span class="text-sm font-semibold">Reason shown to users</span>
+                            <textarea id="reasonField" class="field min-h-[130px]" placeholder="System maintenance, overload control, festival crowd balancing, etc."></textarea>
+                        </label>
+                        <label class="grid gap-2 max-w-md">
+                            <span class="text-sm font-semibold">Auto resume time</span>
+                            <input id="resumeAtField" class="field" type="datetime-local" />
+                        </label>
+                    </div>
+                </div>
+
+                <div class="surface-card rounded-[28px] p-6 md:p-8">
+                    <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Live Status</p>
+                    <div id="statusCard" class="mt-5 rounded-[24px] bg-emerald-100 text-emerald-700 p-5">
+                        <p class="text-xs uppercase tracking-[0.24em] font-bold">Bookings Active</p>
+                        <p class="text-3xl font-extrabold mt-3">Green State</p>
+                    </div>
+                    <div class="mt-5 rounded-[24px] bg-[#f5f6fb] p-5">
+                        <p class="text-xs uppercase tracking-[0.24em] text-primary font-bold">Admin Identity</p>
+                        <p id="adminIdentity" class="mt-3 text-sm text-ink"></p>
+                    </div>
+                    <div class="mt-5 rounded-[24px] bg-[#f5f6fb] p-5">
+                        <p class="text-xs uppercase tracking-[0.24em] text-primary font-bold">Local Mode</p>
+                        <p class="mt-3 text-sm text-muted">This screen works locally with the built-in admin password and updates the live booking pause API used by the site.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="surface-card rounded-[28px] p-6 md:p-8">
+                <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Audit Log</p>
+                <h2 class="text-2xl font-extrabold mt-2">Recent changes</h2>
+                <div id="auditTable" class="mt-6 overflow-x-auto"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm p-4 items-center justify-center">
+        <div class="w-full max-w-xl bg-white rounded-[32px] shadow-divine p-6 md:p-8">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Confirm Action</p>
+            <h3 id="confirmTitle" class="text-2xl font-extrabold mt-3">Pause ticket booking?</h3>
+            <p id="confirmBody" class="text-sm text-muted mt-3">This immediately blocks all new bookings. Existing bookings stay intact.</p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button id="cancelConfirmBtn" type="button" class="bg-[#f5f6fb] text-primary px-4 py-3 rounded-xl font-semibold">Cancel</button>
+                <button id="submitConfirmBtn" type="button" class="bg-rose-500 text-white px-4 py-3 rounded-xl font-semibold shadow-divine">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastStack" class="fixed bottom-4 right-4 z-50 space-y-3"></div>
+
+    <script>
+        const adminSessionKey = "divyaAdminControlLocal";
+        const byId = (id) => document.getElementById(id);
+        let bookingState = { paused: false, reason: "", resumeAt: null, audit: [] };
+        let pendingPauseState = false;
+        let controlStream = null;
+
+        function showToast(message, kind = "info") {
+            const el = document.createElement("div");
+            const bg = kind === "success" ? "bg-emerald-500" : kind === "error" ? "bg-rose-500" : "bg-primary";
+            el.className = `toast rounded-2xl ${bg} text-white px-4 py-3 shadow-divine max-w-sm`;
+            el.textContent = message;
+            byId("toastStack").appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = "0";
+                el.style.transform = "translateY(8px)";
+                el.style.transition = "all 180ms ease";
+                setTimeout(() => el.remove(), 200);
+            }, 2800);
+        }
+
+        function setMessage(message, kind = "info") {
+            const bar = byId("messageBar");
+            bar.classList.remove("hidden");
+            bar.className = `rounded-[24px] px-5 py-4 text-sm font-medium ${kind === "error" ? "bg-rose-50 text-rose-600" : kind === "success" ? "bg-emerald-50 text-emerald-600" : "bg-[#f5f6fb] text-muted"}`;
+            bar.textContent = message;
+        }
+
+        function getSession() {
+            try {
+                return JSON.parse(sessionStorage.getItem(adminSessionKey) || "null");
+            } catch {
+                return null;
+            }
+        }
+
+        function formatDateTime(value) {
+            if (!value) return "No auto-resume scheduled.";
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) return "No auto-resume scheduled.";
+            return date.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+        }
+
+        function authHeaders() {
+            const session = getSession();
+            return {
+                "Content-Type": "application/json",
+                "x-booking-pause-secret": session?.secret || "",
+                "x-admin-id": session?.identity || "local-admin"
+            };
+        }
+
+        function ensureSession() {
+            const session = getSession();
+            if (!session?.secret) {
+                byId("authGuard").classList.remove("hidden");
+                return false;
+            }
+            byId("controlShell").classList.remove("hidden");
+            byId("adminIdentity").textContent = session.identity || "local-admin";
+            return true;
+        }
+
+        function renderState() {
+            const paused = Boolean(bookingState.paused);
+            byId("statusLabel").textContent = paused ? "PAUSED" : "ACTIVE";
+            byId("statusSubtitle").textContent = paused
+                ? "New bookings are blocked on the main site and every temple microsite."
+                : "New bookings are currently accepted across all booking surfaces.";
+            byId("currentReason").textContent = bookingState.reason || "No active pause reason.";
+            byId("currentResume").textContent = formatDateTime(bookingState.resumeAt);
+            byId("reasonField").value = bookingState.reason || "";
+            byId("resumeAtField").value = bookingState.resumeAt ? bookingState.resumeAt.slice(0, 16) : "";
+
+            const statusCard = byId("statusCard");
+            const toggleBtn = byId("toggleBtn");
+            if (paused) {
+                statusCard.className = "mt-5 rounded-[24px] bg-rose-100 text-rose-700 p-5";
+                statusCard.innerHTML = `<p class="text-xs uppercase tracking-[0.24em] font-bold">Bookings Paused</p><p class="text-3xl font-extrabold mt-3">Red State</p>`;
+                toggleBtn.className = "bg-emerald-500 text-white px-5 py-4 rounded-2xl font-bold shadow-divine";
+                toggleBtn.textContent = "Resume Bookings";
+            } else {
+                statusCard.className = "mt-5 rounded-[24px] bg-emerald-100 text-emerald-700 p-5";
+                statusCard.innerHTML = `<p class="text-xs uppercase tracking-[0.24em] font-bold">Bookings Active</p><p class="text-3xl font-extrabold mt-3">Green State</p>`;
+                toggleBtn.className = "bg-rose-500 text-white px-5 py-4 rounded-2xl font-bold shadow-divine";
+                toggleBtn.textContent = "Pause Bookings";
+            }
+        }
+
+        function renderAuditLog(audit = []) {
+            if (!audit.length) {
+                byId("auditTable").innerHTML = `<div class="rounded-[24px] bg-[#f5f6fb] p-5 text-sm text-muted">No booking-control changes logged yet.</div>`;
+                return;
+            }
+            byId("auditTable").innerHTML = `
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-muted">
+                            <th class="pb-3 pr-4 font-semibold">Timestamp</th>
+                            <th class="pb-3 pr-4 font-semibold">Admin</th>
+                            <th class="pb-3 pr-4 font-semibold">Action</th>
+                            <th class="pb-3 pr-4 font-semibold">Reason</th>
+                            <th class="pb-3 pr-4 font-semibold">Resume At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${audit.map((entry) => `
+                            <tr>
+                                <td class="py-3 pr-4">${entry.created_at ? new Date(entry.created_at).toLocaleString("en-IN") : "-"}</td>
+                                <td class="py-3 pr-4">${entry.admin_id || "-"}</td>
+                                <td class="py-3 pr-4">${entry.action || "-"}</td>
+                                <td class="py-3 pr-4">${entry.reason || "-"}</td>
+                                <td class="py-3 pr-4">${entry.resume_at ? new Date(entry.resume_at).toLocaleString("en-IN") : "-"}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function loadControlState() {
+            const res = await fetch("/api/admin/booking-control?includeAudit=true");
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Unable to load booking control state.");
+            bookingState = data;
+            renderState();
+            renderAuditLog(data.audit || []);
+        }
+
+        function openConfirmModal(paused) {
+            pendingPauseState = paused;
+            byId("confirmTitle").textContent = paused ? "Pause ticket booking?" : "Resume ticket booking?";
+            byId("confirmBody").textContent = paused
+                ? "This will immediately stop all new ticket bookings across the main site and temple microsites. Existing bookings are not affected."
+                : "This will immediately reopen ticket bookings across the platform.";
+            const modal = byId("confirmModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            byId("submitConfirmBtn").className = `${paused ? "bg-rose-500" : "bg-emerald-500"} text-white px-4 py-3 rounded-xl font-semibold shadow-divine`;
+            byId("submitConfirmBtn").textContent = paused ? "Confirm Pause" : "Confirm Resume";
+        }
+
+        function closeConfirmModal() {
+            const modal = byId("confirmModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        async function submitControlChange() {
+            try {
+                const payload = {
+                    paused: pendingPauseState,
+                    reason: byId("reasonField").value.trim(),
+                    resumeAt: byId("resumeAtField").value ? new Date(byId("resumeAtField").value).toISOString() : null,
+                };
+                const res = await fetch("/api/admin/booking-control", {
+                    method: "POST",
+                    headers: authHeaders(),
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || "Unable to update booking control.");
+                bookingState = data;
+                renderState();
+                renderAuditLog(data.audit || []);
+                closeConfirmModal();
+                setMessage(`Ticket booking has been ${pendingPauseState ? "paused" : "resumed"} successfully.`, "success");
+                showToast(`Bookings ${pendingPauseState ? "paused" : "resumed"}.`, "success");
+            } catch (error) {
+                setMessage(error.message, "error");
+                showToast(error.message, "error");
+            }
+        }
+
+        function bindLiveUpdates() {
+            if (controlStream || !window.EventSource) return;
+            controlStream = new EventSource("/api/admin/booking-control/stream");
+            controlStream.addEventListener("booking-control", (event) => {
+                try {
+                    const payload = JSON.parse(event.data);
+                    bookingState = { ...bookingState, ...(payload.state || {}) };
+                    renderState();
+                } catch (error) {}
+            });
+        }
+
+        function logout() {
+            sessionStorage.removeItem(adminSessionKey);
+            window.location.href = "admin_login.html";
+        }
+
+        window.addEventListener("DOMContentLoaded", async () => {
+            if (!ensureSession()) return;
+            try {
+                await loadControlState();
+                bindLiveUpdates();
+            } catch (error) {
+                setMessage(error.message, "error");
+            }
+            byId("toggleBtn").addEventListener("click", () => openConfirmModal(!bookingState.paused));
+            byId("cancelConfirmBtn").addEventListener("click", closeConfirmModal);
+            byId("submitConfirmBtn").addEventListener("click", submitControlChange);
+            byId("logoutBtn").addEventListener("click", logout);
+        });
+    </script>
+</body>
+</html>

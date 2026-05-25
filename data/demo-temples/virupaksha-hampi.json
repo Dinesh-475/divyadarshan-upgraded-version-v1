@@ -1,0 +1,154 @@
+{
+  "slug": "virupaksha-temple-hampi",
+  "status": "active",
+  "created_at": "2026-05-08T10:10:00.000Z",
+  "updated_at": "2026-05-08T10:10:00.000Z",
+  "temple_name": "Virupaksha Temple",
+  "religion": "Hinduism",
+  "temple_type": "Shaiva",
+  "deity_name": "Lord Virupaksha (Shiva)",
+  "sect_denomination": "Shaivism",
+  "established_year": 700,
+  "trust_name": "Hampi Virupaksha Temple Trust",
+  "tagline": "An unbroken living Shiva temple at the heart of Hampi's UNESCO World Heritage landscape — worshipped for over 1,300 years.",
+  "historical_significance": "Virupaksha Temple is Hampi's oldest continuously worshipped shrine, predating the Vijayanagara Empire. The magnificent gopuram towers over the ancient Hampi Bazaar and the sacred Tungabhadra river, making this one of South India's most iconic pilgrimage and heritage destinations.",
+  "address_line1": "Hampi Bazaar",
+  "address_line2": "Hampi",
+  "city": "Hosapete",
+  "state": "Karnataka",
+  "pincode": "583239",
+  "country": "India",
+  "latitude": 15.335,
+  "longitude": 76.461,
+  "google_maps_url": "https://maps.google.com/?q=Virupaksha+Temple+Hampi",
+  "nearest_railway": "Hosapete Junction (13 km)",
+  "nearest_airport": "Hubballi Airport (74 km)",
+  "nearest_bus_stop": "Hampi Bus Stand (0.3 km)",
+  "admin_email": "admin@virupaksha-hampi.in",
+  "admin_phone": "+91 08394 241048",
+  "admin_password_hash": "$2b$12$v24qA6a5d/TgagoPi1UfV.N.hLWcBQqqpshbjYdfjWa2/F.ExCEAK",
+  "website_url": "",
+  "social_facebook": "",
+  "social_instagram": "",
+  "social_youtube": "",
+  "theme_preset": "Granite Lotus",
+  "background_style": "Heritage Stone",
+  "primary_color": "#5B3E2B",
+  "secondary_color": "#C48A3A",
+  "accent_color": "#2F6F62",
+  "logo_url": "https://images.unsplash.com/photo-1600100397608-f010e451b8c2?q=80&w=300&auto=format&fit=crop",
+  "hero_image_url": "https://images.unsplash.com/photo-1600100397608-f010e451b8c2?q=80&w=1600&auto=format&fit=crop",
+  "gallery_urls": [
+    "https://images.unsplash.com/photo-1600100397992-ec596101d2a1?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1608958416710-e5bf7e0b57e7?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1581335017260-2ff0d481b7a2?q=80&w=1200&auto=format&fit=crop"
+  ],
+  "darshan_timings": [
+    { "day": "Sunday",    "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] },
+    { "day": "Monday",    "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] },
+    { "day": "Tuesday",   "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] },
+    { "day": "Wednesday", "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] },
+    { "day": "Thursday",  "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] },
+    { "day": "Friday",    "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] },
+    { "day": "Saturday",  "open": "06:00", "close": "20:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "13:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "20:30" } ] }
+  ],
+  "special_days": [
+    { "date": "2026-02-15", "name": "Maha Shivaratri", "extended_hours": "All-night darshan with special abhishek programs. Expect large crowds — book early." }
+  ],
+  "closed_days": [],
+  "entry_fee_general": 0,
+  "entry_fee_vip": 0,
+  "entry_fee_child": 0,
+  "entry_fee_currency": "INR",
+  "dress_code_mode": "Modest Traditional",
+  "dress_code": "Modest attire is mandatory. Shorts, sleeveless tops, and non-traditional clothing are not permitted inside the sanctum. Carry sun protection for the heritage precinct walk.",
+  "special_entry_rules": "The sanctum is an active place of worship. Keep footwear at the entrance, carry minimal belongings, and follow instructions from temple staff. Heritage tour guides available at Hampi Bazaar.",
+  "service_languages": ["Kannada", "Hindi", "English", "Telugu", "Sanskrit"],
+  "id_required": false,
+  "photography_allowed": false,
+  "mobile_allowed": true,
+  "sevas": [
+    { "name": "Rudrabhishek", "description": "Ritual abhishek of Lord Virupaksha with sacred water, milk, and bilva leaves accompanied by Vedic chanting.", "price": 500, "duration_min": 30, "slots_per_day": 10 },
+    { "name": "Archana", "description": "Personal name-and-gotra archana with flowers and kumkum offered at the sanctum.", "price": 51, "duration_min": 15, "slots_per_day": 30 }
+  ],
+  "prasadam_items": [
+    { "name": "Temple Prasadam", "price": 0, "unit": "available at counter after darshan", "available": true, "image_url": "" }
+  ],
+  "prasadam_counter_open": true,
+  "prasadam_online_order": false,
+  "facilities": {
+    "parking": true,
+    "wheelchair": false,
+    "annadanam": false,
+    "accommodation": false,
+    "drinking_water": true,
+    "restrooms": true,
+    "medical": false,
+    "cloak_room": true
+  },
+  "parking_capacity": 80,
+  "parking_fee_2w": 0,
+  "parking_fee_4w": 20,
+  "accommodation_details": "Multiple guesthouses and lodges are available in Hampi Bazaar and Hospete town for pilgrims.",
+  "annadanam_timings": "",
+  "features_enabled": {
+    "darshan_booking": true,
+    "prasadam_order": false,
+    "donation": false,
+    "travel_planner": true,
+    "live_crowd": false,
+    "virtual_tour": false,
+    "news_updates": false,
+    "volunteer_signup": false,
+    "events_calendar": true
+  },
+  "booking_enabled": true,
+  "slot_duration": 30,
+  "max_visitors_per_slot": 70,
+  "advance_booking_window": 10,
+  "special_puja_bookings": [
+    { "name": "Maha Shivaratri Special Puja", "duration_min": 30, "fee": 1100, "max_participants": 5 }
+  ],
+  "live_stream_url": "",
+  "virtual_tour_url": "",
+  "donation_enabled": false,
+  "donation_upi_id": "",
+  "donation_bank_name": "",
+  "donation_account_no": "",
+  "donation_ifsc": "",
+  "donation_causes": [],
+  "major_annual_festivals": [
+    { "name": "Maha Shivaratri", "month": "February/March" },
+    { "name": "Vijayadashami (Dasara)", "month": "October" },
+    { "name": "Hampi Utsav", "month": "November" }
+  ],
+  "weekly_special_prayers": [
+    { "day": "Monday", "time": "06:30" }
+  ],
+  "special_events_text": "Virupaksha Temple celebrates grand festivals through the year. Maha Shivaratri draws lakhs of devotees from across the country. The annual Hampi Utsav transforms the entire heritage zone into a cultural spectacle of music, dance, and light.",
+  "events": [
+    { "title": "Maha Shivaratri — All-Night Darshan", "date": "2026-02-15", "description": "Special all-night puja and abhishek program. Extended timings with dedicated queues for senior citizens and families.", "image_url": "" },
+    { "title": "Hampi Utsav — Heritage Festival", "date": "2026-11-07", "description": "Annual cultural festival celebrating the Vijayanagara heritage. Classical dance, music, and light shows at the temple complex.", "image_url": "" }
+  ],
+  "faqs": [
+    { "question": "What are the darshan timings?", "answer": "Morning darshan: 6:00 AM to 1:00 PM. Evening darshan: 5:00 PM to 8:30 PM. Extended hours apply during festivals." },
+    { "question": "Is entry free?", "answer": "Yes. There is no entry fee for the main temple. Nominal charges may apply for specific sevas." },
+    { "question": "Is photography allowed?", "answer": "Photography is not permitted inside the inner sanctum. The outer gopuram and bazaar areas may be photographed." },
+    { "question": "What should visitors plan around?", "answer": "Hampi experiences extreme heat from March to June. Morning visits are strongly recommended. Wear comfortable footwear for the stone-paved heritage walk." }
+  ],
+  "visit_plan_title": "Plan Your Pilgrimage to Virupaksha",
+  "visit_highlights": [
+    { "label": "Arrive", "title": "Start at Hampi Bazaar", "description": "The temple faces the ancient market street. Use the directions guide for parking, drop-off points, and the short walk into the temple precinct." },
+    { "label": "Darshan", "title": "Keep the sanctum visit focused", "description": "Choose morning (6 AM) for the best experience with shorter queues. Carry minimal belongings and follow temple staff instructions." },
+    { "label": "Explore", "title": "Extend into the heritage zone", "description": "Plan nearby heritage stops — Vittala Temple, royal enclosures, and riverside ghats are all within walking or auto-ride distance." }
+  ],
+  "visitor_advisories": [
+    { "title": "Photography Restriction", "description": "Photography is not allowed inside the inner sanctum. Respect the active place of worship." },
+    { "title": "Summer Heat", "description": "Hampi is extremely hot from March to June. Carry water, wear cotton, and visit in the early morning or evening." },
+    { "title": "Heritage Terrain", "description": "Expect uneven stone paths and open walking stretches. Comfortable footwear is essential." }
+  ],
+  "qr_code_url": "https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=https%3A%2F%2F127.0.0.1%3A3001%2Ftemple%2Fvirupaksha-temple-hampi",
+  "total_scans": 9840,
+  "total_bookings": 28500,
+  "total_donations": 0
+}

@@ -1,0 +1,165 @@
+{
+  "slug": "iskcon-temple-bengaluru",
+  "status": "active",
+  "created_at": "2026-05-08T09:00:00.000Z",
+  "updated_at": "2026-05-08T09:00:00.000Z",
+  "temple_name": "ISKCON Temple Bengaluru",
+  "religion": "Hinduism",
+  "temple_type": "Vaishnava",
+  "deity_name": "Sri Radha Krishna-Chandra",
+  "sect_denomination": "Gaudiya Vaishnava",
+  "established_year": 1997,
+  "trust_name": "ISKCON Bangalore",
+  "tagline": "A Rajajinagar landmark for Radha Krishna darshan, kirtan, prasadam, festivals, and visitor-friendly spiritual learning.",
+  "historical_significance": "ISKCON Sri Radha Krishna Temple on Hare Krishna Hill is one of Bengaluru’s best-known devotional destinations. The official temple site highlights daily darshan, festivals, lectures, bhajans, prasadam distribution, volunteering, guest house support, and devotee services; this demo keeps those details curated into a simple visit-planning flow instead of copying the full website.",
+  "address_line1": "Hare Krishna Hill, Chord Road",
+  "address_line2": "Rajajinagar",
+  "city": "Bengaluru",
+  "state": "Karnataka",
+  "pincode": "560010",
+  "country": "India",
+  "latitude": 13.0098,
+  "longitude": 77.5511,
+  "google_maps_url": "https://maps.google.com/?q=ISKCON+Temple+Bengaluru",
+  "nearest_railway": "Bengaluru City Junction",
+  "nearest_airport": "Kempegowda International Airport",
+  "nearest_bus_stop": "Mahalakshmi Metro / Rajajinagar",
+  "admin_email": "connect@iskconbangalore.org",
+  "admin_phone": "080-23471956",
+  "admin_password_hash": "$2b$12$v24qA6a5d/TgagoPi1UfV.N.hLWcBQqqpshbjYdfjWa2/F.ExCEAK",
+  "website_url": "https://www.iskconbangalore.org",
+  "social_facebook": "https://www.facebook.com/iskconbangalore",
+  "social_instagram": "https://www.instagram.com/iskconbangalore",
+  "social_youtube": "https://www.youtube.com/@iskconbangalore",
+  "theme_preset": "Sacred Saffron",
+  "background_style": "Devotional Warm",
+  "primary_color": "#E65100",
+  "secondary_color": "#FFB74D",
+  "accent_color": "#2E7D32",
+  "logo_url": "https://images.unsplash.com/photo-1628157582853-a796fa650a6a?q=80&w=300&auto=format&fit=crop",
+  "hero_image_url": "https://images.unsplash.com/photo-1609137144814-722a2bb7f551?q=80&w=1600&auto=format&fit=crop",
+  "gallery_urls": [
+    "https://images.unsplash.com/photo-1542856391-010fb87dcfed?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1561361513-2d000a50f0db?q=80&w=1200&auto=format&fit=crop"
+  ],
+  "darshan_timings": [
+    { "day": "Sunday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Continuous Darshan", "start": "07:15", "end": "20:00" } ] },
+    { "day": "Monday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Morning Darshan", "start": "07:15", "end": "13:15" }, { "label": "Evening Darshan", "start": "16:15", "end": "20:00" } ] },
+    { "day": "Tuesday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Morning Darshan", "start": "07:15", "end": "13:15" }, { "label": "Evening Darshan", "start": "16:15", "end": "20:00" } ] },
+    { "day": "Wednesday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Morning Darshan", "start": "07:15", "end": "13:15" }, { "label": "Evening Darshan", "start": "16:15", "end": "20:00" } ] },
+    { "day": "Thursday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Morning Darshan", "start": "07:15", "end": "13:15" }, { "label": "Evening Darshan", "start": "16:15", "end": "20:00" } ] },
+    { "day": "Friday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Morning Darshan", "start": "07:15", "end": "13:15" }, { "label": "Evening Darshan", "start": "16:15", "end": "20:00" } ] },
+    { "day": "Saturday", "open": "04:15", "close": "20:00", "closed": false, "sessions": [ { "label": "Mangala Arati", "start": "04:15", "end": "05:15" }, { "label": "Continuous Darshan", "start": "07:15", "end": "20:00" } ] }
+  ],
+  "special_days": [
+    { "date": "2026-06-27", "name": "Panihati Chida-dahi Utsava", "extended_hours": "Festival updates are announced by the temple." },
+    { "date": "2026-07-16", "name": "Sri Jagannatha Ratha Yatra", "extended_hours": "Festival schedule may vary across ISKCON Bengaluru centres." }
+  ],
+  "closed_days": [],
+  "entry_fee_general": 0,
+  "entry_fee_vip": 0,
+  "entry_fee_child": 0,
+  "entry_fee_currency": "INR",
+  "dress_code_mode": "Strict Traditional",
+  "dress_code": "Formal or traditional attire is recommended; avoid shorts and casual clothing as a mark of respect.",
+  "special_entry_rules": "Photography is not allowed inside temple interiors. Only small bags are allowed for security reasons. Parking and footwear stand may have nominal charges.",
+  "service_languages": ["English", "Hindi", "Kannada", "Sanskrit"],
+  "id_required": false,
+  "photography_allowed": true,
+  "mobile_allowed": true,
+  "sevas": [
+    { "name": "Offer Seva", "description": "A guided demo path for visitors who want to support deity worship or festival services.", "price": 0, "duration_min": 15, "slots_per_day": 12 },
+    { "name": "Bhagavad-gita Learning Visit", "description": "A demo request flow inspired by the temple’s learning programs and lecture culture.", "price": 0, "duration_min": 45, "slots_per_day": 6 }
+  ],
+  "prasadam_items": [
+    { "name": "Lunch Prasadam", "price": 0, "unit": "served daily, 11:30 AM - 2:00 PM", "available": true, "image_url": "" },
+    { "name": "Festival Prasadam Pack", "price": 120, "unit": "takeaway pack", "available": true, "image_url": "" }
+  ],
+  "prasadam_counter_open": true,
+  "prasadam_online_order": true,
+  "facilities": {
+    "parking": true,
+    "wheelchair": true,
+    "annadanam": true,
+    "accommodation": true,
+    "drinking_water": true,
+    "restrooms": true,
+    "medical": true,
+    "cloak_room": true
+  },
+  "parking_capacity": 280,
+  "parking_fee_2w": 20,
+  "parking_fee_4w": 60,
+  "accommodation_details": "",
+  "accommodation_details": "Yatri Nivas / guest-house support is listed by the official temple site.",
+  "annadanam_timings": "11:30 AM - 2:00 PM",
+  "features_enabled": {
+    "darshan_booking": true,
+    "prasadam_order": true,
+    "donation": true,
+    "travel_planner": true,
+    "live_crowd": false,
+    "virtual_tour": false,
+    "news_updates": false,
+    "volunteer_signup": false,
+    "events_calendar": true
+  },
+  "booking_enabled": true,
+  "slot_duration": 30,
+  "max_visitors_per_slot": 120,
+  "advance_booking_window": 14,
+  "special_puja_bookings": [
+    { "name": "Festival Seva Interest", "duration_min": 20, "fee": 0, "max_participants": 6 }
+  ],
+  "live_stream_url": "",
+  "virtual_tour_url": "",
+  "donation_enabled": true,
+  "donation_upi_id": "iskconbangalore@upi",
+  "donation_bank_name": "State Bank of India",
+  "donation_account_no": "12345678901",
+  "donation_ifsc": "SBIN0001234",
+  "donation_causes": [
+    { "name": "Festival Sevas", "target_amount": 800000, "raised": 180000 },
+    { "name": "Annadana Seva", "target_amount": 500000, "raised": 120000 },
+    { "name": "Mandira Nirmana Seva", "target_amount": 1200000, "raised": 260000 }
+  ],
+  "major_annual_festivals": [
+    { "name": "Panihati Chida-dahi Utsava", "month": "June" },
+    { "name": "Sri Brahmotsava", "month": "June" },
+    { "name": "Snana Yatra", "month": "June" },
+    { "name": "Sri Jagannatha Ratha Yatra", "month": "July" }
+  ],
+  "weekly_special_prayers": [
+    { "day": "Sunday", "time": "18:00" },
+    { "day": "Saturday", "time": "17:30" }
+  ],
+  "special_events_text": "ISKCON Bengaluru hosts vibrant festivals throughout the year — from Ratha Yatra to Panihati Utsava — drawing thousands of devotees. The temple also conducts daily bhajans, lecture programs, and cultural activities open to all.",
+  "events": [
+    { "title": "Panihati Chida-dahi Utsava", "date": "2026-06-27", "description": "Official festival listing highlighted on ISKCON Bangalore’s site.", "image_url": "" },
+    { "title": "Sri Jagannatha Ratha Yatra", "date": "2026-07-16", "description": "Official festival listing for the Bengaluru ISKCON community.", "image_url": "" }
+  ],
+  "faqs": [
+    { "question": "What are the official darshan timings used in this demo?", "answer": "Morning 4:15 AM to 5:15 AM and 7:15 AM to 1:15 PM, evening 4:15 PM to 8:00 PM, with no afternoon break on weekends and public holidays." },
+    { "question": "Is entry free?", "answer": "Yes. The official timings page lists temple entry as free, with nominal charges for parking and footwear stand." },
+    { "question": "Is prasadam available?", "answer": "The official FAQ says free lunch prasadam is served daily between 11:30 AM and 2:00 PM." },
+    { "question": "Is parking available?", "answer": "Yes. The official FAQ says parking is available for two-wheelers and four-wheelers with nominal charges." },
+    { "question": "What is the dress code?", "answer": "Formal or traditional attire is advised; avoid shorts and casual clothing." },
+    { "question": "Are wheelchair and lift facilities available?", "answer": "Yes. The official contact and FAQ pages mention elevator, wheelchair, and ramp support for elderly and specially-abled visitors." }
+  ],
+  "visit_plan_title": "Plan Your Visit to ISKCON Bengaluru",
+  "visit_highlights": [
+    { "label": "Before You Go", "title": "Choose a darshan window", "description": "Weekdays are split into morning and evening darshan windows; weekends and public holidays continue through the afternoon." },
+    { "label": "On Campus", "title": "Use visitor facilities first", "description": "Plan footwear, parking, small-bag security, wheelchair support, restrooms, and lift access before entering darshan areas." },
+    { "label": "After Darshan", "title": "Stay for prasadam or learning", "description": "The official site highlights daily lunch prasadam, lectures, bhajans, volunteering, and festival participation." }
+  ],
+  "visitor_advisories": [
+    { "title": "Photography", "description": "Photography is not allowed inside the temple interiors." },
+    { "title": "Best Visit Window", "description": "Early morning around 7–9 AM or the evening arati period (after 4 PM) offer the most serene darshan experience." },
+    { "title": "Accessibility", "description": "Wheelchair, ramp, and elevator support are listed for elderly and specially-abled visitors." }
+  ],
+  "qr_code_url": "https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=https%3A%2F%2F127.0.0.1%3A3001%2Ftemple%2Fiskcon-temple-bengaluru",
+  "total_scans": 24180,
+  "total_bookings": 63820,
+  "total_donations": 9300000
+}

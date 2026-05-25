@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Divya Darshan</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="../shared/i18n.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#455068",
+                        "surface-tint": "#e65100",
+                        "surface-container-highest": "#f2e7e1",
+                        "surface-container-low": "#f9f6f4",
+                        "on-tertiary-fixed": "#333d55",
+                        "error-dim": "#4f0116",
+                        "inverse-surface": "#120e0c",
+                        "surface-bright": "#fffaf8",
+                        "surface-dim": "#e2d8d3",
+                        "secondary-dim": "#565251",
+                        "on-secondary-container": "#555251",
+                        "inverse-on-surface": "#9f9d9c",
+                        "error": "#9e3f4e",
+                        "secondary": "#625f5e",
+                        "secondary-dim": "#d8d4d3",
+                        "background": "#fffaf8",
+                        "surface": "#fffaf8",
+                        "on-background": "#38332d",
+                        "on-error": "#fff7f7",
+                        "outline-variant": "#b8b2ac",
+                        "on-secondary": "#fcf9f8",
+                        "primary-dim": "#bf360c",
+                        "primary": "#e65100",
+                        "secondary-container": "#e6e2e1",
+                        "tertiary-fixed": "#d5dffd",
+                        "primary-fixed-dim": "#ffccbc",
+                        "on-error-container": "#782232",
+                        "tertiary": "#545f78",
+                        "inverse-primary": "#ffab91",
+                        "on-tertiary": "#f9f8ff",
+                        "error-container": "#ff8b9a",
+                        "on-surface": "#38332d",
+                        "secondary-fixed": "#e6e2e1",
+                        "on-primary-container": "#a63a00",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#b23e00",
+                        "on-primary-fixed": "#8e3200",
+                        "tertiary-dim": "#49536b",
+                        "on-tertiary-fixed-variant": "#4f5a72",
+                        "primary-container": "#fff3e0",
+                        "surface-variant": "#f2e7e1",
+                        "tertiary-fixed-dim": "#c7d1ee",
+                        "on-secondary-fixed": "#43403f",
+                        "on-surface-variant": "#656059",
+                        "surface-container": "#f2eeeb",
+                        "outline": "#817b75",
+                        "surface-container-high": "#eee9e4",
+                        "primary-fixed": "#fff3e0",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#d5dffd",
+                        "on-secondary-fixed-variant": "#5f5c5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.75rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* ======= ORIGINAL UIVERSE LOADER BY NAWSOME ======= */
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 10000;
+            width: 160px;
+            height: 100px;
+            margin-left: -80px;
+            margin-top: -50px;
+            border-radius: 5px;
+            background: #1e3f57;
+            animation: dot1_ 3s cubic-bezier(0.55, 0.3, 0.24, 0.99) infinite;
+        }
+
+        .loader:nth-child(2) {
+            z-index: 10001;
+            width: 150px;
+            height: 90px;
+            margin-top: -45px;
+            margin-left: -75px;
+            border-radius: 3px;
+            background: #3c517d;
+            animation-name: dot2_;
+        }
+
+        .loader:nth-child(3) {
+            z-index: 10002;
+            width: 40px;
+            height: 20px;
+            margin-top: 50px;
+            margin-left: -20px;
+            border-radius: 0 0 5px 5px;
+            background: #6bb2cd;
+            animation-name: dot3_;
+        }
+
+        @keyframes dot1_ {
+            3%, 97% {
+                width: 160px;
+                height: 100px;
+                margin-top: -50px;
+                margin-left: -80px;
+            }
+
+            30%, 36% {
+                width: 80px;
+                height: 120px;
+                margin-top: -60px;
+                margin-left: -40px;
+            }
+
+            63%, 69% {
+                width: 40px;
+                height: 80px;
+                margin-top: -40px;
+                margin-left: -20px;
+            }
+        }
+
+        @keyframes dot2_ {
+            3%, 97% {
+                height: 90px;
+                width: 150px;
+                margin-left: -75px;
+                margin-top: -45px;
+            }
+
+            30%, 36% {
+                width: 70px;
+                height: 96px;
+                margin-left: -35px;
+                margin-top: -48px;
+            }
+
+            63%, 69% {
+                width: 32px;
+                height: 60px;
+                margin-left: -16px;
+                margin-top: -30px;
+            }
+        }
+
+        @keyframes dot3_ {
+            3%, 97% {
+                height: 20px;
+                width: 40px;
+                margin-left: -20px;
+                margin-top: 50px;
+            }
+
+            30%, 36% {
+                width: 8px;
+                height: 8px;
+                margin-left: -5px;
+                margin-top: 49px;
+                border-radius: 8px;
+            }
+
+            63%, 69% {
+                width: 16px;
+                height: 4px;
+                margin-left: -8px;
+                margin-top: -37px;
+                border-radius: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col relative overflow-y-auto">
+    <!-- Language Selector Dropdown -->
+    <div class="dd-lang-selector-placeholder absolute top-6 right-6 z-[200]"></div>
+    
+    <!-- ======= AUTHENTICATION LOADER OVERLAY ======= -->
+    <div id="auth-loading-overlay" class="hidden fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-white/30 backdrop-blur-xl transition-all duration-300">
+        <div class="relative w-48 h-48 flex items-center justify-center scale-75 md:scale-90">
+            <div class="loader"></div>
+            <div class="loader"></div>
+            <div class="loader"></div>
+        </div>
+        <h3 id="auth-loading-title" class="text-slate-900 font-manrope font-black text-xl tracking-tight text-center mt-6">Connecting to Digital Sanctuary…</h3>
+        <p id="auth-loading-subtitle" class="text-slate-400 text-xs mt-1.5 uppercase font-bold tracking-[0.2em] text-center animate-pulse">Securing identity handshake</p>
+    </div>
+
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/15 to-transparent mix-blend-multiply"></div>
+<img class="w-full h-full object-cover blur-[8px] scale-105 opacity-40" data-alt="cinematic wide shot of a traditional Indian temple silhouette at dawn with misty atmosphere and soft ethereal orange morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6VxLsBHTgxOj1szXAgpHXYvw16kxVsFn2QzWNiC0-c1Swhrufq4xgQqcHMSYdwkSSuetzpWPUh8kBDmaRn40Lp0R5HNDJWoMQ0Mp9xJuuke0xv0scITgTxC4Yt2VA3aKu7ZAzNVeP1Gfx3QMCI4b59FwCcP5CYY24S8YntSUZweceFUf1nZX7raXEcU1dNpKCCOgYstXWcT_GufalOoz1lM1kMf9OrZtrntT_-huX5p4G8LaZDIfh5MbwAys7m9brX4JTC5M1OXw"/>
+</div>
+<main class="flex-grow flex items-center justify-center p-6 relative z-10">
+<div class="w-full max-w-[440px] bg-surface-container-lowest rounded-3xl shadow-[0px_16px_48px_rgba(230,81,0,0.08)] border border-orange-100 p-8 md:p-10 relative overflow-hidden">
+<div class="text-center mb-8">
+<div class="flex justify-center mb-4">
+<img alt="Divya Darshan Logo" class="h-20 w-auto object-contain cursor-pointer transition-transform hover:scale-105" src="../assets/news/logo.png" onclick="window.location.href='../dashboard/index.html'"/>
+</div>
+<p class="font-body text-sm text-on-surface-variant font-medium mt-1" data-i18n="login-header-subtitle">Smart &amp; Safe Darshan Experience</p>
+</div>
+
+<!-- Tabs selector -->
+<div class="flex bg-slate-100 p-1 rounded-2xl mb-6 relative">
+    <button id="tab-login-btn" onclick="switchTab('login')" class="flex-1 text-center py-2.5 rounded-xl font-manrope font-bold text-xs transition-all bg-white text-primary shadow-sm" data-i18n="login-tab-signin">
+        Sign In
+    </button>
+    <button id="tab-register-btn" onclick="switchTab('register')" class="flex-1 text-center py-2.5 rounded-xl font-manrope font-bold text-xs transition-all text-slate-500 hover:text-slate-700" data-i18n="login-tab-signup">
+        Sign Up
+    </button>
+</div>
+
+<!-- Auth notification alert banner -->
+<div id="auth-alert" class="hidden mb-6 p-4 rounded-2xl border flex gap-3 items-start animate-[fadeInUp_0.3s_ease]">
+    <span class="material-symbols-outlined text-lg flex-shrink-0" id="auth-alert-icon">info</span>
+    <p class="text-xs font-semibold" id="auth-alert-msg"></p>
+</div>
+
+<!-- LOGIN FORM -->
+<form class="space-y-4" id="loginForm">
+<div class="space-y-1.5">
+<label class="font-label text-xs font-semibold text-on-surface-variant ml-1" for="identity" data-i18n="login-label-identity">Email / Mobile number</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="identity" name="identity" placeholder="Enter email or mobile number" type="text" data-i18n="login-placeholder-identity" required/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">mail</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center ml-1">
+<label class="font-label text-xs font-semibold text-on-surface-variant" for="password" data-i18n="login-label-password">Password</label>
+<a class="font-label text-[11px] font-medium text-primary hover:text-primary-dim transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="password" name="password" placeholder="••••••••" type="password" data-i18n="login-placeholder-password" required/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
+<span onclick="togglePasswordVisibility('password', this)" class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-outline text-lg cursor-pointer hover:text-slate-600">visibility_off</span>
+</div>
+</div>
+<div class="pt-2">
+<button id="login-submit-btn" class="w-full bg-primary text-on-primary font-manrope font-semibold py-3.5 rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.98] transition-all flex justify-center items-center gap-2" type="submit">
+                        <span data-i18n="login-btn-signin">Login</span>
+                        <span class="material-symbols-outlined text-lg">login</span>
+</button>
+</div>
+</form>
+
+<!-- REGISTER FORM -->
+<form class="space-y-4 hidden" id="registerForm">
+<div class="space-y-1.5">
+<label class="font-label text-xs font-semibold text-on-surface-variant ml-1" for="reg-name" data-i18n="login-label-name">Full Name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="reg-name" placeholder="Enter your full name" type="text" data-i18n="login-placeholder-name" required/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">person</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label text-xs font-semibold text-on-surface-variant ml-1" for="reg-email" data-i18n="login-label-email">Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="reg-email" placeholder="example@sacredspaces.org" type="email" data-i18n="login-placeholder-email" required/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">mail</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label text-xs font-semibold text-on-surface-variant ml-1" for="reg-phone" data-i18n="login-label-phone">Mobile Number</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="reg-phone" placeholder="9876543210" type="tel" data-i18n="login-placeholder-phone" required/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">call</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label text-xs font-semibold text-on-surface-variant ml-1" for="reg-city" data-i18n="login-label-city">City / Hometown (Optional)</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="reg-city" placeholder="Bengaluru, Karnataka" type="text" data-i18n="login-placeholder-city"/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">location_on</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label text-xs font-semibold text-on-surface-variant ml-1" for="reg-password" data-i18n="login-label-password">Password</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-transparent focus:border-primary/20 focus:ring-4 focus:ring-primary/5 rounded-2xl py-3 px-4 pl-11 text-on-surface placeholder:text-outline text-sm transition-all" id="reg-password" placeholder="••••••••" type="password" data-i18n="login-placeholder-password" required/>
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
+<span onclick="togglePasswordVisibility('reg-password', this)" class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-outline text-lg cursor-pointer hover:text-slate-600">visibility_off</span>
+</div>
+</div>
+<div class="pt-2">
+<button id="reg-submit-btn" class="w-full bg-primary text-on-primary font-manrope font-semibold py-3.5 rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.98] transition-all flex justify-center items-center gap-2" type="submit">
+                        <span data-i18n="login-btn-signup">Create Account</span>
+                        <span class="material-symbols-outlined text-lg">how_to_reg</span>
+</button>
+</div>
+</form>
+
+<script>
+    let activeTab = 'login';
+
+    function switchTab(tab) {
+        activeTab = tab;
+        const loginForm = document.getElementById('loginForm');
+        const regForm = document.getElementById('registerForm');
+        const loginBtn = document.getElementById('tab-login-btn');
+        const regBtn = document.getElementById('tab-register-btn');
+        const alertBox = document.getElementById('auth-alert');
+
+        if (alertBox) alertBox.classList.add('hidden');
+
+        if (tab === 'login') {
+            loginForm.classList.remove('hidden');
+            regForm.classList.add('hidden');
+            loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-manrope font-bold text-xs transition-all bg-white text-primary shadow-sm";
+            regBtn.className = "flex-1 text-center py-2.5 rounded-xl font-manrope font-bold text-xs transition-all text-slate-500 hover:text-slate-700";
+        } else {
+            loginForm.classList.add('hidden');
+            regForm.classList.remove('hidden');
+            loginBtn.className = "flex-1 text-center py-2.5 rounded-xl font-manrope font-bold text-xs transition-all text-slate-500 hover:text-slate-700";
+            regBtn.className = "flex-1 text-center py-2.5 rounded-xl font-manrope font-bold text-xs transition-all bg-white text-primary shadow-sm";
+        }
+    }
+
+    function togglePasswordVisibility(inputId, iconEl) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            iconEl.textContent = 'visibility';
+        } else {
+            input.type = 'password';
+            iconEl.textContent = 'visibility_off';
+        }
+    }
+
+    function showAlert(msg, type = 'error') {
+        const alertBox = document.getElementById('auth-alert');
+        const alertMsg = document.getElementById('auth-alert-msg');
+        const alertIcon = document.getElementById('auth-alert-icon');
+        
+        if (!alertBox || !alertMsg) return;
+
+        alertMsg.textContent = msg;
+        alertBox.classList.remove('hidden');
+
+        if (type === 'error') {
+            alertBox.className = "mb-6 p-4 rounded-2xl border border-red-200 bg-red-50 text-red-700 flex gap-3 items-start animate-[fadeInUp_0.3s_ease]";
+            alertIcon.textContent = 'error';
+        } else if (type === 'success') {
+            alertBox.className = "mb-6 p-4 rounded-2xl border border-green-200 bg-green-50 text-green-700 flex gap-3 items-start animate-[fadeInUp_0.3s_ease]";
+            alertIcon.textContent = 'check_circle';
+        }
+    }
+
+    // LOGIN SUBMIT HANDLER
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const identity = document.getElementById('identity').value.trim();
+        const password = document.getElementById('password').value;
+        const btn = document.getElementById('login-submit-btn');
+
+        const originalBtnText = btn.innerHTML;
+        btn.disabled = true;
+        
+        const overlay = document.getElementById('auth-loading-overlay');
+        const overlayTitle = document.getElementById('auth-loading-title');
+        const overlaySubtitle = document.getElementById('auth-loading-subtitle');
+        if (overlay) {
+            overlayTitle.innerText = 'Connecting to Digital Sanctuary…';
+            overlaySubtitle.innerText = 'Securing identity handshake';
+            overlay.classList.remove('hidden');
+        }
+
+        const startTime = Date.now();
+
+        try {
+            const res = await fetch('/api/user/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identity, password })
+            });
+            const data = await res.json();
+
+            const elapsed = Date.now() - startTime;
+            const delay = Math.max(0, 300 - elapsed);
+
+            setTimeout(() => {
+                if (!res.ok) {
+                    if (overlay) overlay.classList.add('hidden');
+                    showAlert(data.error || 'Authentication failed. Please verify credentials.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnText;
+                    return;
+                }
+
+                // Success
+                localStorage.setItem('dd_user_token', data.token);
+                localStorage.setItem('dd_profile', JSON.stringify(data.user));
+
+                let notes = JSON.parse(localStorage.getItem('globalNotifications')) || [];
+                notes.unshift({ msg: `Welcome back, ${data.user.name}! Successful login.`, time: new Date().toLocaleString(), type: 'login' });
+                if(notes.length > 30) notes.pop();
+                localStorage.setItem('globalNotifications', JSON.stringify(notes));
+
+                // Update loader text instead of hiding it to avoid revealing login form
+                if (overlay) {
+                    overlayTitle.innerText = 'Divine Access Granted!';
+                    overlaySubtitle.innerText = `Welcome, ${data.user.name}. Redirecting to Sanctuary…`;
+                }
+
+                showAlert('Success! Redirecting to Digital Sanctuary...', 'success');
+                setTimeout(() => {
+                    sessionStorage.setItem('justLoggedIn', 'true');
+                    window.location.href = '../dashboard/index.html';
+                }, 300);
+            }, delay);
+
+        } catch (err) {
+            if (overlay) overlay.classList.add('hidden');
+            showAlert('Unable to connect to the authentication server. Please check connection.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = originalBtnText;
+        }
+    });
+
+    // REGISTER SUBMIT HANDLER
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const city = document.getElementById('reg-city').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const btn = document.getElementById('reg-submit-btn');
+
+        const originalBtnText = btn.innerHTML;
+        btn.disabled = true;
+        
+        const overlay = document.getElementById('auth-loading-overlay');
+        const overlayTitle = document.getElementById('auth-loading-title');
+        const overlaySubtitle = document.getElementById('auth-loading-subtitle');
+        if (overlay) {
+            overlayTitle.innerText = 'Forging Sacred Credentials…';
+            overlaySubtitle.innerText = 'Writing record to sanctuary registries';
+            overlay.classList.remove('hidden');
+        }
+
+        const startTime = Date.now();
+
+        try {
+            const res = await fetch('/api/user/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, phone, password, city })
+            });
+            const data = await res.json();
+
+            const elapsed = Date.now() - startTime;
+            const delay = Math.max(0, 300 - elapsed);
+
+            setTimeout(() => {
+                if (overlay) overlay.classList.add('hidden');
+
+                if (!res.ok) {
+                    showAlert(data.error || 'Registration failed. Try a different email or mobile.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnText;
+                    return;
+                }
+
+                // Success - Switch to login tab and pre-fill credentials
+                showAlert('Account created successfully! Please sign in with your credentials.', 'success');
+                
+                // Transition form to Login Tab
+                switchTab('login');
+                
+                // Pre-fill identity with registered email or phone
+                const loginIdentityInput = document.getElementById('identity');
+                if (loginIdentityInput) {
+                    loginIdentityInput.value = email || phone;
+                }
+                
+                // Reset signup form
+                document.getElementById('registerForm').reset();
+                
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
+            }, delay);
+
+        } catch (err) {
+            if (overlay) overlay.classList.add('hidden');
+            showAlert('Unable to connect to the authentication server. Please check connection.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = originalBtnText;
+        }
+    });
+</script>
+<p class="mt-6 text-center font-body text-xs text-slate-400 font-medium" data-i18n="login-footer-secure">Secured with 256-bit encryption · Divya Darshan</p>
+</div>
+</main>
+<footer class="relative z-10 w-full py-8">
+<div class="max-w-7xl mx-auto px-12 flex flex-col md:flex-row justify-between items-center">
+<p class="font-inter text-xs tracking-wide text-slate-500">© 2024 Divya Darshan Sanctuary. All rights reserved.</p>
+<div class="flex gap-6 mt-4 md:mt-0">
+<a class="font-inter text-xs tracking-wide text-slate-500 hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-inter text-xs tracking-wide text-slate-500 hover:text-primary transition-colors" href="#">Support</a>
+<a class="font-inter text-xs tracking-wide text-slate-500 hover:text-primary transition-colors" href="#">Digital Sanctuary</a>
+</div>
+</div>
+</footer>
+</body></html>

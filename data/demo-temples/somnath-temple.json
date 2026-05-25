@@ -1,0 +1,193 @@
+{
+  "slug": "somnath-temple",
+  "status": "active",
+  "created_at": "2026-05-23T12:00:00.000Z",
+  "updated_at": "2026-05-23T12:00:00.000Z",
+  "temple_name": "Somnath Temple",
+  "religion": "Hinduism",
+  "temple_type": "Shaiva",
+  "deity_name": "Lord Somnath (Shiva)",
+  "sect_denomination": "Shaivism",
+  "established_year": 950,
+  "trust_name": "Shree Somnath Trust",
+  "tagline": "The eternal shrine by the Arabian Sea — the first of the twelve sacred Jyotirlingas.",
+  "historical_significance": "Situated at the shore of the Arabian Sea in Prabhas Patan, Gujarat. It is the first among the twelve Jyotirlinga shrines of Shiva. In Hindu tradition, it is considered a sacred place where Lord Krishna ended his earthly journey. The temple's history is a story of resilience, having been destroyed by foreign invaders and rebuilt seven times.",
+  "address_line1": "Somnath Prabhas Patan",
+  "address_line2": "Veraval",
+  "city": "Prabhas Patan",
+  "state": "Gujarat",
+  "pincode": "362268",
+  "country": "India",
+  "latitude": 20.888,
+  "longitude": 70.401,
+  "google_maps_url": "https://maps.google.com/?q=Somnath+Temple+Prabhas+Patan",
+  "nearest_railway": "Veraval Junction (6 km)",
+  "nearest_airport": "Diu Airport (85 km) / Rajkot Airport (200 km)",
+  "nearest_bus_stop": "Somnath Bus Stand (0.5 km)",
+  "admin_email": "admin@somnath.org",
+  "admin_phone": "+91 02876 231200",
+  "admin_password_hash": "$2b$12$6RgRmWJjwRB7W3KmD.c47eGEUwM1Nt8hRl9FB/cGwk1X077IiTwPO",
+  "website_url": "https://somnath.org",
+  "social_facebook": "",
+  "social_instagram": "",
+  "social_youtube": "",
+  "theme_preset": "Devotional Warm",
+  "background_style": "Ocean Waves",
+  "primary_color": "#b45309",
+  "secondary_color": "#f59e0b",
+  "accent_color": "#047857",
+  "logo_url": "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=300&auto=format&fit=crop",
+  "hero_image_url": "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=1600&auto=format&fit=crop",
+  "gallery_urls": [
+    "https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1596117808712-c26b528a054a?q=80&w=1200&auto=format&fit=crop"
+  ],
+  "darshan_timings": [
+    { "day": "Sunday",    "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] },
+    { "day": "Monday",    "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] },
+    { "day": "Tuesday",   "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] },
+    { "day": "Wednesday", "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] },
+    { "day": "Thursday",  "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] },
+    { "day": "Friday",    "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] },
+    { "day": "Saturday",  "open": "06:00", "close": "21:30", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "06:00", "end": "12:00" }, { "label": "Evening Darshan", "start": "16:00", "end": "21:30" } ] }
+  ],
+  "special_days": [
+    { "date": "2026-03-08", "name": "Maha Shivaratri", "extended_hours": "Open 24 hours with continuous abhishekams." }
+  ],
+  "closed_days": [],
+  "entry_fee_general": 0,
+  "entry_fee_vip": 0,
+  "entry_fee_child": 0,
+  "entry_fee_currency": "INR",
+  "dress_code_mode": "Modest Traditional",
+  "dress_code": "Modest attire is required. Shorts, skirts, sleeveless clothing are strictly prohibited inside the temple boundaries.",
+  "special_entry_rules": "Mobiles, cameras, leather items, and bags must be deposited at the free locker counter near the main entrance before entry.",
+  "service_languages": ["Gujarati", "Hindi", "English", "Sanskrit"],
+  "id_required": false,
+  "photography_allowed": false,
+  "mobile_allowed": false,
+  "sevas": [
+    { "name": "Someshwar Maha Abhishek", "description": "Sacred milk and water bath ritual of the Jyotirlinga, performed with Vedic chanting.", "price": 500, "duration_min": 45, "slots_per_day": 30 },
+    { "name": "Bilva Pooja", "description": "Offering of auspicious leaves and flowers to Lord Somnath.", "price": 100, "duration_min": 15, "slots_per_day": 50 }
+  ],
+  "prasadam_items": [
+    { "name": "Somnath Bundi Prasadam", "price": 40, "unit": "packet", "available": true, "image_url": "" }
+  ],
+  "prasadam_counter_open": true,
+  "prasadam_online_order": false,
+  "facilities": {
+    "parking": true,
+    "wheelchair": true,
+    "annadanam": false,
+    "accommodation": true,
+    "drinking_water": true,
+    "restrooms": true,
+    "medical": true,
+    "cloak_room": true,
+    "ev_charging": true
+  },
+  "parking_capacity": 120,
+  "parking_fee_2w": 10,
+  "parking_fee_4w": 40,
+  "accommodation_details": "Shree Somnath Trust operates multiple guesthouses (Sagar Darshan, Lilavati Guest House, etc.) overlooking the Arabian Sea. Book online.",
+  "annadanam_timings": "",
+  "features_enabled": {
+    "darshan_booking": true,
+    "prasadam_order": false,
+    "donation": false,
+    "travel_planner": true,
+    "live_crowd": true,
+    "virtual_tour": false,
+    "news_updates": true,
+    "volunteer_signup": false,
+    "events_calendar": true
+  },
+  "booking_enabled": true,
+  "slot_duration": 30,
+  "max_visitors_per_slot": 250,
+  "advance_booking_window": 45,
+  "special_puja_bookings": [],
+  "live_stream_url": "",
+  "virtual_tour_url": "",
+  "donation_enabled": false,
+  "major_annual_festivals": [
+    { "name": "Maha Shivaratri", "month": "February/March" },
+    { "name": "Kartik Purnima", "month": "November" }
+  ],
+  "weekly_special_prayers": [],
+  "special_events_text": "The Sound & Light Show (Jay Somnath) is conducted daily at the temple precinct from 8:00 PM to 9:00 PM, narrating the history of the Jyotirlinga.",
+  "events": [],
+  "faqs": [
+    { "question": "What is the best time for darshan?", "answer": "Early morning (6 AM) or during the evening Aarti (7 PM)." }
+  ],
+  "visit_plan_title": "Plan Your Sea-Facing Pilgrimage",
+  "visit_highlights": [
+    { "label": "Aarti", "title": "Attend Evening Aarti", "description": "The temple doors echo with drums and chants at 7:00 PM as massive crowd gathers inside the main hall." },
+    { "label": "Show", "title": "Sound & Light Show", "description": "Narrated in Amitabh Bachchan's voice, this visual projection show on the stone temple walls is a must-watch." }
+  ],
+  "visitor_advisories": [
+    { "title": "High Security Check", "description": "All electronic devices and bags must be kept in the secure locker bay." }
+  ],
+  "qr_code_url": "https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=https%3A%2F%2F127.0.0.1%3A3001%2Ftemple%2Fsomnath-temple",
+  "total_scans": 16320,
+  "total_bookings": 64000,
+  "total_donations": 0,
+  "parking_layout": {
+    "zones": [
+      {
+        "id": "lot-eg",
+        "name": "East Gate Lot",
+        "rows": 3,
+        "cols": 6,
+        "slots": [
+          { "id": "E1", "status": "occupied", "type": "car", "label": "Car E-1" },
+          { "id": "E2", "status": "available", "type": "car", "label": "Slot E-2" },
+          { "id": "E3", "status": "ev", "type": "ev", "label": "EV Charger" },
+          { "id": "E4", "status": "occupied", "type": "car", "label": "Car E-4" },
+          { "id": "E5", "status": "available", "type": "car", "label": "Slot E-5" },
+          { "id": "E6", "status": "available", "type": "car", "label": "Slot E-6" },
+          { "id": "F1", "status": "occupied", "type": "car", "label": "Car F-1" },
+          { "id": "F2", "status": "occupied", "type": "car", "label": "Car F-2" },
+          { "id": "F3", "status": "available", "type": "car", "label": "Slot F-3" },
+          { "id": "F4", "status": "available", "type": "car", "label": "Slot F-4" },
+          { "id": "F5", "status": "available", "type": "car", "label": "Slot F-5" },
+          { "id": "F6", "status": "available", "type": "car", "label": "Slot F-6" },
+          { "id": "G1", "status": "available", "type": "car", "label": "Slot G-1" },
+          { "id": "G2", "status": "available", "type": "car", "label": "Slot G-2" },
+          { "id": "G3", "status": "occupied", "type": "car", "label": "Car G-3" },
+          { "id": "G4", "status": "occupied", "type": "car", "label": "Car G-4" },
+          { "id": "G5", "status": "available", "type": "car", "label": "Slot G-5" },
+          { "id": "G6", "status": "available", "type": "car", "label": "Slot G-6" }
+        ]
+      },
+      {
+        "id": "lot-sd",
+        "name": "Sagar Darshan Lot",
+        "rows": 4,
+        "cols": 5,
+        "slots": [
+          { "id": "A1", "status": "occupied", "type": "car", "label": "Car A-1" },
+          { "id": "A2", "status": "occupied", "type": "car", "label": "Car A-2" },
+          { "id": "A3", "status": "available", "type": "car", "label": "Slot A-3" },
+          { "id": "A4", "status": "available", "type": "car", "label": "Slot A-4" },
+          { "id": "A5", "status": "available", "type": "car", "label": "Slot A-5" },
+          { "id": "B1", "status": "occupied", "type": "car", "label": "Car B-1" },
+          { "id": "B2", "status": "occupied", "type": "car", "label": "Car B-2" },
+          { "id": "B3", "status": "available", "type": "car", "label": "Slot B-3" },
+          { "id": "B4", "status": "reserved", "type": "car", "label": "VIP B-4" },
+          { "id": "B5", "status": "available", "type": "car", "label": "Slot B-5" },
+          { "id": "C1", "status": "available", "type": "car", "label": "Slot C-1" },
+          { "id": "C2", "status": "available", "type": "car", "label": "Slot C-2" },
+          { "id": "C3", "status": "available", "type": "car", "label": "Slot C-3" },
+          { "id": "C4", "status": "available", "type": "car", "label": "Slot C-4" },
+          { "id": "C5", "status": "available", "type": "car", "label": "Slot C-5" },
+          { "id": "D1", "status": "occupied", "type": "car", "label": "Car D-1" },
+          { "id": "D2", "status": "occupied", "type": "car", "label": "Car D-2" },
+          { "id": "D3", "status": "available", "type": "car", "label": "Slot D-3" },
+          { "id": "D4", "status": "available", "type": "car", "label": "Slot D-4" },
+          { "id": "D5", "status": "available", "type": "car", "label": "Slot D-5" }
+        ]
+      }
+    ]
+  }
+}

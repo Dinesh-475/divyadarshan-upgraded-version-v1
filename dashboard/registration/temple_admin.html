@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Temple Admin Dashboard | Divya Darshan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "var(--primary)",
+            "primary-dim": "var(--primary-dim)",
+            secondary: "var(--secondary)",
+            surface: "#f7f8fd",
+            ink: "#1f2749",
+            muted: "#66708f"
+          },
+          boxShadow: {
+            divine: "0px 12px 32px rgba(26,35,126,0.06)"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --primary: #4c56af;
+      --primary-dim: #38429a;
+      --secondary: #f5a623;
+    }
+    body {
+      font-family: "Inter", sans-serif;
+      color: #1f2749;
+      background:
+        radial-gradient(circle at top left, rgba(76,86,175,0.16), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(245,166,35,0.12), transparent 26%),
+        linear-gradient(180deg, #fbfcff 0%, #f5f6fd 100%);
+    }
+    h1, h2, h3, h4 {
+      font-family: "Manrope", sans-serif;
+    }
+    .glass-nav {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(24px);
+    }
+    .surface-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(18px);
+      box-shadow: 0px 12px 32px rgba(26,35,126,0.06);
+    }
+    .field {
+      width: 100%;
+      border: 0;
+      border-radius: 0.9rem;
+      background: #eef1fb;
+      padding: 0.9rem 1rem;
+      color: #1f2749;
+      outline: none;
+    }
+    .field:focus {
+      box-shadow: 0 0 0 4px rgba(76,86,175,0.12);
+    }
+    .tab-btn.active {
+      background: rgba(76,86,175,0.12);
+      color: var(--primary);
+    }
+    .admin-tab {
+      display: none;
+    }
+    .admin-tab.active {
+      display: block;
+    }
+    .toast {
+      animation: toastIn 180ms ease;
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #edf0fb 25%, #f7f8fd 40%, #edf0fb 60%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="glass-nav sticky top-0 z-40 shadow-divine">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div id="navLogo" class="w-14 h-14 rounded-2xl bg-white shadow-divine flex items-center justify-center text-xl overflow-hidden">
+            <img src="/assets/news/logo.png" alt="Divya Darshan Logo" class="h-10 w-auto object-contain" />
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Temple Admin Panel</p>
+            <h1 id="dashboardTitle" class="text-2xl font-extrabold mt-1">Temple Dashboard</h1>
+            <p id="dashboardSubtitle" class="text-sm text-muted mt-1">Bookings, donations, QR scans, and profile controls.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a id="micrositeLink" href="#" target="_blank" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-primary">Open Microsite</a>
+          <button id="logoutBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Logout</button>
+        </div>
+      </div>
+      <div id="tabBar" class="mt-4 flex gap-2 overflow-x-auto pb-1 lg:hidden"></div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
+    <section id="loadingShell" class="grid gap-6">
+      <div class="skeleton h-40 rounded-[28px]"></div>
+      <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="skeleton h-40 rounded-[28px]"></div>
+        <div class="skeleton h-40 rounded-[28px]"></div>
+        <div class="skeleton h-40 rounded-[28px]"></div>
+        <div class="skeleton h-40 rounded-[28px]"></div>
+      </div>
+    </section>
+
+    <section id="dashboardShell" class="hidden lg:grid lg:grid-cols-[280px_minmax(0,1fr)] gap-6 items-start">
+      <aside class="surface-card rounded-[28px] p-5 lg:sticky lg:top-28 hidden lg:block">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Temple Controls</p>
+        <h2 class="text-2xl font-extrabold mt-3">Left Sidebar</h2>
+        <p class="text-sm text-muted mt-3">Manage every microsite section from one temple-specific control rail.</p>
+        <div id="sidebarNav" class="mt-6 grid gap-2"></div>
+      </aside>
+
+      <div class="space-y-6 min-w-0">
+      <div id="messageBar" class="hidden rounded-[24px] px-5 py-4 text-sm font-medium"></div>
+
+      <section id="tab-overview" class="admin-tab active">
+        <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Bookings Today</p>
+            <h2 id="kpiBookingsToday" class="text-4xl font-extrabold mt-4">0</h2>
+          </div>
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Bookings This Month</p>
+            <h2 id="kpiBookingsMonth" class="text-4xl font-extrabold mt-4">0</h2>
+          </div>
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Donations</p>
+            <h2 id="kpiDonations" class="text-4xl font-extrabold mt-4">INR 0</h2>
+          </div>
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">QR Scans</p>
+            <h2 id="kpiScans" class="text-4xl font-extrabold mt-4">0</h2>
+          </div>
+        </div>
+        <div class="grid xl:grid-cols-[0.95fr_1.05fr] gap-6 mt-6">
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Temple Status</p>
+            <div class="grid md:grid-cols-2 gap-4 mt-5 text-sm">
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Active Sevas</p>
+                <p id="overviewSevas" class="text-2xl font-extrabold mt-2">0</p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Total Booking Counter</p>
+                <p id="overviewBookingCounter" class="text-2xl font-extrabold mt-2">0</p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Donation Counter</p>
+                <p id="overviewDonationCounter" class="text-2xl font-extrabold mt-2">INR 0</p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Temple Status</p>
+                <p id="overviewTempleStatus" class="text-2xl font-extrabold mt-2">Active</p>
+              </div>
+            </div>
+          </div>
+          <div class="surface-card rounded-[28px] p-6">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">QR Analytics</p>
+                <h3 class="text-2xl font-extrabold mt-2">Scans over the last 30 days</h3>
+              </div>
+            </div>
+            <div id="scanChart" class="mt-6 rounded-[24px] bg-[#eef1fb] p-5 min-h-[260px]"></div>
+          </div>
+        </div>
+        <div class="grid xl:grid-cols-[340px_minmax(0,1fr)] gap-6 mt-6">
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Temple QR</p>
+            <h3 class="text-2xl font-extrabold mt-2">Download microsite QR</h3>
+            <div class="mt-5 rounded-[24px] bg-[#eef1fb] p-4 relative">
+              <img id="overviewQrImage" src="" alt="Temple QR Code" class="w-full rounded-[20px] bg-white p-3 shadow-divine" />
+            </div>
+            <button id="downloadOverviewQrBtn" type="button" class="mt-5 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Download QR</button>
+          </div>
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Launch Pointers</p>
+            <div class="mt-5 grid md:grid-cols-2 gap-4 text-sm">
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Microsite Link</p>
+                <p id="overviewMicrositeLink" class="mt-2 break-all text-muted"></p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Admin Email</p>
+                <p id="overviewAdminEmail" class="mt-2 text-muted"></p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Brand Theme</p>
+                <p id="overviewThemePreset" class="mt-2 text-muted"></p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="font-semibold">Features Enabled</p>
+                <p id="overviewFeaturesEnabled" class="mt-2 text-muted"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-bookings" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Bookings</p>
+              <h3 class="text-2xl font-extrabold mt-2">Temple booking records</h3>
+            </div>
+            <button id="exportBookingsBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Export CSV</button>
+          </div>
+          <div id="bookingsTable" class="mt-6 overflow-x-auto"></div>
+        </div>
+      </section>
+
+      <section id="tab-orders" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Prasadam Orders</p>
+          <h3 class="text-2xl font-extrabold mt-2">Temple pickup orders</h3>
+          <div id="ordersTable" class="mt-6 overflow-x-auto"></div>
+        </div>
+      </section>
+
+      <section id="tab-donations" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Donations</p>
+          <h3 class="text-2xl font-extrabold mt-2">Temple donation ledger</h3>
+          <div id="donationsTable" class="mt-6 overflow-x-auto"></div>
+        </div>
+      </section>
+
+      <section id="tab-analytics" class="admin-tab">
+        <div class="grid xl:grid-cols-[1fr_1fr] gap-6">
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Temple Summary</p>
+            <div id="analyticsSummary" class="mt-6 grid gap-4"></div>
+          </div>
+          <div class="surface-card rounded-[28px] p-6">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">QR Scan Chart</p>
+            <div id="analyticsChart" class="mt-6 rounded-[24px] bg-[#eef1fb] p-5 min-h-[280px]"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-profile" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Edit Profile</p>
+              <h3 class="text-2xl font-extrabold mt-2">Live microsite profile editor</h3>
+            </div>
+            <button id="saveProfileBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Save Profile</button>
+          </div>
+          <form id="profileForm" class="mt-6 grid gap-5">
+            <div class="grid md:grid-cols-2 gap-4">
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Temple Name</span>
+                <input class="field" data-profile-field="temple_name" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Deity Name</span>
+                <input class="field" data-profile-field="deity_name" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Admin Phone</span>
+                <input class="field" data-profile-field="admin_phone" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Website URL</span>
+                <input class="field" data-profile-field="website_url" />
+              </label>
+              <label class="grid gap-2 md:col-span-2">
+                <span class="text-sm font-semibold">Tagline</span>
+                <textarea class="field min-h-[110px]" data-profile-field="tagline"></textarea>
+              </label>
+              <label class="grid gap-2 md:col-span-2">
+                <span class="text-sm font-semibold">Dress Code</span>
+                <textarea class="field min-h-[110px]" data-profile-field="dress_code"></textarea>
+              </label>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4">
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Primary Colour</span>
+                <input class="field h-14 p-2" data-profile-field="primary_color" type="color" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Secondary Colour</span>
+                <input class="field h-14 p-2" data-profile-field="secondary_color" type="color" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Accent Colour</span>
+                <input class="field h-14 p-2" data-profile-field="accent_color" type="color" />
+              </label>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Google Maps URL</span>
+                <input class="field" data-profile-field="google_maps_url" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Live Stream URL</span>
+                <input class="field" data-profile-field="live_stream_url" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Virtual Tour URL</span>
+                <input class="field" data-profile-field="virtual_tour_url" />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Gallery URLs (one per line)</span>
+                <textarea id="galleryUrlsField" class="field min-h-[120px]"></textarea>
+              </label>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Darshan Timings JSON</span>
+                <textarea id="timingsJsonField" class="field min-h-[220px]"></textarea>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Facilities JSON</span>
+                <textarea id="facilitiesJsonField" class="field min-h-[220px]"></textarea>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Features JSON</span>
+                <textarea id="featuresJsonField" class="field min-h-[220px]"></textarea>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">FAQs JSON</span>
+                <textarea id="faqsJsonField" class="field min-h-[220px]"></textarea>
+              </label>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="tab-sevas" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Sevas Manager</p>
+              <h3 class="text-2xl font-extrabold mt-2">Temple seva catalogue</h3>
+            </div>
+            <button id="addSevaBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Add Seva</button>
+          </div>
+          <div id="sevasEditor" class="mt-6 grid gap-4"></div>
+          <button id="saveSevasBtn" type="button" class="mt-6 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Save Sevas</button>
+        </div>
+      </section>
+
+      <section id="tab-events" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Events Manager</p>
+              <h3 class="text-2xl font-extrabold mt-2">Upcoming temple events</h3>
+            </div>
+            <button id="addEventBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Add Event</button>
+          </div>
+          <div id="eventsEditor" class="mt-6 grid gap-4"></div>
+          <button id="saveEventsBtn" type="button" class="mt-6 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Save Events</button>
+        </div>
+      </section>
+
+      <section id="tab-gallery" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Gallery Manager</p>
+              <h3 class="text-2xl font-extrabold mt-2">Temple image gallery</h3>
+            </div>
+            <button id="addGalleryImageBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Add Image</button>
+          </div>
+          <div id="galleryEditor" class="mt-6 grid gap-4"></div>
+          <button id="saveGalleryBtn" type="button" class="mt-6 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Save Gallery</button>
+        </div>
+      </section>
+
+      <section id="tab-timings" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Timings Manager</p>
+              <h3 class="text-2xl font-extrabold mt-2">Weekly darshan schedule</h3>
+            </div>
+            <button id="saveTimingsBtn" type="button" class="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Save Timings</button>
+          </div>
+          <div id="timingsEditor" class="mt-6 grid gap-4"></div>
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold">Special Days JSON</span>
+              <textarea id="specialDaysJsonField" class="field min-h-[180px]"></textarea>
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold">Closed Days JSON</span>
+              <textarea id="closedDaysJsonField" class="field min-h-[180px]"></textarea>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-parking" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Parking Layout Manager</p>
+              <h3 class="text-2xl font-extrabold mt-2">Visual Parking & Slot Capacity Editor</h3>
+              <p class="text-sm text-muted mt-1">Configure layout zones, capacity categories, and live spot statuses.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="addZoneBtn" type="button" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-primary" onclick="addParkingZone()">Add Zone</button>
+              <button id="saveParkingBtn" type="button" class="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white shadow-divine" onclick="saveParkingLayout()">Save Layout</button>
+            </div>
+          </div>
+
+          <!-- Zone Pills & Stats Row -->
+          <div class="grid lg:grid-cols-[260px_1fr] gap-6">
+            <!-- Left Panel: Zone Selection & Controls -->
+            <div class="space-y-6">
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="text-xs uppercase tracking-wider font-bold text-primary mb-3">Select Zone</p>
+                <div id="parkingZoneList" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                  <!-- Dynamic Zone List Buttons -->
+                </div>
+              </div>
+
+              <!-- Zone Configuration -->
+              <div id="zoneConfigPanel" class="rounded-[24px] bg-[#eef1fb] p-5 space-y-4">
+                <p class="text-xs uppercase tracking-wider font-bold text-primary">Zone Settings</p>
+                <label class="grid gap-2">
+                  <span class="text-xs font-semibold">Zone Name</span>
+                  <input id="zoneNameInput" class="field text-sm" placeholder="e.g. Main Gate Lot" oninput="updateZoneName(this.value)" />
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                  <label class="grid gap-2">
+                    <span class="text-xs font-semibold">Rows (2-8)</span>
+                    <input id="zoneRowsInput" type="number" min="2" max="8" class="field text-sm" onchange="updateZoneDimensions()" />
+                  </label>
+                  <label class="grid gap-2">
+                    <span class="text-xs font-semibold">Cols (2-8)</span>
+                    <input id="zoneColsInput" type="number" min="2" max="8" class="field text-sm" onchange="updateZoneDimensions()" />
+                  </label>
+                </div>
+                <button type="button" class="w-full rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 px-3 py-2 text-xs font-semibold transition" onclick="deleteActiveZone()">
+                  Delete Active Zone
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Panel: Grid & Live Statistics -->
+            <div class="space-y-6">
+              <!-- Grid Stats Bar -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="rounded-[20px] bg-emerald-50 border border-emerald-100 p-4 text-center">
+                  <p class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider">Available</p>
+                  <p id="parkingStatAvailable" class="text-2xl font-extrabold text-emerald-700 mt-1">0</p>
+                </div>
+                <div class="rounded-[20px] bg-sky-50 border border-sky-100 p-4 text-center">
+                  <p class="text-[11px] font-bold text-sky-800 uppercase tracking-wider">Reserved</p>
+                  <p id="parkingStatReserved" class="text-2xl font-extrabold text-sky-700 mt-1">0</p>
+                </div>
+                <div class="rounded-[20px] bg-amber-50 border border-amber-100 p-4 text-center">
+                  <p class="text-[11px] font-bold text-amber-800 uppercase tracking-wider">Occupied</p>
+                  <p id="parkingStatOccupied" class="text-2xl font-extrabold text-amber-700 mt-1">0</p>
+                </div>
+                <div class="rounded-[20px] bg-purple-50 border border-purple-100 p-4 text-center">
+                  <p class="text-[11px] font-bold text-purple-800 uppercase tracking-wider">EV Charging</p>
+                  <p id="parkingStatEV" class="text-2xl font-extrabold text-purple-700 mt-1">0</p>
+                </div>
+              </div>
+
+              <!-- Legend Details -->
+              <div class="flex flex-wrap items-center justify-between gap-4 p-4 rounded-[20px] bg-[#eef1fb] text-xs font-semibold text-muted">
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span>
+                  <span>Click slots directly to cycle state:</span>
+                </div>
+                <div class="flex gap-4">
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Available</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Reserved</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Occupied</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> EV</span>
+                </div>
+              </div>
+
+              <!-- Main Slot Grid -->
+              <div class="surface-card rounded-[24px] p-5 md:p-6 border border-indigo-50/50">
+                <div id="parkingGridContainer" class="grid gap-3">
+                  <!-- Dynamic CSS Grid -->
+                </div>
+              </div>
+
+              <!-- Selected Slot Customizer Pane -->
+              <div id="slotCustomizerPane" class="rounded-[24px] bg-[#eef1fb] p-5 grid sm:grid-cols-3 gap-4 items-center opacity-50 pointer-events-none transition-all">
+                <div class="sm:col-span-3 flex justify-between items-center">
+                  <p class="text-xs uppercase tracking-wider font-bold text-primary">Customize Slot Details</p>
+                  <span id="slotHelperText" class="text-xs text-muted font-normal">Select a slot to edit details</span>
+                </div>
+                <label class="grid gap-2">
+                  <span class="text-xs font-semibold">Slot Code / ID</span>
+                  <input id="customSlotId" class="field text-sm bg-white" placeholder="Select slot" readonly />
+                </label>
+                <label class="grid gap-2">
+                  <span class="text-xs font-semibold">Slot Display Label</span>
+                  <input id="customSlotLabel" class="field text-sm bg-white" placeholder="Enter custom label" oninput="updateSelectedSlotLabel(this.value)" />
+                </label>
+                <label class="grid gap-2">
+                  <span class="text-xs font-semibold">Vehicle Capacity Type</span>
+                  <select id="customSlotVehicleType" class="field text-sm bg-white border-0 py-2" onchange="updateSelectedSlotVehicleType(this.value)">
+                    <option value="car">Car / Sedan</option>
+                    <option value="bike">Two-Wheeler</option>
+                    <option value="bus">Heavy / Bus</option>
+                    <option value="ev">EV Charging Bay</option>
+                  </select>
+                </label>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- NEW: Admin Parking Overrides, Walk-In Tickets, Analytics, & Log Feeds -->
+          <div class="grid md:grid-cols-2 gap-6 mt-8 pt-6 border-t border-slate-100 font-sans">
+             <!-- Walk-In Ticket Generator Form -->
+             <div class="rounded-[24px] bg-[#eef1fb] p-5 space-y-4">
+                 <p class="text-xs uppercase tracking-wider font-bold text-primary flex items-center gap-1.5">
+                     <span class="material-symbols-outlined text-sm">confirmation_number</span>
+                     Walk-In Ticket Generator
+                 </p>
+                 <div class="grid grid-cols-2 gap-3 text-xs">
+                     <label class="grid gap-2">
+                         <span class="text-xs font-semibold">Vehicle Category</span>
+                         <select id="walkinVehicleType" class="field text-sm bg-white border-0 py-2">
+                             <option value="car">4W Car/Sedan</option>
+                             <option value="bike">2W Motorcycle</option>
+                             <option value="ev">EV Charging</option>
+                             <option value="heavy">Heavy Lorry</option>
+                         </select>
+                     </label>
+                     <label class="grid gap-2">
+                         <span class="text-xs font-semibold">Duration (Hours)</span>
+                         <input id="walkinDuration" type="number" min="1" max="24" value="2" class="field text-sm bg-white" />
+                     </label>
+                 </div>
+                 <div class="grid grid-cols-2 gap-3 text-xs">
+                     <label class="grid gap-2">
+                         <span class="text-xs font-semibold">Vehicle Number</span>
+                         <input id="walkinPlate" class="field text-sm bg-white font-mono uppercase" placeholder="e.g. TN-01-AB-1234" />
+                     </label>
+                     <label class="grid gap-2">
+                         <span class="text-xs font-semibold">Devotee Phone</span>
+                         <input id="walkinPhone" class="field text-sm bg-white" placeholder="e.g. 9876543210" />
+                     </label>
+                 </div>
+                 <div class="flex gap-2">
+                     <button type="button" onclick="handleWalkinTicketSubmit()" class="flex-1 rounded-xl bg-primary text-white py-2.5 text-xs font-bold shadow-divine flex items-center justify-center gap-1.5 active:scale-[0.98] transition-all">
+                         <span class="material-symbols-outlined text-[14px]">print</span>
+                         Generate & Print Pass
+                     </button>
+                     <button type="button" onclick="openWaiveChargesModal()" class="rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-600 px-3 py-2.5 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                         <span class="material-symbols-outlined text-[14px]">money_off</span>
+                         Waive Fees
+                     </button>
+                 </div>
+             </div>
+
+             <!-- Live Activity Logs / Audit Trail -->
+             <div class="rounded-[24px] bg-[#eef1fb] p-5 flex flex-col h-full max-h-[300px]">
+                 <p class="text-xs uppercase tracking-wider font-bold text-primary mb-3 flex items-center justify-between">
+                     <span class="flex items-center gap-1.5">
+                         <span class="material-symbols-outlined text-sm">history</span>
+                         Live Operations Audit Log
+                     </span>
+                     <span class="text-[8px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase">Real-Time</span>
+                 </p>
+                 <div id="parkingAuditLogs" class="space-y-2 overflow-y-auto flex-1 pr-1 text-[11px] font-bold text-slate-700">
+                     <!-- Populated with audit events dynamically -->
+                     <div class="p-2.5 bg-white rounded-xl flex items-start gap-2 border border-slate-100">
+                         <span class="material-symbols-outlined text-xs text-slate-400 mt-0.5">info</span>
+                         <div>
+                             <p class="text-slate-600">Smart parking console loaded.</p>
+                             <span class="text-[9px] text-slate-400">System Initialized</span>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+          </div>
+
+          <!-- NEW: Analytics View - Timeline Area Charts & Revenue Stacked Charts -->
+          <div class="grid md:grid-cols-2 gap-6 mt-6 font-sans">
+              <!-- Occupancy Timeline Area Chart -->
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                  <p class="text-xs uppercase tracking-wider font-bold text-primary mb-3">Occupancy Timeline (Last 12 hrs)</p>
+                  <div class="bg-white rounded-2xl p-3 shadow-inner flex items-center justify-center min-h-[160px]">
+                      <svg viewBox="0 0 400 160" class="w-full">
+                          <!-- Grid lines -->
+                          <line x1="20" y1="20" x2="380" y2="20" stroke="#f1f5f9" stroke-width="1"></line>
+                          <line x1="20" y1="60" x2="380" y2="60" stroke="#f1f5f9" stroke-width="1"></line>
+                          <line x1="20" y1="100" x2="380" y2="100" stroke="#f1f5f9" stroke-width="1"></line>
+                          <line x1="20" y1="140" x2="380" y2="140" stroke="#e2e8f0" stroke-width="1.5"></line>
+                          <!-- Timeline Area Path -->
+                          <path d="M20,140 L50,110 L100,85 L150,115 L200,90 L250,55 L300,45 L350,75 L380,60 L380,140 Z" fill="rgba(76, 86, 175, 0.15)"></path>
+                          <path d="M20,140 L50,110 L100,85 L150,115 L200,90 L250,55 L300,45 L350,75 L380,60" fill="none" stroke="var(--primary)" stroke-width="3"></path>
+                          <!-- Labels -->
+                          <text x="20" y="152" fill="#64748b" font-size="8" font-weight="bold">08:00</text>
+                          <text x="140" y="152" fill="#64748b" font-size="8" font-weight="bold">12:00</text>
+                          <text x="260" y="152" fill="#64748b" font-size="8" font-weight="bold">16:00</text>
+                          <text x="360" y="152" fill="#64748b" font-size="8" font-weight="bold">20:00</text>
+                          <text x="250" y="35" fill="var(--primary)" font-size="9" font-weight="900" class="animate-pulse">Peak Occupancy (88%)</text>
+                      </svg>
+                  </div>
+              </div>
+
+              <!-- Revenue Stacked Bar Chart -->
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                  <p class="text-xs uppercase tracking-wider font-bold text-primary mb-3">Revenue Stacked Breakdown</p>
+                  <div class="bg-white rounded-2xl p-4 shadow-inner flex flex-col gap-3 min-h-[160px] justify-center text-xs">
+                      <!-- Bar stacks -->
+                      <div class="h-6 w-full rounded-full overflow-hidden flex font-extrabold text-[9px] text-white select-none">
+                          <div style="width: 45%" class="bg-[#4c56af] flex items-center justify-center" title="Sedan: 45%">45%</div>
+                          <div style="width: 25%" class="bg-[#f5a623] flex items-center justify-center" title="Bike: 25%">25%</div>
+                          <div style="width: 20%" class="bg-[#10b981] flex items-center justify-center" title="EV: 20%">20%</div>
+                          <div style="width: 10%" class="bg-[#8b5cf6] flex items-center justify-center" title="Heavy: 10%">10%</div>
+                      </div>
+                      <!-- Legend keys -->
+                      <div class="grid grid-cols-2 gap-3 mt-1 font-bold text-slate-500 text-[10px]">
+                          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#4c56af] inline-block"></span>4W Cars (₹3.4k)</span>
+                          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#f5a623] inline-block"></span>2W Bikes (₹1.8k)</span>
+                          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#10b981] inline-block"></span>EV Slots (₹1.5k)</span>
+                          <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-[#8b5cf6] inline-block"></span>Heavy Lorry (₹800)</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECONDARY PIN SECURITY CHALLENGE MODAL -->
+      <div id="pinChallengeModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 transition-all duration-300 select-none">
+          <div class="bg-slate-950 border-2 border-slate-800 text-white max-w-sm w-full rounded-[32px] overflow-hidden shadow-2xl transform scale-95 transition-all duration-300 p-6 flex flex-col items-center gap-5">
+              <div class="w-12 h-12 rounded-full bg-orange-950/50 border border-orange-500/50 text-orange-500 flex items-center justify-center shadow-[0_0_12px_rgba(234,88,12,0.3)] animate-pulse">
+                  <span class="material-symbols-outlined text-xl">lock_open</span>
+              </div>
+              <div class="text-center font-sans">
+                  <h4 class="font-extrabold text-sm uppercase tracking-wider text-slate-100">PIN Authorization Required</h4>
+                  <p class="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">Authorized Overrides Only • Default PIN: 1208</p>
+              </div>
+              
+              <!-- Code indicators -->
+              <div class="flex gap-4 my-2">
+                  <div id="pin-dot-1" class="w-3.5 h-3.5 rounded-full border border-slate-700 bg-slate-900 transition-all"></div>
+                  <div id="pin-dot-2" class="w-3.5 h-3.5 rounded-full border border-slate-700 bg-slate-900 transition-all"></div>
+                  <div id="pin-dot-3" class="w-3.5 h-3.5 rounded-full border border-slate-700 bg-slate-900 transition-all"></div>
+                  <div id="pin-dot-4" class="w-3.5 h-3.5 rounded-full border border-slate-700 bg-slate-900 transition-all"></div>
+              </div>
+
+              <!-- Keypad Grid -->
+              <div class="grid grid-cols-3 gap-3.5 w-full max-w-[240px] font-sans">
+                  <button type="button" onclick="pressPinKey(1)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">1</button>
+                  <button type="button" onclick="pressPinKey(2)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">2</button>
+                  <button type="button" onclick="pressPinKey(3)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">3</button>
+                  <button type="button" onclick="pressPinKey(4)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">4</button>
+                  <button type="button" onclick="pressPinKey(5)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">5</button>
+                  <button type="button" onclick="pressPinKey(6)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">6</button>
+                  <button type="button" onclick="pressPinKey(7)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">7</button>
+                  <button type="button" onclick="pressPinKey(8)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">8</button>
+                  <button type="button" onclick="pressPinKey(9)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">9</button>
+                  <button type="button" onclick="clearPinCode()" class="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 text-rose-500 hover:bg-rose-950/20 active:scale-90 font-bold text-[10px] uppercase tracking-wider transition-all flex items-center justify-center">CLR</button>
+                  <button type="button" onclick="pressPinKey(0)" class="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 active:scale-90 font-bold text-sm transition-all flex items-center justify-center">0</button>
+                  <button type="button" onclick="closePinChallengeModal()" class="w-12 h-12 rounded-full bg-slate-950 border border-slate-800 text-slate-400 hover:bg-slate-900 active:scale-90 font-bold text-[10px] uppercase tracking-wider transition-all flex items-center justify-center">ESC</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- WAIVE CHARGES MODAL -->
+      <div id="waiveChargesModal" class="fixed inset-0 z-[2000] hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 transition-all duration-300 select-none">
+          <div class="bg-slate-950 border-2 border-slate-800 text-white max-w-sm w-full rounded-[32px] overflow-hidden shadow-2xl transform scale-95 transition-all duration-300 p-6 flex flex-col gap-4 font-manrope">
+              <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-3xl text-orange-500">money_off</span>
+                  <div>
+                      <h4 class="font-extrabold text-sm uppercase tracking-wider text-slate-100 font-sans">Waive Penalty Fee</h4>
+                      <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider font-sans">Waiver Log Entry Authorization</p>
+                  </div>
+              </div>
+
+              <div class="flex flex-col gap-1.5 mt-2 text-xs font-sans">
+                  <label class="text-[10px] font-extrabold uppercase text-slate-400">Pass ID / Plate Number</label>
+                  <input id="waivePassId" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono font-bold tracking-wider" placeholder="e.g. PKG-T7Y9B2" />
+              </div>
+
+              <div class="flex flex-col gap-1.5 text-xs font-sans">
+                  <label class="text-[10px] font-extrabold uppercase text-slate-400">Reason for Waiver</label>
+                  <select id="waiveReason" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-bold">
+                      <option value="Senior Citizen Exemption">Senior Citizen Exemption</option>
+                      <option value="Temple VIP / Donor Pass">Temple VIP / Donor Pass</option>
+                      <option value="Festival Crowd Delay">Festival Crowd Delay</option>
+                      <option value="Medical Emergency Exit">Medical Emergency Exit</option>
+                  </select>
+              </div>
+
+              <div class="flex gap-2.5 mt-2 font-sans">
+                  <button type="button" onclick="executeWaiver()" class="flex-1 bg-orange-600 hover:bg-orange-500 text-white font-bold py-2.5 rounded-xl text-xs active:scale-[0.98] transition-all flex items-center justify-center gap-1.5">
+                      Authorize Waiver
+                  </button>
+                  <button type="button" onclick="closeWaiveChargesModal()" class="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 rounded-xl text-xs transition-all">
+                      Cancel
+                  </button>
+              </div>
+          </div>
+      </div>
+
+      <section id="tab-settings" class="admin-tab">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-primary">Settings</p>
+          <h3 class="text-2xl font-extrabold mt-2">Password and feature settings</h3>
+          <div class="grid md:grid-cols-2 gap-4 mt-6">
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold">New Password</span>
+              <input id="newPasswordField" class="field" type="password" placeholder="Minimum 8 characters" />
+            </label>
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold">Confirm Password</span>
+              <input id="confirmPasswordField" class="field" type="password" />
+            </label>
+          </div>
+          <button id="saveSettingsBtn" type="button" class="mt-6 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-divine">Update Settings</button>
+        </div>
+      </section>
+      </div>
+    </section>
+  </main>
+
+  <div id="toastStack" class="fixed bottom-4 right-4 z-50 space-y-3"></div>
+
+  <script>
+    const slug = window.location.pathname.split("/")[2] || "";
+    const authKey = `templeAdminToken:${slug}`;
+    const tabMeta = [
+      { id: "overview", label: "Overview", icon: "dashboard" },
+      { id: "bookings", label: "Bookings", icon: "confirmation_number" },
+      { id: "orders", label: "Prasadam Orders", icon: "shopping_bag" },
+      { id: "donations", label: "Donations", icon: "volunteer_activism" },
+      { id: "analytics", label: "QR Analytics", icon: "query_stats" },
+      { id: "profile", label: "Edit Profile", icon: "edit_square" },
+      { id: "sevas", label: "Sevas Manager", icon: "temple_hindu" },
+      { id: "events", label: "Events Manager", icon: "event" },
+      { id: "gallery", label: "Gallery Manager", icon: "photo_library" },
+      { id: "timings", label: "Timings Manager", icon: "schedule" },
+      { id: "parking", label: "Parking Layout", icon: "local_parking" },
+      { id: "settings", label: "Settings", icon: "settings" },
+    ];
+    const tabs = tabMeta.map((tab) => tab.id);
+    let token = "";
+    let profile = null;
+    let summary = null;
+    let bookings = [];
+    let donations = [];
+    let orders = [];
+    let sevasDraft = [];
+    let eventsDraft = [];
+    let galleryDraft = [];
+    let timingsDraft = [];
+    let specialDaysDraft = [];
+    let closedDaysDraft = [];
+    let parkingDraft = { zones: [] };
+    let activeZoneIndex = 0;
+    let selectedSlotIndex = null;
+
+    const byId = (id) => document.getElementById(id);
+
+    function showToast(message, kind = "info") {
+      const el = document.createElement("div");
+      const bg = kind === "success" ? "bg-emerald-500" : kind === "error" ? "bg-rose-500" : "bg-primary";
+      el.className = `toast rounded-2xl ${bg} text-white px-4 py-3 shadow-divine max-w-sm`;
+      el.textContent = message;
+      byId("toastStack").appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(8px)";
+        setTimeout(() => el.remove(), 180);
+      }, 3000);
+    }
+
+    function currency(value) {
+      return `INR ${Number(value || 0).toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+    }
+
+    function setMessage(message, kind = "info") {
+      const bar = byId("messageBar");
+      bar.classList.remove("hidden");
+      bar.className = `rounded-[24px] px-5 py-4 text-sm font-medium ${kind === "error" ? "bg-rose-50 text-rose-600" : kind === "success" ? "bg-emerald-50 text-emerald-600" : "bg-[#eef1fb] text-muted"}`;
+      bar.textContent = message;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function redirectToLogin() {
+      sessionStorage.removeItem(authKey);
+      window.location.href = `/temple/${slug}/admin/login`;
+    }
+
+    function authHeaders() {
+      return { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
+    }
+
+    function showTab(name) {
+      document.querySelectorAll(".admin-tab").forEach((tab) => tab.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach((button) => button.classList.remove("active"));
+      byId(`tab-${name}`).classList.add("active");
+      document.querySelectorAll(`[data-tab-target="${name}"]`).forEach((button) => button.classList.add("active"));
+    }
+
+    function renderTabBar() {
+      const mobileButton = (tab, index) => `
+        <button id="tabbtn-${tab.id}" data-tab-target="${tab.id}" type="button" class="tab-btn ${index === 0 ? "active" : ""} rounded-full bg-white/80 px-4 py-2 text-sm font-semibold text-muted shadow-divine whitespace-nowrap">
+          ${tab.label}
+        </button>
+      `;
+      const sidebarButton = (tab, index) => `
+        <button data-tab-target="${tab.id}" type="button" class="tab-btn ${index === 0 ? "active" : ""} w-full rounded-[20px] px-4 py-3 text-sm font-semibold text-muted text-left flex items-center gap-3">
+          <span class="material-symbols-outlined text-[18px]">${tab.icon}</span>
+          <span>${tab.label}</span>
+        </button>
+      `;
+      byId("tabBar").innerHTML = tabMeta.map(mobileButton).join("");
+      byId("sidebarNav").innerHTML = tabMeta.map(sidebarButton).join("");
+      tabs.forEach((name) => {
+        document.querySelectorAll(`[data-tab-target="${name}"]`).forEach((button) => {
+          button.addEventListener("click", () => showTab(name));
+        });
+      });
+    }
+
+    function downloadTempleQr() {
+      if (!profile?.qr_code_url) {
+        showToast("Temple QR is not available yet.", "error");
+        return;
+      }
+      const link = document.createElement("a");
+      link.href = profile.qr_code_url;
+      link.download = `${slug || "temple"}_QR.png`;
+      link.click();
+    }
+
+    function safeJsonParse(value, fallback) {
+      try {
+        const parsed = JSON.parse(value);
+        return parsed ?? fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function createDefaultDayTiming(day) {
+      return {
+        day,
+        open: "06:00",
+        close: "20:00",
+        closed: false,
+        sessions: [{ label: "General", start: "06:00", end: "20:00" }],
+      };
+    }
+
+    function ensureWeeklyTimings(list) {
+      const dayOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+      return dayOrder.map((day) => {
+        const found = (Array.isArray(list) ? list : []).find((item) => item?.day === day);
+        return found ? { ...createDefaultDayTiming(day), ...found, sessions: Array.isArray(found.sessions) && found.sessions.length ? found.sessions : createDefaultDayTiming(day).sessions } : createDefaultDayTiming(day);
+      });
+    }
+
+    function renderQuickOverview() {
+      byId("overviewQrImage").src = profile.qr_code_url || "";
+      byId("overviewMicrositeLink").textContent = `${window.location.origin}/temple/${slug}`;
+      byId("overviewAdminEmail").textContent = profile.admin_email || "Not available";
+      byId("overviewThemePreset").textContent = profile.theme_preset || "Custom theme";
+      const enabledFeatures = Object.entries(profile.features_enabled || {}).filter(([, enabled]) => enabled).map(([key]) => key.replaceAll("_", " "));
+      byId("overviewFeaturesEnabled").textContent = enabledFeatures.length ? enabledFeatures.join(", ") : "No optional features enabled";
+    }
+
+    async function fetchJson(url) {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      const data = await res.json();
+      if (res.status === 401 || res.status === 403) {
+        redirectToLogin();
+        throw new Error("Session expired. Please log in again.");
+      }
+      if (!res.ok) throw new Error(data.error || `Request failed: ${url}`);
+      return data;
+    }
+
+    async function loadDashboard() {
+      token = sessionStorage.getItem(authKey) || "";
+      if (!token) return redirectToLogin();
+      try {
+        const [summaryData, profileData, bookingsData, donationsData, ordersData] = await Promise.all([
+          fetchJson(`/api/temple/${slug}/admin/summary`),
+          fetchJson(`/api/temple/${slug}`),
+          fetchJson(`/api/temple/${slug}/admin/bookings`),
+          fetchJson(`/api/temple/${slug}/admin/donations`),
+          fetchJson(`/api/temple/${slug}/admin/orders`)
+        ]);
+        summary = summaryData;
+        profile = profileData;
+        bookings = bookingsData.bookings || [];
+        donations = donationsData.donations || [];
+        orders = ordersData.orders || [];
+        sevasDraft = JSON.parse(JSON.stringify(profile.sevas || []));
+        eventsDraft = JSON.parse(JSON.stringify(profile.events || []));
+        galleryDraft = JSON.parse(JSON.stringify(profile.gallery_urls || []));
+        timingsDraft = ensureWeeklyTimings(JSON.parse(JSON.stringify(profile.darshan_timings || [])));
+        specialDaysDraft = JSON.parse(JSON.stringify(profile.special_days || []));
+        closedDaysDraft = JSON.parse(JSON.stringify(profile.closed_days || []));
+        parkingDraft = safeJsonParse(JSON.stringify(profile.parking_layout || { zones: [] }), { zones: [] });
+        if (!parkingDraft.zones || !parkingDraft.zones.length) {
+          // Initialize with a beautiful, high-quality starting preset
+          parkingDraft = {
+            zones: [
+              {
+                id: "zone-a",
+                name: "Main Northern Lot",
+                rows: 4,
+                cols: 6,
+                slots: Array.from({ length: 24 }, (_, i) => {
+                  const row = String.fromCharCode(65 + Math.floor(i / 6));
+                  const col = (i % 6) + 1;
+                  let status = "available";
+                  if (i === 3 || i === 8) status = "occupied";
+                  if (i === 5) status = "reserved";
+                  if (i === 12 || i === 13) status = "ev";
+                  return {
+                    id: `${row}${col}`,
+                    status: status,
+                    type: status === "ev" ? "ev" : "car",
+                    label: `Slot ${row}-${col}`
+                  };
+                })
+              },
+              {
+                id: "zone-b",
+                name: "West Wing (Two Wheelers)",
+                rows: 3,
+                cols: 8,
+                slots: Array.from({ length: 24 }, (_, i) => {
+                  const row = "B";
+                  const col = i + 1;
+                  let status = "available";
+                  if (i === 1 || i === 12 || i === 18) status = "occupied";
+                  return {
+                    id: `${row}${col}`,
+                    status: status,
+                    type: "bike",
+                    label: `Bike ${col}`
+                  };
+                })
+              }
+            ]
+          };
+        }
+        renderDashboard();
+        byId("loadingShell").classList.add("hidden");
+        byId("dashboardShell").classList.remove("hidden");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    function renderDashboard() {
+      document.documentElement.style.setProperty("--primary", profile.primary_color || "#4c56af");
+      document.documentElement.style.setProperty("--primary-dim", "#38429a");
+      document.documentElement.style.setProperty("--secondary", profile.secondary_color || "#f5a623");
+      if (profile.logo_url) byId("navLogo").innerHTML = `<img src="${profile.logo_url}" alt="${profile.temple_name}" class="w-full h-full object-cover rounded-2xl" />`;
+      byId("dashboardTitle").textContent = profile.temple_name;
+      byId("dashboardSubtitle").textContent = `${profile.slug} • ${profile.city || "Temple city"} • status ${profile.status || "active"}`;
+      byId("micrositeLink").href = `/temple/${slug}`;
+
+      byId("kpiBookingsToday").textContent = summary.bookings_today || 0;
+      byId("kpiBookingsMonth").textContent = summary.bookings_month || 0;
+      byId("kpiDonations").textContent = currency(summary.donations_total || 0);
+      byId("kpiScans").textContent = summary.qr_scans_total || 0;
+      byId("overviewSevas").textContent = summary.active_sevas || 0;
+      byId("overviewBookingCounter").textContent = summary.total_bookings_counter || 0;
+      byId("overviewDonationCounter").textContent = currency(summary.total_donations_counter || 0);
+      byId("overviewTempleStatus").textContent = profile.status || "active";
+
+      renderScanChart(byId("scanChart"), summary.scan_chart || []);
+      renderQuickOverview();
+      renderBookings();
+      renderOrders();
+      renderDonations();
+      renderAnalytics();
+      renderProfileForm();
+      renderSevasEditor();
+      renderEventsEditor();
+      renderGalleryEditor();
+      renderTimingsEditor();
+      renderParkingLayout();
+    }
+
+    function renderScanChart(container, points) {
+      if (!points.length) {
+        container.innerHTML = `<div class="text-sm text-muted">No scan data available yet.</div>`;
+        return;
+      }
+      const max = Math.max(...points.map((item) => Number(item.count || 0)), 1);
+      const bars = points.map((item, index) => {
+        const height = Math.max(10, Math.round((Number(item.count || 0) / max) * 160));
+        const x = 12 + index * 18;
+        return `
+          <g>
+            <rect x="${x}" y="${180 - height}" width="12" height="${height}" rx="6" fill="var(--primary)"></rect>
+            ${index % 5 === 0 ? `<text x="${x}" y="196" fill="#66708f" font-size="9">${item.date.slice(5)}</text>` : ""}
+          </g>
+        `;
+      }).join("");
+      container.innerHTML = `
+        <svg viewBox="0 0 580 210" class="w-full">
+          <rect x="0" y="0" width="580" height="210" rx="24" fill="white"></rect>
+          ${bars}
+        </svg>
+      `;
+    }
+
+    function renderBookings() {
+      byId("bookingsTable").innerHTML = renderTable(
+        ["Ticket ID", "Visit Date", "Slot", "Type", "Qty", "Phone", "Status"],
+        bookings.map((booking) => [
+          booking.id,
+          booking.visit_date || "-",
+          booking.slot || "-",
+          booking.ticket_type || "-",
+          booking.qty,
+          booking.phone || "-",
+          booking.status || "-"
+        ])
+      );
+    }
+
+    function renderOrders() {
+      byId("ordersTable").innerHTML = renderTable(
+        ["Order ID", "Items", "Phone", "Pickup Slot", "Total", "Status"],
+        orders.map((order) => [
+          order.id,
+          Array.isArray(order.items) ? order.items.map((item) => `${item.name} x${item.qty}`).join(", ") : "-",
+          order.phone || "-",
+          order.pickup_slot || "-",
+          currency(order.total || 0),
+          order.status || "-"
+        ])
+      );
+    }
+
+    function renderDonations() {
+      byId("donationsTable").innerHTML = renderTable(
+        ["Donation ID", "Donor", "Cause", "Amount", "Reference", "Created"],
+        donations.map((donation) => [
+          donation.id,
+          donation.donor_name || "-",
+          donation.cause || "Temple Donation",
+          currency(donation.amount || 0),
+          donation.payment_ref || "-",
+          donation.created_at ? new Date(donation.created_at).toLocaleString() : "-"
+        ])
+      );
+    }
+
+    function renderAnalytics() {
+      byId("analyticsSummary").innerHTML = `
+        <div class="rounded-[24px] bg-[#eef1fb] p-5"><p class="font-semibold">Bookings Total</p><p class="text-2xl font-extrabold mt-2">${summary.bookings_total || 0}</p></div>
+        <div class="rounded-[24px] bg-[#eef1fb] p-5"><p class="font-semibold">Donations Total</p><p class="text-2xl font-extrabold mt-2">${currency(summary.donations_total || 0)}</p></div>
+        <div class="rounded-[24px] bg-[#eef1fb] p-5"><p class="font-semibold">QR Scans Total</p><p class="text-2xl font-extrabold mt-2">${summary.qr_scans_total || 0}</p></div>
+        <div class="rounded-[24px] bg-[#eef1fb] p-5"><p class="font-semibold">Active Sevas</p><p class="text-2xl font-extrabold mt-2">${summary.active_sevas || 0}</p></div>
+      `;
+      renderScanChart(byId("analyticsChart"), summary.scan_chart || []);
+    }
+
+    function renderProfileForm() {
+      document.querySelectorAll("[data-profile-field]").forEach((input) => {
+        input.value = profile[input.dataset.profileField] ?? "";
+      });
+      byId("galleryUrlsField").value = (profile.gallery_urls || []).join("\n");
+      byId("timingsJsonField").value = JSON.stringify(profile.darshan_timings || [], null, 2);
+      byId("facilitiesJsonField").value = JSON.stringify(profile.facilities || {}, null, 2);
+      byId("featuresJsonField").value = JSON.stringify(profile.features_enabled || {}, null, 2);
+      byId("faqsJsonField").value = JSON.stringify(profile.faqs || [], null, 2);
+    }
+
+    function renderSevasEditor() {
+      byId("sevasEditor").innerHTML = sevasDraft.length
+        ? sevasDraft.map((item, index) => `
+          <div class="rounded-[24px] bg-[#eef1fb] p-5">
+            <div class="flex items-center justify-between gap-4 mb-4">
+              <h4 class="text-xl font-extrabold">Seva ${index + 1}</h4>
+              <button type="button" class="text-rose-600 font-semibold" onclick="removeSeva(${index})">Remove</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+              <input class="field" placeholder="Name" value="${escapeHtml(item.name)}" data-seva-field="${index}:name" />
+              <input class="field" placeholder="Price" type="number" min="0" step="0.01" value="${escapeHtml(item.price)}" data-seva-field="${index}:price" />
+              <input class="field" placeholder="Duration" type="number" min="0" value="${escapeHtml(item.duration_min)}" data-seva-field="${index}:duration_min" />
+              <input class="field" placeholder="Slots per day" type="number" min="0" value="${escapeHtml(item.slots_per_day)}" data-seva-field="${index}:slots_per_day" />
+              <textarea class="field md:col-span-2 min-h-[110px]" placeholder="Description" data-seva-field="${index}:description">${escapeHtml(item.description)}</textarea>
+            </div>
+          </div>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-5 text-sm text-muted">No sevas added yet.</div>`;
+      document.querySelectorAll("[data-seva-field]").forEach((input) => input.addEventListener("input", () => {
+        const [index, field] = input.dataset.sevaField.split(":");
+        sevasDraft[Number(index)][field] = input.value;
+      }));
+    }
+
+    function renderEventsEditor() {
+      byId("eventsEditor").innerHTML = eventsDraft.length
+        ? eventsDraft.map((item, index) => `
+          <div class="rounded-[24px] bg-[#eef1fb] p-5">
+            <div class="flex items-center justify-between gap-4 mb-4">
+              <h4 class="text-xl font-extrabold">Event ${index + 1}</h4>
+              <button type="button" class="text-rose-600 font-semibold" onclick="removeEvent(${index})">Remove</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+              <input class="field" placeholder="Title" value="${escapeHtml(item.title)}" data-event-field="${index}:title" />
+              <input class="field" type="date" value="${escapeHtml(item.date)}" data-event-field="${index}:date" />
+              <input class="field md:col-span-2" placeholder="Image URL" value="${escapeHtml(item.image_url)}" data-event-field="${index}:image_url" />
+              <textarea class="field md:col-span-2 min-h-[110px]" placeholder="Description" data-event-field="${index}:description">${escapeHtml(item.description)}</textarea>
+            </div>
+          </div>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-5 text-sm text-muted">No events added yet.</div>`;
+      document.querySelectorAll("[data-event-field]").forEach((input) => input.addEventListener("input", () => {
+        const [index, field] = input.dataset.eventField.split(":");
+        eventsDraft[Number(index)][field] = input.value;
+      }));
+    }
+
+    function renderGalleryEditor() {
+      byId("galleryEditor").innerHTML = galleryDraft.length
+        ? galleryDraft.map((item, index) => `
+          <div class="rounded-[24px] bg-[#eef1fb] p-5">
+            <div class="flex items-center justify-between gap-4 mb-4">
+              <h4 class="text-xl font-extrabold">Image ${index + 1}</h4>
+              <div class="flex items-center gap-2">
+                <button type="button" class="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-primary shadow-divine" onclick="moveGalleryImage(${index}, -1)" ${index === 0 ? "disabled" : ""}>Up</button>
+                <button type="button" class="rounded-xl bg-white px-3 py-2 text-xs font-semibold text-primary shadow-divine" onclick="moveGalleryImage(${index}, 1)" ${index === galleryDraft.length - 1 ? "disabled" : ""}>Down</button>
+                <button type="button" class="text-rose-600 font-semibold" onclick="removeGalleryImage(${index})">Remove</button>
+              </div>
+            </div>
+            <input class="field" placeholder="Image URL" value="${escapeHtml(item)}" data-gallery-field="${index}" />
+          </div>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-5 text-sm text-muted">No gallery images added yet.</div>`;
+      document.querySelectorAll("[data-gallery-field]").forEach((input) => input.addEventListener("input", () => {
+        galleryDraft[Number(input.dataset.galleryField)] = input.value;
+      }));
+    }
+
+    function renderTimingsEditor() {
+      byId("timingsEditor").innerHTML = timingsDraft.map((item, index) => `
+        <div class="rounded-[24px] bg-[#eef1fb] p-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h4 class="text-xl font-extrabold">${item.day}</h4>
+              <p class="text-sm text-muted mt-1">Temple opening hours and session blocks.</p>
+            </div>
+            <label class="flex items-center gap-2 text-sm font-semibold">
+              <input type="checkbox" ${item.closed ? "checked" : ""} data-timing-closed="${index}" />
+              Closed
+            </label>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 mt-4">
+            <input class="field" type="time" value="${escapeHtml(item.open || "")}" data-timing-open="${index}" />
+            <input class="field" type="time" value="${escapeHtml(item.close || "")}" data-timing-close="${index}" />
+          </div>
+          <label class="grid gap-2 mt-4">
+            <span class="text-sm font-semibold">Sessions JSON</span>
+            <textarea class="field min-h-[140px]" data-timing-sessions="${index}">${escapeHtml(JSON.stringify(item.sessions || [], null, 2))}</textarea>
+          </label>
+        </div>
+      `).join("");
+      document.querySelectorAll("[data-timing-closed]").forEach((input) => input.addEventListener("change", () => {
+        timingsDraft[Number(input.dataset.timingClosed)].closed = input.checked;
+      }));
+      document.querySelectorAll("[data-timing-open]").forEach((input) => input.addEventListener("input", () => {
+        timingsDraft[Number(input.dataset.timingOpen)].open = input.value;
+      }));
+      document.querySelectorAll("[data-timing-close]").forEach((input) => input.addEventListener("input", () => {
+        timingsDraft[Number(input.dataset.timingClose)].close = input.value;
+      }));
+      document.querySelectorAll("[data-timing-sessions]").forEach((input) => input.addEventListener("input", () => {
+        const index = Number(input.dataset.timingSessions);
+        timingsDraft[index].sessions = safeJsonParse(input.value, timingsDraft[index].sessions || []);
+      }));
+      byId("specialDaysJsonField").value = JSON.stringify(specialDaysDraft || [], null, 2);
+      byId("closedDaysJsonField").value = JSON.stringify(closedDaysDraft || [], null, 2);
+    }
+
+    function renderTable(headers, rows) {
+      if (!rows.length) {
+        return `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-muted">No records available yet.</div>`;
+      }
+      return `
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-muted">
+              ${headers.map((header) => `<th class="pb-3 pr-4 font-semibold">${header}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr class="border-0">
+                ${row.map((cell) => `<td class="py-3 pr-4 align-top">${cell}</td>`).join("")}
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function saveProfile() {
+      try {
+        const payload = {};
+        document.querySelectorAll("[data-profile-field]").forEach((input) => {
+          payload[input.dataset.profileField] = input.value;
+        });
+        payload.gallery_urls = byId("galleryUrlsField").value.split("\n").map((item) => item.trim()).filter(Boolean);
+        payload.darshan_timings = JSON.parse(byId("timingsJsonField").value || "[]");
+        payload.facilities = JSON.parse(byId("facilitiesJsonField").value || "{}");
+        payload.features_enabled = JSON.parse(byId("featuresJsonField").value || "{}");
+        payload.faqs = JSON.parse(byId("faqsJsonField").value || "[]");
+        const res = await fetch(`/api/temple/${slug}/admin/profile`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Profile update failed");
+        profile = { ...profile, ...data };
+        renderDashboard();
+        setMessage("Temple profile updated successfully.", "success");
+        showToast("Temple profile updated.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    async function saveSevas() {
+      try {
+        const res = await fetch(`/api/temple/${slug}/admin/sevas`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ sevas: sevasDraft })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to save sevas");
+        profile.sevas = data.sevas || sevasDraft;
+        summary.active_sevas = profile.sevas.length;
+        renderDashboard();
+        setMessage("Temple sevas updated successfully.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    async function saveEvents() {
+      try {
+        const res = await fetch(`/api/temple/${slug}/admin/events`, {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ events: eventsDraft })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to save events");
+        profile.events = data.events || eventsDraft;
+        renderDashboard();
+        setMessage("Temple events updated successfully.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    async function saveGallery() {
+      try {
+        const res = await fetch(`/api/temple/${slug}/admin/profile`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ gallery_urls: galleryDraft.filter(Boolean) })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to save gallery");
+        profile.gallery_urls = data.gallery_urls || galleryDraft.filter(Boolean);
+        galleryDraft = JSON.parse(JSON.stringify(profile.gallery_urls || []));
+        renderGalleryEditor();
+        setMessage("Temple gallery updated successfully.", "success");
+        showToast("Gallery updated.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    async function saveTimings() {
+      try {
+        specialDaysDraft = safeJsonParse(byId("specialDaysJsonField").value || "[]", []);
+        closedDaysDraft = safeJsonParse(byId("closedDaysJsonField").value || "[]", []);
+        const res = await fetch(`/api/temple/${slug}/admin/profile`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            darshan_timings: timingsDraft,
+            special_days: specialDaysDraft,
+            closed_days: closedDaysDraft
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to save timings");
+        profile.darshan_timings = data.darshan_timings || timingsDraft;
+        profile.special_days = data.special_days || specialDaysDraft;
+        profile.closed_days = data.closed_days || closedDaysDraft;
+        timingsDraft = ensureWeeklyTimings(JSON.parse(JSON.stringify(profile.darshan_timings || [])));
+        renderTimingsEditor();
+        setMessage("Temple timings updated successfully.", "success");
+        showToast("Timings updated.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    async function saveSettings() {
+      try {
+        const password = byId("newPasswordField").value;
+        const confirm = byId("confirmPasswordField").value;
+        if (!password || password.length < 8) throw new Error("New password must be at least 8 characters.");
+        if (password !== confirm) throw new Error("Password confirmation does not match.");
+        const res = await fetch(`/api/temple/${slug}/admin/profile`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ admin_password: password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to update password");
+        byId("newPasswordField").value = "";
+        byId("confirmPasswordField").value = "";
+        setMessage("Temple admin password updated successfully.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    function exportBookingsCsv() {
+      const header = ["Ticket ID", "Temple", "Visit Date", "Slot", "Qty", "Phone", "Ticket Type", "Status"];
+      const lines = [header.join(",")];
+      bookings.forEach((booking) => {
+        lines.push([
+          booking.id,
+          booking.temple_name,
+          booking.visit_date || "",
+          booking.slot || "",
+          booking.qty,
+          booking.phone || "",
+          booking.ticket_type || "",
+          booking.status || ""
+        ].map((value) => `"${String(value).replaceAll("\"", "\"\"")}"`).join(","));
+      });
+      const blob = new Blob([lines.join("\n")], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${slug}_bookings.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function addSeva() {
+      sevasDraft.push({ name: "", description: "", price: "", duration_min: "", slots_per_day: "" });
+      renderSevasEditor();
+    }
+
+    function addEvent() {
+      eventsDraft.push({ title: "", date: "", description: "", image_url: "" });
+      renderEventsEditor();
+    }
+
+    function addGalleryImage() {
+      galleryDraft.push("");
+      renderGalleryEditor();
+    }
+
+    function removeSeva(index) {
+      sevasDraft.splice(index, 1);
+      renderSevasEditor();
+    }
+
+    function removeEvent(index) {
+      eventsDraft.splice(index, 1);
+      renderEventsEditor();
+    }
+
+    function removeGalleryImage(index) {
+      galleryDraft.splice(index, 1);
+      renderGalleryEditor();
+    }
+
+    function moveGalleryImage(index, direction) {
+      const target = index + direction;
+      if (target < 0 || target >= galleryDraft.length) return;
+      const [item] = galleryDraft.splice(index, 1);
+      galleryDraft.splice(target, 0, item);
+      renderGalleryEditor();
+    }
+
+    function getVehicleIcon(type) {
+      switch (type) {
+        case "bike": return "two_wheeler";
+        case "bus": return "airport_shuttle";
+        case "ev": return "electric_car";
+        default: return "directions_car";
+      }
+    }
+
+    function renderParkingLayout() {
+      const zoneList = byId("parkingZoneList");
+      if (!parkingDraft.zones || !parkingDraft.zones.length) {
+        zoneList.innerHTML = `<p class="text-xs text-muted p-2">No active zones configured.</p>`;
+        byId("zoneConfigPanel").classList.add("hidden");
+        byId("parkingGridContainer").innerHTML = `
+          <div class="flex flex-col items-center justify-center py-12 text-center">
+            <span class="material-symbols-outlined text-5xl text-muted/40 mb-3">local_parking</span>
+            <h4 class="font-bold text-ink">No Parking Zones Active</h4>
+            <p class="text-xs text-muted max-w-xs mt-1">Add a parking zone (e.g. Front Gate Lot) to start visually managing capacities.</p>
+            <button type="button" class="mt-4 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white shadow-divine" onclick="addParkingZone()">
+              Create Zone
+            </button>
+          </div>
+        `;
+        byId("slotCustomizerPane").classList.add("opacity-50", "pointer-events-none");
+        byId("slotHelperText").textContent = "Add a parking zone first";
+        return;
+      }
+      
+      byId("zoneConfigPanel").classList.remove("hidden");
+      
+      zoneList.innerHTML = parkingDraft.zones.map((zone, index) => {
+        const isActive = index === activeZoneIndex;
+        const activeClass = isActive ? "bg-primary text-white shadow-divine" : "bg-white hover:bg-slate-50 text-muted";
+        return `
+          <button type="button" onclick="switchParkingZone(${index})" 
+                  class="w-full text-left rounded-xl px-4 py-3 text-xs font-bold transition flex items-center justify-between gap-2 ${activeClass}">
+            <span class="truncate">${escapeHtml(zone.name)}</span>
+            <span class="text-[10px] bg-black/10 text-current px-2 py-0.5 rounded-full">${zone.slots.length} Slots</span>
+          </button>
+        `;
+      }).join("");
+      
+      const activeZone = parkingDraft.zones[activeZoneIndex];
+      byId("zoneNameInput").value = activeZone.name;
+      byId("zoneRowsInput").value = activeZone.rows;
+      byId("zoneColsInput").value = activeZone.cols;
+      
+      selectedSlotIndex = null;
+      byId("customSlotId").value = "";
+      byId("customSlotLabel").value = "";
+      byId("customSlotVehicleType").value = "car";
+      byId("slotCustomizerPane").classList.add("opacity-50", "pointer-events-none");
+      byId("slotHelperText").textContent = "Select a slot to edit details";
+      
+      renderActiveZoneGridOnly();
+    }
+
+    function renderActiveZoneGridOnly() {
+      const zone = parkingDraft.zones[activeZoneIndex];
+      if (!zone) return;
+      
+      let available = 0, reserved = 0, occupied = 0, ev = 0;
+      zone.slots.forEach(slot => {
+        if (slot.status === "available") available++;
+        else if (slot.status === "reserved") reserved++;
+        else if (slot.status === "occupied") occupied++;
+        else if (slot.status === "ev") ev++;
+      });
+      
+      byId("parkingStatAvailable").textContent = available;
+      byId("parkingStatReserved").textContent = reserved;
+      byId("parkingStatOccupied").textContent = occupied;
+      byId("parkingStatEV").textContent = ev;
+      
+      const gridContainer = byId("parkingGridContainer");
+      gridContainer.className = "grid gap-3 bg-slate-900 p-6 rounded-[24px] border border-slate-800 justify-center";
+      gridContainer.style.gridTemplateColumns = `repeat(${zone.cols}, minmax(0, 1fr))`;
+      
+      gridContainer.innerHTML = zone.slots.map((slot, index) => {
+        const isSelected = selectedSlotIndex === index;
+        const ringClass = isSelected ? "ring-4 ring-offset-2 ring-primary scale-[1.03] shadow-lg" : "";
+        let borderClass = 'border-dashed border border-slate-700 bg-slate-800/40 hover:bg-slate-800/80';
+        let content = `<div class="text-[10px] font-bold text-slate-500">${slot.id}</div>`;
+        
+        if (slot.status === 'occupied') {
+            borderClass = 'border border-slate-800 bg-slate-900/60 opacity-90';
+            const carSvg = `
+                <svg viewBox="0 0 40 80" class="w-7 h-12">
+                    <rect x="3" y="10" width="34" height="60" rx="8" fill="#5c6bc0" />
+                    <rect x="6" y="25" width="28" height="15" rx="3" fill="#111" opacity="0.8" />
+                    <rect x="6" y="55" width="28" height="10" rx="2" fill="#111" opacity="0.8" />
+                    <rect x="5" y="6" width="6" height="4" rx="1" fill="#fff" opacity="0.8" />
+                    <rect x="29" y="6" width="6" height="4" rx="1" fill="#fff" opacity="0.8" />
+                    <line x1="6" y1="67" x2="34" y2="67" stroke="#3f51b5" stroke-width="3" />
+                </svg>
+            `;
+            const bikeSvg = `
+                <svg viewBox="0 0 20 50" class="w-4.5 h-10">
+                    <rect x="8" y="2" width="4" height="10" rx="2" fill="#222" />
+                    <rect x="8" y="38" width="4" height="10" rx="2" fill="#222" />
+                    <rect x="5" y="15" width="10" height="20" rx="4" fill="#3f51b5" />
+                    <rect x="6" y="22" width="8" height="10" rx="2" fill="#222" />
+                    <line x1="2" y1="12" x2="18" y2="12" stroke="#333" stroke-width="2" />
+                </svg>
+            `;
+            content = slot.type === 'bike' ? bikeSvg : carSvg;
+        } else if (slot.status === 'reserved') {
+            borderClass = 'border border-amber-500/50 bg-amber-500/10';
+            content = `<div class="text-[10px] font-black text-amber-500 flex flex-col items-center gap-0.5"><span class="material-symbols-outlined text-sm">bookmark</span>VIP</div>`;
+        } else if (slot.status === 'walkway') {
+            borderClass = 'border-transparent bg-slate-950/20';
+            content = `<div class="text-[9px] font-bold text-slate-600">Road</div>`;
+        } else if (slot.status === 'pillar') {
+            borderClass = 'border border-slate-700 bg-slate-800';
+            content = `<div class="text-[10px] font-bold text-slate-600">▧</div>`;
+        } else {
+            if (slot.type === 'ev' || slot.status === 'ev') {
+                borderClass = 'border border-emerald-500/40 bg-emerald-950/20 hover:bg-emerald-900/40';
+                content = `<div class="text-[9px] font-black text-emerald-400 flex flex-col items-center gap-0.5">
+                    <span class="material-symbols-outlined text-[13px] text-emerald-400">electrical_services</span>
+                    ${slot.id}
+                </div>`;
+            } else {
+                const iconName = slot.type === 'bike' ? 'two_wheeler' : 'directions_car';
+                borderClass = 'border border-primary/40 bg-slate-800/20 hover:border-primary hover:bg-slate-800/60';
+                content = `<div class="text-[10px] font-bold text-primary-dim group-hover:text-primary transition-colors flex flex-col items-center gap-0.5">
+                    <span class="material-symbols-outlined text-[14px]">${iconName}</span>
+                    ${slot.id}
+                </div>`;
+            }
+        }
+
+        return `
+          <button id="slot-btn-${index}" data-slot-btn type="button" onclick="cycleSlotStatus(${index})" 
+                  class="group relative flex flex-col items-center justify-center rounded-2xl border-2 transition-all duration-200 ${borderClass} ${ringClass} hover:scale-[1.02] active:scale-[0.98] w-14 h-16 md:w-16 md:h-20 select-none">
+            ${content}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function selectSlot(index) {
+      selectedSlotIndex = index;
+      const zone = parkingDraft.zones[activeZoneIndex];
+      if (!zone || !zone.slots[index]) return;
+      const slot = zone.slots[index];
+      
+      byId("customSlotId").value = slot.id;
+      byId("customSlotLabel").value = slot.label || "";
+      byId("customSlotVehicleType").value = slot.type || "car";
+      byId("slotCustomizerPane").classList.remove("opacity-50", "pointer-events-none");
+      byId("slotHelperText").textContent = "Editing slot details";
+      
+      document.querySelectorAll("[data-slot-btn]").forEach(btn => {
+        btn.classList.remove("ring-4", "ring-offset-2", "ring-primary", "scale-[1.03]", "shadow-lg");
+      });
+      const selectedBtn = byId(`slot-btn-${index}`);
+      if (selectedBtn) {
+        selectedBtn.classList.add("ring-4", "ring-offset-2", "ring-primary", "scale-[1.03]", "shadow-lg");
+      }
+    }
+
+    function cycleSlotStatus(slotIndex) {
+      challengeAdminOverride(() => {
+        const zone = parkingDraft.zones[activeZoneIndex];
+        if (!zone || !zone.slots[slotIndex]) return;
+        
+        const slot = zone.slots[slotIndex];
+        const states = ["available", "reserved", "occupied", "ev"];
+        let nextIndex = (states.indexOf(slot.status) + 1) % states.length;
+        slot.status = states[nextIndex];
+        
+        if (slot.status === "ev") {
+          slot.type = "ev";
+        } else if (slot.type === "ev") {
+          slot.type = "car";
+        }
+        
+        renderActiveZoneGridOnly();
+        selectSlot(slotIndex);
+        
+        addAuditLogEntry(`Manual override: Spot ${slot.id} set to ${slot.status}`, "OVERRIDE");
+      });
+    }
+
+    function updateSelectedSlotLabel(label) {
+      if (selectedSlotIndex === null) return;
+      const zone = parkingDraft.zones[activeZoneIndex];
+      if (!zone || !zone.slots[selectedSlotIndex]) return;
+      zone.slots[selectedSlotIndex].label = label;
+      
+      const slotBtn = byId(`slot-btn-${selectedSlotIndex}`);
+      if (slotBtn) {
+        const labelSpan = slotBtn.querySelector(".slot-display-label");
+        if (labelSpan) {
+          labelSpan.textContent = label || (zone.slots[selectedSlotIndex].status.charAt(0).toUpperCase() + zone.slots[selectedSlotIndex].status.slice(1));
+        }
+      }
+    }
+
+    function updateSelectedSlotVehicleType(type) {
+      challengeAdminOverride(() => {
+        if (selectedSlotIndex === null) return;
+        const zone = parkingDraft.zones[activeZoneIndex];
+        if (!zone || !zone.slots[selectedSlotIndex]) return;
+        zone.slots[selectedSlotIndex].type = type;
+        
+        renderActiveZoneGridOnly();
+        selectSlot(selectedSlotIndex);
+        
+        addAuditLogEntry(`Capacity modified: Spot ${zone.slots[selectedSlotIndex].id} set to ${type.toUpperCase()}`, "OVERRIDE");
+      });
+    }
+
+    function switchParkingZone(index) {
+      activeZoneIndex = index;
+      renderParkingLayout();
+    }
+
+    function addParkingZone() {
+      const id = `zone-${Date.now()}`;
+      const name = `Zone ${String.fromCharCode(65 + parkingDraft.zones.length)}`;
+      parkingDraft.zones.push({
+        id,
+        name,
+        rows: 3,
+        cols: 5,
+        slots: Array.from({ length: 15 }, (_, i) => {
+          const row = String.fromCharCode(65 + Math.floor(i / 5));
+          const col = (i % 5) + 1;
+          return {
+            id: `${row}${col}`,
+            status: "available",
+            type: "car",
+            label: `Slot ${row}-${col}`
+          };
+        })
+      });
+      activeZoneIndex = parkingDraft.zones.length - 1;
+      renderParkingLayout();
+      showToast(`Added new parking zone: ${name}`, "success");
+    }
+
+    function deleteActiveZone() {
+      if (!confirm("Are you sure you want to delete this parking zone? All slot layout configurations will be lost.")) return;
+      const deletedName = parkingDraft.zones[activeZoneIndex].name;
+      parkingDraft.zones.splice(activeZoneIndex, 1);
+      activeZoneIndex = Math.max(0, activeZoneIndex - 1);
+      renderParkingLayout();
+      showToast(`Deleted zone: ${deletedName}`, "info");
+    }
+
+    function updateZoneName(name) {
+      const zone = parkingDraft.zones[activeZoneIndex];
+      if (!zone) return;
+      zone.name = name;
+      
+      const zoneBtns = byId("parkingZoneList").querySelectorAll("button");
+      if (zoneBtns[activeZoneIndex]) {
+        const textSpan = zoneBtns[activeZoneIndex].querySelector("span");
+        if (textSpan) textSpan.textContent = name;
+      }
+    }
+
+    function updateZoneDimensions() {
+      const rows = Math.min(8, Math.max(2, parseInt(byId("zoneRowsInput").value) || 2));
+      const cols = Math.min(8, Math.max(2, parseInt(byId("zoneColsInput").value) || 2));
+      
+      byId("zoneRowsInput").value = rows;
+      byId("zoneColsInput").value = cols;
+      
+      resizeZoneGrid(activeZoneIndex, rows, cols);
+    }
+
+    function resizeZoneGrid(zoneIndex, newRows, newCols) {
+      const zone = parkingDraft.zones[zoneIndex];
+      if (!zone) return;
+      const newSlots = [];
+
+      for (let r = 0; r < newRows; r++) {
+        for (let c = 0; c < newCols; c++) {
+          const rowLabel = String.fromCharCode(65 + r);
+          const colLabel = c + 1;
+          const slotId = `${rowLabel}${colLabel}`;
+          
+          const existing = zone.slots.find(s => s.id === slotId);
+          if (existing) {
+            newSlots.push(existing);
+          } else {
+            newSlots.push({
+              id: slotId,
+              status: "available",
+              type: "car",
+              label: `Slot ${rowLabel}-${colLabel}`
+            });
+          }
+        }
+      }
+
+      zone.rows = newRows;
+      zone.cols = newCols;
+      zone.slots = newSlots;
+      renderParkingLayout();
+    }
+
+    async function saveParkingLayout() {
+      try {
+        const res = await fetch(`/api/temple/${slug}/admin/profile`, {
+          method: "PUT",
+          headers: authHeaders(),
+          body: JSON.stringify({ parking_layout: parkingDraft })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to save parking layout");
+        profile.parking_layout = data.parking_layout || parkingDraft;
+        parkingDraft = JSON.parse(JSON.stringify(profile.parking_layout || { zones: [] }));
+        renderParkingLayout();
+        setMessage("Parking layout saved successfully.", "success");
+        showToast("Parking layout saved.", "success");
+      } catch (error) {
+        setMessage(error.message, "error");
+      }
+    }
+
+    // ─── PIN CHALLENGE SYSTEM ──────────────────────────────────────────────────
+    const ADMIN_PIN = "1208";
+    let pinBuffer = "";
+    let pinCallback = null;
+
+    function challengeAdminOverride(callback) {
+      pinBuffer = "";
+      pinCallback = callback;
+      updatePinDots();
+      const modal = byId("pinChallengeModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      requestAnimationFrame(() => {
+        modal.style.opacity = "1";
+        modal.querySelector("div").style.transform = "scale(1)";
+      });
+    }
+
+    function closePinChallengeModal() {
+      const modal = byId("pinChallengeModal");
+      modal.style.opacity = "0";
+      modal.querySelector("div").style.transform = "scale(0.95)";
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        pinBuffer = "";
+        pinCallback = null;
+        updatePinDots();
+      }, 300);
+    }
+
+    function pressPinKey(digit) {
+      if (pinBuffer.length >= 4) return;
+      pinBuffer += String(digit);
+      updatePinDots();
+
+      if (pinBuffer.length === 4) {
+        if (pinBuffer === ADMIN_PIN) {
+          const modal = byId("pinChallengeModal");
+          // Flash green success
+          for (let i = 1; i <= 4; i++) {
+            const dot = byId(`pin-dot-${i}`);
+            if (dot) { dot.style.background = "#10b981"; dot.style.borderColor = "#10b981"; }
+          }
+          setTimeout(() => {
+            closePinChallengeModal();
+            if (typeof pinCallback === "function") pinCallback();
+          }, 380);
+        } else {
+          // Flash red failure + shake
+          for (let i = 1; i <= 4; i++) {
+            const dot = byId(`pin-dot-${i}`);
+            if (dot) { dot.style.background = "#ef4444"; dot.style.borderColor = "#ef4444"; }
+          }
+          const inner = byId("pinChallengeModal").querySelector("div");
+          inner.style.animation = "none";
+          inner.style.transform = "translateX(-8px)";
+          setTimeout(() => { inner.style.transform = "translateX(8px)"; }, 80);
+          setTimeout(() => { inner.style.transform = "scale(1)"; }, 160);
+          setTimeout(() => {
+            pinBuffer = "";
+            updatePinDots();
+          }, 500);
+          addAuditLogEntry("FAILED PIN attempt — unauthorized override blocked", "SECURITY");
+        }
+      }
+    }
+
+    function clearPinCode() {
+      pinBuffer = "";
+      updatePinDots();
+    }
+
+    function updatePinDots() {
+      for (let i = 1; i <= 4; i++) {
+        const dot = byId(`pin-dot-${i}`);
+        if (!dot) continue;
+        if (i <= pinBuffer.length) {
+          dot.style.background = "#4c56af";
+          dot.style.borderColor = "#4c56af";
+        } else {
+          dot.style.background = "";
+          dot.style.borderColor = "";
+        }
+      }
+    }
+
+    // ─── OPERATIONS AUDIT LOG ─────────────────────────────────────────────────
+    function addAuditLogEntry(message, type = "INFO") {
+      const logContainer = byId("parkingAuditLogs");
+      if (!logContainer) return;
+
+      const typeConfig = {
+        OVERRIDE:  { icon: "warning",       color: "text-orange-500",  bg: "border-orange-900/30" },
+        SECURITY:  { icon: "lock",          color: "text-rose-500",    bg: "border-rose-900/30" },
+        TICKET:    { icon: "confirmation_number", color: "text-emerald-500", bg: "border-emerald-900/30" },
+        WAIVER:    { icon: "money_off",     color: "text-yellow-400",  bg: "border-yellow-900/30" },
+        INFO:      { icon: "info",          color: "text-slate-400",   bg: "border-slate-700/30" },
+      };
+      const cfg = typeConfig[type] || typeConfig.INFO;
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      const entry = document.createElement("div");
+      entry.className = `p-2.5 bg-white rounded-xl flex items-start gap-2 border ${cfg.bg} animate-fadeIn`;
+      entry.innerHTML = `
+        <span class="material-symbols-outlined text-xs ${cfg.color} mt-0.5">${cfg.icon}</span>
+        <div>
+          <p class="text-slate-700 font-semibold text-[11px]">${message}</p>
+          <span class="text-[9px] text-slate-400 font-bold">${timeStr} · ${type}</span>
+        </div>`;
+
+      logContainer.prepend(entry);
+
+      // Trim to last 30 entries
+      const entries = logContainer.querySelectorAll("div.p-2\.5");
+      if (entries.length > 30) entries[entries.length - 1].remove();
+    }
+
+    // ─── WALK-IN TICKET GENERATOR ─────────────────────────────────────────────
+    const WALKIN_RATES = { car: 30, bike: 15, ev: 50, heavy: 60 };
+
+    function handleWalkinTicketSubmit() {
+      const vehicleType = byId("walkinVehicleType")?.value || "car";
+      const duration    = Math.max(1, Math.min(24, parseInt(byId("walkinDuration")?.value) || 2));
+      const plate       = (byId("walkinPlate")?.value || "").trim().toUpperCase();
+      const phone       = (byId("walkinPhone")?.value || "").trim();
+
+      if (!plate) { showToast("Please enter a vehicle number.", "error"); return; }
+
+      const passId  = "PKG-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+      const amount  = (WALKIN_RATES[vehicleType] || 30) * duration;
+      const issued  = new Date();
+      const expiry  = new Date(issued.getTime() + duration * 3600000);
+      const fmtTime = (d) => d.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+      const fmtDate = (d) => d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+
+      const vehicleLabel = { car: "4W Car/Sedan", bike: "2W Motorcycle", ev: "EV Charging", heavy: "Heavy Lorry" }[vehicleType] || vehicleType;
+
+      const ticketWin = window.open("", "_blank", "width=360,height=520,left=100,top=100");
+      if (!ticketWin) { showToast("Pop-up blocked. Please allow pop-ups.", "error"); return; }
+
+      ticketWin.document.write(`
+        <!DOCTYPE html><html><head>
+          <meta charset="UTF-8"><title>Parking Pass – ${passId}</title>
+          <style>
+            *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
+            body{background:#f8f9fc;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+            .ticket{background:#fff;border-radius:20px;box-shadow:0 8px 40px rgba(76,86,175,.2);width:320px;overflow:hidden}
+            .header{background:linear-gradient(135deg,#4c56af,#6c73cf);color:#fff;padding:20px;text-align:center}
+            .header h1{font-size:11px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;opacity:.8}
+            .header .id{font-size:22px;font-weight:900;letter-spacing:.05em;margin-top:4px}
+            .body{padding:20px;border-top:1px dashed #e2e8f0}
+            .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px}
+            .row .label{color:#94a3b8;font-weight:700;font-size:10px;text-transform:uppercase}
+            .row .val{font-weight:800;color:#1e293b}
+            .amount{background:#f0fdf4;border-radius:12px;padding:14px;text-align:center;margin-top:14px}
+            .amount .label{font-size:10px;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:.1em}
+            .amount .val{font-size:28px;font-weight:900;color:#059669;margin-top:2px}
+            .footer{padding:14px 20px;background:#fafafa;text-align:center;font-size:9px;color:#94a3b8;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+            @media print{body{background:#fff}}
+          </style>
+        </head><body>
+          <div class="ticket">
+            <div class="header">
+              <h1>Parking Pass</h1>
+              <div class="id">${passId}</div>
+            </div>
+            <div class="body">
+              <div class="row"><span class="label">Vehicle No.</span><span class="val font-mono">${plate}</span></div>
+              <div class="row"><span class="label">Type</span><span class="val">${vehicleLabel}</span></div>
+              <div class="row"><span class="label">Duration</span><span class="val">${duration} hour${duration !== 1 ? "s" : ""}</span></div>
+              <div class="row"><span class="label">Issued</span><span class="val">${fmtDate(issued)} ${fmtTime(issued)}</span></div>
+              <div class="row"><span class="label">Valid Until</span><span class="val">${fmtDate(expiry)} ${fmtTime(expiry)}</span></div>
+              ${phone ? `<div class="row"><span class="label">Phone</span><span class="val">${phone}</span></div>` : ""}
+              <div class="amount">
+                <div class="label">Total Amount</div>
+                <div class="val">₹${amount}</div>
+              </div>
+            </div>
+            <div class="footer">Generated via Divyadarshan Parking System</div>
+          </div>
+          <script>window.onload=()=>{window.print()}<\/script>
+        </body></html>`);
+      ticketWin.document.close();
+
+      addAuditLogEntry(`Walk-in ticket issued: ${passId} · ${plate} · ₹${amount}`, "TICKET");
+      showToast(`Ticket ${passId} generated for ${plate}`, "success");
+
+      // Reset form
+      if (byId("walkinPlate")) byId("walkinPlate").value = "";
+      if (byId("walkinPhone")) byId("walkinPhone").value = "";
+    }
+
+    // ─── WAIVE CHARGES MODAL ──────────────────────────────────────────────────
+    function openWaiveChargesModal() {
+      const modal = byId("waiveChargesModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      requestAnimationFrame(() => {
+        modal.style.opacity = "1";
+        modal.querySelector("div").style.transform = "scale(1)";
+      });
+    }
+
+    function closeWaiveChargesModal() {
+      const modal = byId("waiveChargesModal");
+      modal.style.opacity = "0";
+      modal.querySelector("div").style.transform = "scale(0.95)";
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }, 300);
+    }
+
+    function executeWaiver() {
+      const passId = (byId("waivePassId")?.value || "").trim();
+      const reason = byId("waiveReason")?.value || "Unspecified";
+      if (!passId) { showToast("Please enter a Pass ID or Plate Number.", "error"); return; }
+
+      addAuditLogEntry(`Fee waiver authorized: ${passId} — Reason: ${reason}`, "WAIVER");
+      showToast(`Waiver logged for ${passId}`, "success");
+      if (byId("waivePassId")) byId("waivePassId").value = "";
+      closeWaiveChargesModal();
+    }
+
+    window.addParkingZone = addParkingZone;
+    window.saveParkingLayout = saveParkingLayout;
+    window.deleteActiveZone = deleteActiveZone;
+    window.updateZoneName = updateZoneName;
+    window.updateZoneDimensions = updateZoneDimensions;
+    window.updateSelectedSlotLabel = updateSelectedSlotLabel;
+    window.updateSelectedSlotVehicleType = updateSelectedSlotVehicleType;
+    window.switchParkingZone = switchParkingZone;
+    window.cycleSlotStatus = cycleSlotStatus;
+    window.challengeAdminOverride = challengeAdminOverride;
+    window.closePinChallengeModal = closePinChallengeModal;
+    window.pressPinKey = pressPinKey;
+    window.clearPinCode = clearPinCode;
+    window.openWaiveChargesModal = openWaiveChargesModal;
+    window.closeWaiveChargesModal = closeWaiveChargesModal;
+    window.executeWaiver = executeWaiver;
+    window.handleWalkinTicketSubmit = handleWalkinTicketSubmit;
+    window.addAuditLogEntry = addAuditLogEntry;
+
+    window.removeSeva = removeSeva;
+    window.removeEvent = removeEvent;
+    window.removeGalleryImage = removeGalleryImage;
+    window.moveGalleryImage = moveGalleryImage;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      renderTabBar();
+      loadDashboard();
+      byId("logoutBtn").addEventListener("click", redirectToLogin);
+      byId("saveProfileBtn").addEventListener("click", saveProfile);
+      byId("saveSevasBtn").addEventListener("click", saveSevas);
+      byId("saveEventsBtn").addEventListener("click", saveEvents);
+      byId("saveGalleryBtn").addEventListener("click", saveGallery);
+      byId("saveTimingsBtn").addEventListener("click", saveTimings);
+      byId("saveSettingsBtn").addEventListener("click", saveSettings);
+      byId("exportBookingsBtn").addEventListener("click", exportBookingsCsv);
+      byId("downloadOverviewQrBtn").addEventListener("click", downloadTempleQr);
+      byId("addSevaBtn").addEventListener("click", addSeva);
+      byId("addEventBtn").addEventListener("click", addEvent);
+      byId("addGalleryImageBtn").addEventListener("click", addGalleryImage);
+    });
+  </script>
+</body>
+</html>

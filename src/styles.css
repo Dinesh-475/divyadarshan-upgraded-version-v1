@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+/* Crisp, calm scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Subtle selection tint */
+::selection {
+  background: rgba(244, 138, 31, 0.18);
+}
+

@@ -1,0 +1,3487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Temple Microsite | Divya Darshan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <link rel="manifest" id="pwaManifest" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script src="../../shared/i18n.js"></script>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" defer></script>
+  <script defer>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "var(--primary)",
+            secondary: "var(--secondary)",
+            accent: "var(--accent)",
+            ink: "var(--ink)"
+          },
+          boxShadow: {
+            divine: "0px 12px 32px rgba(26,35,126,0.06)"
+          },
+          fontFamily: {
+            heading: ["Manrope", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --primary: #4c56af;
+      --secondary: #f5a623;
+      --accent: #2ecc71;
+      --ink: #1f2749;
+      --muted: #66708f;
+      --surface: #f7f8fd;
+      --surface-card: rgba(255,255,255,0.92);
+      --bg-style: linear-gradient(180deg, #fbfcff 0%, #f4f6fd 100%);
+      --bg: #f7f8fd;
+      --text-primary: #1f2749;
+      --text-secondary: #66708f;
+      --card-bg: rgba(255,255,255,0.92);
+      --border: rgba(76,86,175,0.15);
+      --shadow: rgba(76,86,175,0.18);
+      --btn-text: #ffffff;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--text-primary);
+      background: var(--bg-style);
+    }
+    h1, h2, h3, h4 {
+      font-family: "Manrope", sans-serif;
+    }
+    .glass-nav {
+      background: color-mix(in srgb, var(--bg) 84%, white 16%);
+      backdrop-filter: blur(24px);
+    }
+    .surface-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(18px);
+      box-shadow: 0px 12px 32px rgba(26,35,126,0.06);
+    }
+    .field {
+      width: 100%;
+      border: 0;
+      border-radius: 0.9rem;
+      background: #eef1fb;
+      padding: 0.95rem 1rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .field:focus {
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, white);
+    }
+    .tab-pill.active {
+      background: color-mix(in srgb, var(--primary) 14%, white);
+      color: var(--primary);
+    }
+    .toast {
+      animation: toastIn 180ms ease;
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #edf0fb 25%, #f7f8fd 40%, #edf0fb 60%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+    }
+    .masonry {
+      column-count: 1;
+      column-gap: 1rem;
+    }
+    .masonry img {
+      break-inside: avoid;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) {
+      .masonry { column-count: 2; }
+    }
+    @media (min-width: 1100px) {
+      .masonry { column-count: 3; }
+    }
+    #mapContainer {
+      min-height: 420px;
+    }
+    /* Font Size Override Classes */
+    .font-size-sm { font-size: 0.875rem !important; }
+    .font-size-lg { font-size: 1.125rem !important; }
+    .font-size-sm h1, .font-size-sm h2, .font-size-sm h3 { font-size: 90% !important; }
+    .font-size-lg h1, .font-size-lg h2, .font-size-lg h3 { font-size: 110% !important; }
+
+    /* High Contrast Mode Overrides */
+    body.high-contrast {
+      filter: contrast(1.2) saturate(1.05);
+    }
+    body.high-contrast .surface-card,
+    body.high-contrast input,
+    body.high-contrast select,
+    body.high-contrast button {
+      border-color: rgba(0, 0, 0, 0.6) !important;
+      border-width: 1.5px !important;
+    }
+    
+    /* Modern Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--primary) 18%, #cbd5e1);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+    .content-search-hit {
+      outline: 3px solid color-mix(in srgb, var(--accent) 40%, white);
+      box-shadow: 0 18px 42px color-mix(in srgb, var(--primary) 14%, transparent);
+    }
+    .slot-card.active {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 18%, white), color-mix(in srgb, var(--accent) 12%, white));
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 18%, transparent);
+    }
+    .slot-card.disabled {
+      opacity: 0.58;
+      pointer-events: none;
+    }
+    .review-star {
+      color: color-mix(in srgb, var(--accent) 86%, #f59e0b);
+    }
+    .floating-book-btn {
+      box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 22%, transparent);
+    }
+    .curated-hero {
+      border: 1px solid color-mix(in srgb, var(--primary) 16%, transparent);
+    }
+    .visit-card {
+      border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78)),
+        color-mix(in srgb, var(--secondary) 10%, white);
+    }
+    .advisory-strip {
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--primary) 12%, white), color-mix(in srgb, var(--accent) 9%, white));
+      border: 1px solid color-mix(in srgb, var(--primary) 14%, transparent);
+    }
+    body.iskcon-curated .surface-card {
+      box-shadow: 0 18px 48px color-mix(in srgb, var(--primary) 11%, transparent);
+    }
+    body.iskcon-curated #home {
+      border-radius: 28px;
+    }
+    .lightbox-backdrop {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(16px);
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInContent {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceSubtle {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -6px); }
+    }
+    .animate-bounce-subtle {
+      animation: bounceSubtle 4s ease-in-out infinite;
+    }
+    /* Lightning-fast FOUC prevention styles */
+    body {
+      opacity: 0;
+      transition: opacity 0.15s ease-in-out;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <script>
+    (function() {
+      // Instantly reveal the page upon DOM readiness to ensure maximum load speed
+      function revealPage() {
+        document.body.classList.add('loaded');
+      }
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        revealPage();
+      } else {
+        document.addEventListener('DOMContentLoaded', revealPage);
+        window.addEventListener('load', revealPage);
+        // Fail-safe protection
+        setTimeout(revealPage, 100);
+      }
+    })();
+  </script>
+  <header class="glass-nav sticky top-0 z-40 shadow-divine">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 py-3">
+      <!-- Accessibility and Language Bar -->
+      <div class="flex items-center justify-between border-b border-slate-200/50 pb-2 mb-2 text-[10px] text-slate-500 font-semibold select-none">
+        <div class="flex items-center gap-3">
+          <a href="#contentShell" class="sr-only focus:not-sr-only focus:bg-white focus:text-[color:var(--primary)] focus:p-2 focus:rounded-xl focus:absolute focus:z-50 focus:shadow-divine">Skip to content</a>
+          <span class="flex items-center gap-0.5">
+            <span class="material-symbols-outlined text-xs">text_fields</span>
+            Font:
+          </span>
+          <div class="flex items-center gap-1 bg-slate-100 rounded p-0.5 border border-slate-200/40">
+            <button onclick="setFontSize('sm')" class="px-1.5 py-0.5 rounded hover:bg-white focus:outline-none text-[8px]" aria-label="Decrease Font Size">A-</button>
+            <button onclick="setFontSize('md')" class="px-1.5 py-0.5 rounded bg-white shadow-sm focus:outline-none text-[8px]" aria-label="Reset Font Size">A</button>
+            <button onclick="setFontSize('lg')" class="px-1.5 py-0.5 rounded hover:bg-white focus:outline-none text-[8px]" aria-label="Increase Font Size">A+</button>
+          </div>
+          <button onclick="toggleHighContrast()" class="flex items-center gap-0.5 ml-2 px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 focus:outline-none text-[9px]" aria-label="Toggle High Contrast Mode">
+            <span class="material-symbols-outlined text-xs">contrast</span>
+            High Contrast
+          </button>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- Premium Language Selector Dropdown -->
+          <div class="dd-lang-selector-placeholder flex items-center"></div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between gap-4">
+        <a href="/dashboard/index.html" class="flex items-center gap-3">
+          <div id="navLogo" class="w-12 h-12 rounded-2xl bg-white/90 shadow-divine flex items-center justify-center text-xl">🛕</div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Divya Darshan</p>
+            <h1 id="navTempleName" class="text-lg font-extrabold">Temple Microsite</h1>
+          </div>
+        </a>
+        <div class="flex items-center gap-3">
+          <a href="/dashboard/index.html" class="inline-flex items-center gap-1.5 rounded-xl bg-white/85 border border-slate-200/50 backdrop-blur-md px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-divine hover:bg-slate-50 transition-all duration-200">
+            <span class="material-symbols-outlined text-base">arrow_back</span>
+            <span>Back to Main Site</span>
+          </a>
+          <a id="adminBadge" href="#" class="hidden rounded-full bg-white px-4 py-2 text-sm font-semibold text-[color:var(--primary)] shadow-divine">Admin</a>
+          <nav class="hidden lg:flex items-center gap-4 text-sm font-semibold text-[color:var(--muted)]">
+            <a href="/dashboard/index.html">Home</a>
+            <a href="/dashboard/index.html#live-map">Map</a>
+            <a href="/dashboard/index.html#registered-temples">All Temples</a>
+            <a href="/dashboard/index.html#booking-history">My Bookings</a>
+          </nav>
+          <a href="/dashboard/registration/register_temple.html" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Register Your Temple</a>
+        </div>
+      </div>
+      <div id="tabNav" class="mt-4 flex gap-2 overflow-x-auto pb-1"></div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-8">
+    <section id="loadingShell" class="hidden"></section>
+
+    <section id="contentShell" class="space-y-8" style="animation: fadeInContent 0.25s ease;">
+      <style>#contentShell > section { display: none; } #contentShell > section:not(.hidden) { display: block; }</style>
+      <section id="bookingPauseBanner" class="hidden surface-card rounded-[24px] p-5"></section>
+      <section id="home" class="surface-card curated-hero rounded-[32px] overflow-hidden relative min-h-[450px] flex items-center bg-slate-900 transition-all duration-500">
+        <div class="relative z-10 p-6 md:p-8 lg:p-10 text-white w-full lg:w-3/4 xl:w-2/3">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-xs font-bold uppercase tracking-[0.26em]">Partner Temple</span>
+            <span id="crowdBadge" class="hidden rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-xs font-bold uppercase tracking-[0.26em]">Live crowd</span>
+            <span id="religionBadge" class="rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-xs font-bold uppercase tracking-[0.26em]">Temple</span>
+          </div>
+          <h2 id="heroTempleName" class="text-4xl md:text-5xl lg:text-6xl font-extrabold mt-6 leading-tight drop-shadow-md">Temple Name</h2>
+          <p id="heroTagline" class="mt-4 text-lg md:text-xl text-white/90 max-w-2xl drop-shadow-sm font-medium">Temple tagline and devotional identity.</p>
+          <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+            <div class="rounded-[22px] bg-white/15 backdrop-blur-md p-4 border border-white/10">
+              <p class="text-white/80 uppercase tracking-[0.22em] text-[11px] font-extrabold">Deity</p>
+              <p id="heroDeity" class="mt-2 font-bold">-</p>
+            </div>
+            <div class="rounded-[22px] bg-white/15 backdrop-blur-md p-4 border border-white/10">
+              <p class="text-white/80 uppercase tracking-[0.22em] text-[11px] font-extrabold">Established</p>
+              <p id="heroYear" class="mt-2 font-bold">-</p>
+            </div>
+            <div class="rounded-[22px] bg-white/15 backdrop-blur-md p-4 border border-white/10">
+              <p class="text-white/80 uppercase tracking-[0.22em] text-[11px] font-extrabold">Location</p>
+              <p id="heroCity" class="mt-2 font-bold">-</p>
+            </div>
+            <div class="rounded-[22px] bg-white/15 backdrop-blur-md p-4 border border-white/10">
+              <p class="text-white/80 uppercase tracking-[0.22em] text-[11px] font-extrabold">Entry</p>
+              <p id="heroFee" class="mt-2 font-bold">Free</p>
+            </div>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <button type="button" onclick="scrollToSection('booking')" class="rounded-xl bg-white px-5 py-3.5 text-sm font-bold text-[color:var(--primary)] shadow-lg hover:scale-105 transition-transform">Book Darshan</button>
+            <button type="button" onclick="scrollToSection('prasadam')" class="rounded-xl bg-white/20 backdrop-blur-md px-5 py-3.5 text-sm font-bold text-white hover:bg-white/30 transition-colors">Order Prasadam</button>
+            <button type="button" onclick="scrollToSection('donate')" class="rounded-xl bg-white/20 backdrop-blur-md px-5 py-3.5 text-sm font-bold text-white hover:bg-white/30 transition-colors">Donate</button>
+            <button type="button" onclick="openDirections()" class="rounded-xl bg-white/20 backdrop-blur-md px-5 py-3.5 text-sm font-bold text-white hover:bg-white/30 transition-colors">Get Directions</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="temple-search" class="surface-card rounded-[28px] p-5 md:p-6">
+        <div class="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+          <label class="grid gap-2">
+            <span class="text-xs uppercase tracking-[0.24em] font-bold text-[color:var(--primary)]">Search This Temple Page</span>
+            <input id="pageSearchInput" class="field" type="search" placeholder="Search festivals, pujas, timings, facilities, contact..." />
+          </label>
+          <div id="quickFilterChips" class="flex gap-2 overflow-x-auto pb-1"></div>
+        </div>
+      </section>
+
+      <section id="page-menu" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Temple Menu</p>
+            <h3 class="text-3xl font-extrabold mt-2">Choose what you want to do</h3>
+          </div>
+          <a id="pageMenuAdminLink" href="#" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">Temple Admin Login</a>
+        </div>
+        <div id="pageMenuGrid" class="mt-6 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+      </section>
+
+      <section id="about" class="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-6">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">About the Temple</p>
+              <h3 class="text-3xl font-extrabold mt-2">Heritage and temple trust</h3>
+            </div>
+            <div id="trustChip" class="rounded-full bg-[color:var(--primary)]/10 px-4 py-2 text-sm font-semibold text-[color:var(--primary)]"></div>
+          </div>
+            <div class="grid md:grid-cols-2 gap-6 mt-6">
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="text-xs uppercase tracking-[0.22em] text-[color:var(--muted)] font-bold">Overview</p>
+                <p id="aboutCopy" class="mt-3 text-sm leading-7 text-[color:var(--ink)]"></p>
+              </div>
+              <div class="rounded-[24px] bg-[#eef1fb] p-5">
+                <p class="text-xs uppercase tracking-[0.22em] text-[color:var(--muted)] font-bold">Identity and Address</p>
+                <p id="aboutIdentity" class="mt-3 text-sm leading-7 text-[color:var(--ink)]"></p>
+                <p id="aboutAddress" class="mt-3 text-sm leading-7 text-[color:var(--ink)]"></p>
+                <div class="mt-5 grid gap-3 text-sm">
+                  <p id="aboutReachRail"></p>
+                <p id="aboutReachBus"></p>
+                <p id="aboutReachAirport"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="surface-card rounded-[28px] p-6">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Gallery Highlights</p>
+          <div id="galleryRail" class="mt-5 grid gap-3"></div>
+        </div>
+      </section>
+
+      <section id="timings" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Timings</p>
+            <h3 class="text-3xl font-extrabold mt-2">Darshan schedule</h3>
+          </div>
+          <div id="specialDayAlert" class="hidden rounded-full bg-[color:var(--secondary)]/12 px-4 py-2 text-sm font-semibold text-[color:var(--ink)]"></div>
+        </div>
+        <div id="timingsTable" class="mt-6 grid gap-4"></div>
+      </section>
+
+      <section id="booking" class="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-6">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Darshan Booking</p>
+            <h3 class="text-3xl font-extrabold mt-2">Book a temple-specific darshan slot</h3>
+          </div>
+          <form id="bookingForm" class="grid gap-4 mt-6">
+            <div class="grid md:grid-cols-2 gap-4">
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Visit Date</span>
+                <input id="bookingDate" class="field" type="date" required />
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Slot</span>
+                <select id="bookingSlot" class="field" required></select>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Ticket Type</span>
+                <select id="bookingTicketType" class="field">
+                  <option value="General">General</option>
+                  <option value="VIP">VIP</option>
+                  <option value="Child">Child</option>
+                </select>
+              </label>
+              <label class="grid gap-2">
+                <span class="text-sm font-semibold">Pilgrims</span>
+                <input id="bookingQty" class="field" type="number" min="1" value="1" />
+              </label>
+            </div>
+            <label class="grid gap-2">
+              <span class="text-sm font-semibold">Phone Number</span>
+              <input id="bookingPhone" class="field" placeholder="+91XXXXXXXXXX" />
+            </label>
+            <div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-sm font-semibold">Available Slots</span>
+                <span id="bookingSlotHint" class="text-xs font-semibold text-[color:var(--muted)]">Choose a date to load live availability</span>
+              </div>
+              <div id="bookingSlotsGrid" class="mt-3 grid gap-3"></div>
+            </div>
+            <div class="rounded-[24px] bg-[#eef1fb] p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold">Estimated total</p>
+                <p id="bookingTotal" class="text-2xl font-extrabold mt-1">INR 0</p>
+              </div>
+              <button type="submit" class="rounded-xl bg-[color:var(--primary)] px-5 py-3 text-sm font-semibold text-white shadow-divine">Confirm Booking</button>
+            </div>
+          </form>
+        </div>
+        <div class="surface-card rounded-[28px] p-6">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Confirmation</p>
+          <div id="bookingConfirmation" class="mt-5 rounded-[24px] bg-[#eef1fb] p-5 min-h-[320px] flex items-center justify-center text-center text-sm text-[color:var(--muted)]">
+            Confirm a booking to see the ticket ID, QR image, and printable summary.
+          </div>
+        </div>
+      </section>
+
+      <section id="sevas" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Sevas and Pujas</p>
+            <h3 class="text-3xl font-extrabold mt-2">Temple seva offerings</h3>
+          </div>
+        </div>
+        <div id="sevasGrid" class="mt-6 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+      </section>
+
+      <section id="prasadam" class="grid grid-cols-1 xl:grid-cols-[1.15fr_0.85fr] gap-6">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Prasadam</p>
+            <h3 class="text-3xl font-extrabold mt-2">Order temple prasadam for pickup</h3>
+          </div>
+          <div id="prasadamGrid" class="mt-6 grid md:grid-cols-2 gap-4"></div>
+        </div>
+        <div class="surface-card rounded-[28px] p-6">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Pickup Cart</p>
+              <h3 class="text-xl font-extrabold mt-2">Temple counter order</h3>
+            </div>
+            <span id="prasadamStatus" class="rounded-full bg-[#eef1fb] px-4 py-2 text-xs font-bold uppercase tracking-[0.22em]"></span>
+          </div>
+          <div id="cartItems" class="mt-5 grid gap-3 text-sm"></div>
+          <div class="mt-5 grid gap-3">
+            <input id="prasadamPhone" class="field" placeholder="Phone number" />
+            <input id="prasadamPickupSlot" class="field" placeholder="Pickup slot e.g. 5:30 PM - 6:00 PM" />
+            <div class="rounded-[24px] bg-[#eef1fb] p-5 flex items-center justify-between">
+              <span class="text-sm font-semibold">Order total</span>
+              <span id="cartTotal" class="text-xl font-extrabold">INR 0</span>
+            </div>
+            <button id="placePrasadamOrder" type="button" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Place Prasadam Order</button>
+            <div id="prasadamConfirmation" class="rounded-[24px] bg-[#eef1fb] p-4 text-sm text-[color:var(--muted)]">No order placed yet.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reach" class="grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-6">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">How to Reach</p>
+          <h3 class="text-3xl font-extrabold mt-2">Directions and transport access</h3>
+          <div class="mt-6 grid gap-4 text-sm leading-7">
+            <p id="reachAddress"></p>
+            <p id="reachRail"></p>
+            <p id="reachBus"></p>
+            <p id="reachAirport"></p>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <button type="button" onclick="openDirections()" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Open Route Planner</button>
+            <a id="mapsLink" href="#" target="_blank" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">Open Maps Link</a>
+            <a id="streetViewLink" href="#" target="_blank" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">Street View</a>
+            <button id="copyAddressBtn" type="button" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">Copy Address</button>
+            <button id="expandMapBtn" type="button" class="rounded-xl bg-[#eef1fb] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">Expand Map</button>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="surface-card rounded-[28px] overflow-hidden border border-slate-200/50 shadow-divine relative bg-slate-100" style="min-height:420px;">
+            <div id="mapContainer" aria-label="Temple location map" class="w-full h-full" style="min-height:420px;"></div>
+          </div>
+          
+          <!-- Smart Crowd Heatmap Section -->
+          <div class="surface-card rounded-[28px] p-6 border border-slate-200/50 shadow-divine">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-[28px] text-[color:var(--primary)]">group</span>
+              <div>
+                <h4 class="text-lg font-extrabold text-slate-800">Smart Crowd Heatmap</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Historical pilgrim density by day and time</p>
+              </div>
+            </div>
+            <!-- Heatmap Grid -->
+            <div class="mt-6 overflow-x-auto">
+              <div class="min-w-[550px] space-y-3 text-[10px]">
+                <!-- Time headers -->
+                <div class="grid grid-cols-[80px_repeat(8,1fr)] gap-1 text-center font-bold text-slate-400 select-none">
+                  <div></div>
+                  <div>6 AM</div>
+                  <div>8 AM</div>
+                  <div>10 AM</div>
+                  <div>12 PM</div>
+                  <div>2 PM</div>
+                  <div>4 PM</div>
+                  <div>6 PM</div>
+                  <div>8 PM</div>
+                </div>
+                <!-- Day Rows populated in JS -->
+                <div id="heatmapRows" class="space-y-2"></div>
+              </div>
+            </div>
+            <!-- Legend -->
+            <div class="mt-4 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-3 flex-wrap gap-2">
+              <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500/80"></span> Low</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500/80"></span> Moderate</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500/80"></span> Peak</span>
+              </div>
+              <div class="font-semibold text-[color:var(--primary)]" id="bestTimeNotice">Best time: loading patterns...</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="facilities" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Facilities</p>
+        <h3 class="text-3xl font-extrabold mt-2">What’s available on-site</h3>
+        <div id="facilitiesBadges" class="mt-6 grid md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+      </section>
+
+      <section id="parking-layout" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Live Parking Availability</p>
+            <h3 class="text-3xl font-extrabold mt-2">Real-time Slot & Space Capacity</h3>
+            <p class="text-xs text-[color:var(--muted)] mt-1">Check real-time parking space status, EV spots, and standard slots before your arrival.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-4 text-xs font-semibold">
+            <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-emerald-500"></span> Available</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-rose-500"></span> Occupied</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-blue-500"></span> Reserved</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-amber-400 flex items-center justify-center text-[10px] text-white">⚡</span> EV Spot</span>
+          </div>
+        </div>
+        <div id="parkingZonesContainer" class="mt-8 space-y-8">
+          <!-- Dynamically populated zones and slot grids -->
+        </div>
+      </section>
+
+      <section id="donate" class="grid grid-cols-1 xl:grid-cols-[1fr_0.95fr] gap-6">
+        <div class="surface-card rounded-[28px] p-6 md:p-8">
+          <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Donate</p>
+          <h3 class="text-3xl font-extrabold mt-2">Support temple causes</h3>
+          <div id="causeCards" class="mt-6 grid gap-4"></div>
+        </div>
+        <div class="surface-card rounded-[28px] p-6">
+          <div class="rounded-[24px] bg-[#eef1fb] p-5">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Donation Details</p>
+            <div class="mt-4 text-sm leading-7">
+              <p id="donationUpi"></p>
+              <p id="donationBank"></p>
+              <p id="donationIfsc"></p>
+            </div>
+          </div>
+          <form id="donationForm" class="mt-5 grid gap-4" onsubmit="event.preventDefault(); openUpiDonationModal();">
+            <input id="donorName" class="field" placeholder="Donor name" required />
+            <select id="donationCause" class="field"></select>
+            
+            <!-- Quick Preset Amount Buttons -->
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Select Donation Amount</p>
+              <div class="grid grid-cols-4 gap-2">
+                <button type="button" onclick="setDonationAmount(101, this)" class="preset-amt-btn py-2.5 rounded-xl border border-slate-200 hover:border-[color:var(--primary)] hover:bg-[color:var(--primary)]/5 font-extrabold text-slate-700 text-sm transition-all duration-200 cursor-pointer">₹101</button>
+                <button type="button" onclick="setDonationAmount(501, this)" class="preset-amt-btn py-2.5 rounded-xl border border-slate-200 hover:border-[color:var(--primary)] hover:bg-[color:var(--primary)]/5 font-extrabold text-slate-700 text-sm transition-all duration-200 cursor-pointer">₹501</button>
+                <button type="button" onclick="setDonationAmount(1008, this)" class="preset-amt-btn py-2.5 rounded-xl border border-slate-200 hover:border-[color:var(--primary)] hover:bg-[color:var(--primary)]/5 font-extrabold text-slate-700 text-sm transition-all duration-200 cursor-pointer">₹1008</button>
+                <button type="button" onclick="setDonationAmount(5001, this)" class="preset-amt-btn py-2.5 rounded-xl border border-slate-200 hover:border-[color:var(--primary)] hover:bg-[color:var(--primary)]/5 font-extrabold text-slate-700 text-sm transition-all duration-200 cursor-pointer">₹5001</button>
+              </div>
+            </div>
+
+            <div class="relative">
+              <input id="donationAmount" class="field pr-8" type="number" min="1" placeholder="Or enter custom amount (₹)" required />
+              <span class="absolute right-3 top-3.5 text-slate-400 text-sm font-bold">₹</span>
+            </div>
+            
+            <button type="submit" class="w-full bg-[color:var(--primary)] hover:translate-y-[-2px] active:translate-y-0 text-white py-4 rounded-xl font-extrabold text-base shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[color:var(--primary)]/20">
+              <span class="material-symbols-outlined text-lg">volunteer_activism</span> Proceed to UPI Pay
+            </button>
+          </form>
+          <div id="donationConfirmation" class="mt-4 rounded-[24px] bg-[#eef1fb] p-4 text-sm text-[color:var(--muted)]">Submit details to activate the premium real-time UPI scan-code system.</div>
+        </div>
+      </section>
+
+      <section id="events" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Events</p>
+        <h3 class="text-3xl font-extrabold mt-2">Upcoming festivals and gatherings</h3>
+        <div id="eventsGrid" class="mt-6 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+      </section>
+
+      <section id="special-pujas" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Special Pujas</p>
+        <h3 class="text-3xl font-extrabold mt-2">Temple-specific ceremonies and offerings</h3>
+        <div id="specialPujasGrid" class="mt-6 grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+      </section>
+
+      <section id="travel" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="grid grid-cols-1 xl:grid-cols-[0.9fr_1.1fr] gap-6">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Travel Planner</p>
+            <h3 class="text-3xl font-extrabold mt-2">Generate an AI travel plan for this temple</h3>
+            <div class="grid gap-3 mt-6">
+              <input id="travelOrigin" class="field" placeholder="Starting city or current location" />
+              <div class="grid md:grid-cols-3 gap-3">
+                <input id="travelDate" class="field" type="date" />
+                <select id="travelTime" class="field">
+                  <option value="morning">Morning</option>
+                  <option value="afternoon">Afternoon</option>
+                  <option value="evening">Evening</option>
+                </select>
+                <input id="travelPilgrims" class="field" type="number" min="1" value="2" />
+              </div>
+              <button id="generateTravelPlan" type="button" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Generate Plan</button>
+            </div>
+          </div>
+          <div id="travelOutput" class="rounded-[24px] bg-[#eef1fb] p-5 min-h-[260px] text-sm text-[color:var(--muted)]">
+            Generate a plan to view travel suggestions, route notes, temple facts, and a simplified itinerary.
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Gallery</p>
+        <h3 class="text-3xl font-extrabold mt-2">Temple moments and sacred spaces</h3>
+        <div id="galleryMasonry" class="masonry mt-6"></div>
+      </section>
+
+      <section id="faqs" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">FAQs</p>
+        <h3 class="text-3xl font-extrabold mt-2">Pilgrim questions, answered</h3>
+        <div id="faqAccordion" class="mt-6 grid gap-4"></div>
+      </section>
+
+      <section id="reviews" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="grid gap-6 xl:grid-cols-[320px_1fr]">
+          <div class="rounded-[24px] bg-[#eef1fb] p-5">
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Reviews and Ratings</p>
+            <div class="mt-5">
+              <p id="reviewAverage" class="text-4xl font-extrabold">0.0</p>
+              <p id="reviewCountLabel" class="mt-2 text-sm text-[color:var(--muted)]">No reviews yet</p>
+            </div>
+            <div id="reviewBreakdown" class="mt-5 grid gap-3"></div>
+            <div class="mt-5 grid gap-3">
+              <select id="reviewSort" class="field">
+                <option value="recent">Most Recent</option>
+                <option value="highest">Highest Rated</option>
+                <option value="lowest">Lowest Rated</option>
+              </select>
+              <button id="writeReviewBtn" type="button" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Write a Review</button>
+            </div>
+          </div>
+          <div>
+            <div id="reviewFormWrap" class="hidden rounded-[24px] bg-[#eef1fb] p-5">
+              <div class="grid gap-3">
+                <input id="reviewName" class="field" placeholder="Your name" />
+                <select id="reviewRating" class="field">
+                  <option value="5">5 Stars</option>
+                  <option value="4">4 Stars</option>
+                  <option value="3">3 Stars</option>
+                  <option value="2">2 Stars</option>
+                  <option value="1">1 Star</option>
+                </select>
+                <textarea id="reviewText" class="field min-h-[120px]" placeholder="Share your temple visit experience"></textarea>
+                <div class="flex flex-wrap gap-3">
+                  <button id="submitReviewBtn" type="button" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Submit Review</button>
+                  <button id="cancelReviewBtn" type="button" class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[color:var(--primary)] shadow-divine">Cancel</button>
+                </div>
+              </div>
+            </div>
+            <div id="reviewsGrid" class="grid gap-4"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="live" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Live</p>
+        <h3 class="text-3xl font-extrabold mt-2">Live stream and crowd watch</h3>
+        <div id="liveSectionContent" class="mt-6 grid gap-4"></div>
+      </section>
+
+      <section id="virtual-tour" class="surface-card rounded-[28px] p-6 md:p-8">
+        <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Virtual Tour</p>
+        <h3 class="text-3xl font-extrabold mt-2">Explore the temple remotely</h3>
+        <div id="virtualTourContent" class="mt-6"></div>
+      </section>
+
+      <section id="contact" class="surface-card rounded-[28px] p-6 md:p-8">
+        <div class="grid grid-cols-1 xl:grid-cols-[1fr_0.9fr] gap-6">
+          <div>
+            <p class="text-xs uppercase tracking-[0.28em] font-bold text-[color:var(--primary)]">Contact</p>
+            <h3 class="text-3xl font-extrabold mt-2">Temple contact and social channels</h3>
+            <div id="contactCopy" class="mt-6 grid gap-3 text-sm leading-7"></div>
+          </div>
+          <div class="rounded-[24px] bg-[#eef1fb] p-5">
+            <p class="text-xs uppercase tracking-[0.22em] text-[color:var(--muted)] font-bold">Quick Links</p>
+            <div id="socialLinks" class="mt-5 flex flex-wrap gap-3"></div>
+          </div>
+      </section>
+
+      <!-- ==================== EMBEDDED TEMPLE ADMIN PANEL ==================== -->
+      <section id="admin-panel" class="surface-card rounded-[28px] p-6 md:p-8 hidden">
+        <!-- Authentication credentials form (Default) -->
+        <div id="adminLoginForm" class="max-w-md mx-auto surface-card rounded-3xl p-6 md:p-8 border border-slate-200/50 shadow-lg">
+          <div class="text-center mb-6">
+            <span class="material-symbols-outlined text-4xl text-[color:var(--primary)]">admin_panel_settings</span>
+            <h3 class="text-2xl font-black text-slate-800 mt-2">Temple Admin Console</h3>
+            <p class="text-xs text-slate-500 mt-1 text-center">Authorized access only for temple administrators</p>
+          </div>
+          <form onsubmit="event.preventDefault(); handleAdminLogin();" class="grid gap-4">
+            <label class="grid gap-1">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wide text-left">Admin Email</span>
+              <input type="email" id="adminEmail" class="field" placeholder="admin@temple.org" required />
+            </label>
+            <label class="grid gap-1">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wide text-left">Password</span>
+              <input type="password" id="adminPassword" class="field" placeholder="••••••••" required />
+            </label>
+            <button type="submit" class="w-full bg-[color:var(--primary)] hover:opacity-95 text-white py-3.5 rounded-xl font-bold shadow-md cursor-pointer mt-2 transition-all">
+              Verify & Login
+            </button>
+          </form>
+          <div class="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-xl text-[10px] text-amber-800 leading-normal flex items-start gap-1.5 text-left">
+            <span class="material-symbols-outlined text-sm shrink-0">info</span>
+            <span>For simulated offline test mode: any email and password <strong>admin</strong> will grant full access.</span>
+          </div>
+        </div>
+
+        <!-- Dashboard State (When authenticated) -->
+        <div id="adminDashboardContent" class="hidden space-y-6">
+          <!-- Top Bar -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50 border border-slate-200/60 rounded-3xl p-5">
+            <div class="text-left">
+              <h4 class="text-xl font-black text-slate-800 flex items-center gap-1.5"><span class="material-symbols-outlined text-[color:var(--primary)]">dashboard</span> Admin Portal</h4>
+              <p id="adminStatusText" class="text-xs text-slate-500 mt-0.5"></p>
+            </div>
+            <button onclick="handleAdminLogout()" class="px-4 py-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition-all border border-rose-100 flex items-center gap-1 cursor-pointer">
+              <span class="material-symbols-outlined text-xs">logout</span> Sign Out
+            </button>
+          </div>
+
+          <!-- KPI Stats -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="surface-card border border-slate-100 rounded-3xl p-5 shadow-divine flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200 text-left">
+              <span class="material-symbols-outlined text-blue-500 bg-blue-50 w-8 h-8 rounded-full flex items-center justify-center text-lg">calendar_today</span>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Today's Bookings</p>
+                <h5 id="kpiTodayBookings" class="text-2xl font-black text-slate-800 mt-1">0</h5>
+              </div>
+            </div>
+            <div class="surface-card border border-slate-100 rounded-3xl p-5 shadow-divine flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200 text-left">
+              <span class="material-symbols-outlined text-emerald-500 bg-emerald-50 w-8 h-8 rounded-full flex items-center justify-center text-lg">event_available</span>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Total Bookings</p>
+                <h5 id="kpiTotalBookings" class="text-2xl font-black text-slate-800 mt-1">0</h5>
+              </div>
+            </div>
+            <div class="surface-card border border-slate-100 rounded-3xl p-5 shadow-divine flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200 text-left">
+              <span class="material-symbols-outlined text-amber-500 bg-amber-50 w-8 h-8 rounded-full flex items-center justify-center text-lg">volunteer_activism</span>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Donations Raised</p>
+                <h5 id="kpiTotalDonations" class="text-2xl font-black text-slate-800 mt-1">₹0</h5>
+              </div>
+            </div>
+            <div class="surface-card border border-slate-100 rounded-3xl p-5 shadow-divine flex flex-col justify-between hover:translate-y-[-2px] transition-all duration-200 text-left">
+              <span class="material-symbols-outlined text-purple-500 bg-purple-50 w-8 h-8 rounded-full flex items-center justify-center text-lg">qr_code_scanner</span>
+              <div class="mt-4">
+                <p class="text-[10px] uppercase tracking-wider font-bold text-slate-400">Ticket Scans Active</p>
+                <h5 id="kpiActiveScans" class="text-2xl font-black text-slate-800 mt-1">0</h5>
+              </div>
+            </div>
+          </div>
+
+          <!-- Crowd Status Controls -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Crowd Control Board -->
+            <div class="surface-card border border-slate-200/50 rounded-[28px] p-6 shadow-sm text-left">
+              <h4 class="text-lg font-black text-slate-800 flex items-center gap-1.5"><span class="material-symbols-outlined text-slate-500 text-xl">traffic</span> Crowd Management</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Toggle live crowd congestion levels & control online ticket booking access.</p>
+              
+              <div class="mt-5 space-y-4">
+                <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                  <div class="text-left">
+                    <p class="text-sm font-bold text-slate-800">Online Bookings Status</p>
+                    <p id="bookingSwitchLabel" class="text-xs text-emerald-600 font-semibold mt-0.5">Active & Open</p>
+                  </div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="bookingStatusToggle" class="sr-only peer" onchange="toggleBookingStatusAdmin(this)" />
+                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[color:var(--primary)]"></div>
+                  </label>
+                </div>
+
+                <div id="bookingPauseOptions" class="hidden space-y-3 bg-rose-50/50 border border-rose-100 rounded-2xl p-4">
+                  <label class="grid gap-1 text-left">
+                    <span class="text-xs font-bold text-rose-800 uppercase tracking-wide">Pause Reason</span>
+                    <select id="pauseReasonSelect" class="field text-xs text-rose-900 border-rose-200/60 bg-white">
+                      <option value="High Crowd Congestion">⚠️ High Crowd Congestion</option>
+                      <option value="Special Deity Puja / VIP Visit">🏛️ Special Deity Puja / VIP Visit</option>
+                      <option value="Scheduled Maintenance">🛠️ Scheduled Maintenance</option>
+                      <option value="Adverse Weather Alert">⛈️ Adverse Weather Alert</option>
+                    </select>
+                  </label>
+                  <label class="grid gap-1 text-left">
+                    <span class="text-xs font-bold text-rose-800 uppercase tracking-wide">Auto-Resume in</span>
+                    <select id="pauseDurationSelect" class="field text-xs text-rose-900 border-rose-200/60 bg-white">
+                      <option value="1">1 Hour</option>
+                      <option value="2">2 Hours</option>
+                      <option value="4" selected>4 Hours</option>
+                      <option value="8">8 Hours</option>
+                      <option value="24">24 Hours</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="grid gap-1.5 text-left">
+                  <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Live Crowd Watch Badge</span>
+                  <select id="crowdLevelSelect" class="field text-sm" onchange="changeCrowdLevelAdmin(this.value)">
+                    <option value="Low">🟢 Low Congestion (Smooth Darshan)</option>
+                    <option value="Moderate">🟡 Moderate Congestion (Normal Flow)</option>
+                    <option value="High">🟠 High Congestion (Extended Queue)</option>
+                    <option value="Critical">🔴 Critical Crowd (Immediate Restrictions)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Quick Editor -->
+            <div class="surface-card border border-slate-200/50 rounded-[28px] p-6 shadow-sm text-left">
+              <h4 class="text-lg font-black text-slate-800 flex items-center gap-1.5"><span class="material-symbols-outlined text-slate-500 text-xl">edit_square</span> Profile Quick Editor</h4>
+              <p class="text-xs text-slate-500 mt-0.5">Quickly edit your tagline, website, phone, email, and UPI address.</p>
+              
+              <form id="adminProfileForm" class="mt-4 grid gap-3 text-left" onsubmit="event.preventDefault(); saveProfileAdmin();">
+                <div class="grid grid-cols-2 gap-3">
+                  <label class="grid gap-1">
+                    <span class="text-xs font-bold text-slate-500">Tagline</span>
+                    <input type="text" id="adminTagline" class="field text-xs" />
+                  </label>
+                  <label class="grid gap-1">
+                    <span class="text-xs font-bold text-slate-500">Website URL</span>
+                    <input type="text" id="adminWebsite" class="field text-xs" />
+                  </label>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <label class="grid gap-1">
+                    <span class="text-xs font-bold text-slate-500">Contact Phone</span>
+                    <input type="text" id="adminPhone" class="field text-xs" />
+                  </label>
+                  <label class="grid gap-1">
+                    <span class="text-xs font-bold text-slate-500">Contact Email</span>
+                    <input type="email" id="adminEmailField" class="field text-xs" />
+                  </label>
+                </div>
+                <label class="grid gap-1">
+                  <span class="text-xs font-bold text-slate-500">Donation UPI ID</span>
+                  <input type="text" id="adminUpiId" class="field text-xs" />
+                </label>
+                
+                <button type="submit" class="w-full bg-[color:var(--primary)] hover:opacity-95 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1">
+                  <span class="material-symbols-outlined text-sm">save</span> Update Settings
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Recent Bookings Operational Grid -->
+          <div class="surface-card border border-slate-200/50 rounded-[28px] p-6 shadow-sm text-left">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4 mb-4">
+              <div>
+                <h4 class="text-lg font-black text-slate-800 flex items-center gap-1.5"><span class="material-symbols-outlined text-slate-500 text-xl">assignment</span> Pilgrim Bookings Queue</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Approve entry passes, record pilgrim visits, or cancel bookings in real-time.</p>
+              </div>
+              <span id="bookingCountBadge" class="rounded-full bg-slate-100 text-slate-600 px-3 py-1 text-xs font-bold">0 bookings</span>
+            </div>
+
+            <!-- Table container -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider bg-slate-50">
+                    <th class="p-3">Reference ID</th>
+                    <th class="p-3">Pilgrim Phone</th>
+                    <th class="p-3">Ticket Class</th>
+                    <th class="p-3">Date & Slot</th>
+                    <th class="p-3 text-center">Quantity</th>
+                    <th class="p-3 text-center">Status</th>
+                    <th class="p-3 text-center">Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="adminBookingsTableBody">
+                  <tr>
+                    <td colspan="7" class="p-4 text-center text-slate-400 font-semibold">No bookings available.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toastStack" class="fixed bottom-4 right-4 z-50 space-y-3"></div>
+
+  <!-- ==================== PREMIUM UPI CHECKOUT MODAL ==================== -->
+  <div id="upiCheckoutModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+    <div class="w-full max-w-md surface-card rounded-[32px] overflow-hidden shadow-2xl border border-slate-200/50 scale-95 transition-all duration-300">
+      <div class="bg-[color:var(--primary)] p-6 text-white relative">
+        <h3 class="text-2xl font-extrabold flex items-center gap-2"><span class="material-symbols-outlined">qr_code_2</span> UPI Gateway</h3>
+        <p class="text-xs text-white/80 mt-1">Divya Darshan Secure Sacred Donations</p>
+        <button onclick="closeUpiDonationModal()" class="absolute right-4 top-5 material-symbols-outlined text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-1 cursor-pointer">close</button>
+      </div>
+      <div class="p-6 flex flex-col items-center">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Amount to Donate</p>
+        <p id="upiModalAmount" class="text-4xl font-black mt-1 text-slate-800">₹0</p>
+        <p id="upiModalCause" class="text-sm font-semibold text-slate-500 mt-1">Toward: General</p>
+
+        <!-- Simulated QR Scan code -->
+        <div class="my-6 p-4 bg-white border border-slate-100 rounded-3xl shadow-sm flex flex-col items-center relative group">
+          <div class="absolute inset-0 bg-[color:var(--primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl pointer-events-none"></div>
+          <img id="upiQrImg" src="" alt="UPI Scan Code" class="w-48 h-48 object-contain rounded-2xl" />
+          <div class="mt-3 flex items-center gap-2 text-xs font-bold text-emerald-600 animate-pulse">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Waiting for scan
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 flex items-center justify-between text-sm">
+          <div class="flex items-center gap-2 text-slate-500">
+            <span class="material-symbols-outlined text-lg">timer</span> Timer Remaining
+          </div>
+          <span id="upiTimer" class="font-extrabold text-rose-500 text-base">02:00</span>
+        </div>
+
+        <div class="w-full grid grid-cols-2 gap-3 mt-6">
+          <button onclick="simulateUpiSuccess()" type="button" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20">
+            <span class="material-symbols-outlined text-base">verified</span> Simulate Success
+          </button>
+          <button onclick="closeUpiDonationModal()" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PREMIUM SUCCESS RECEIPT MODAL ==================== -->
+  <div id="donationSuccessModal" class="hidden fixed inset-0 z-[110] flex items-center justify-center bg-black/75 backdrop-blur-lg p-4">
+    <canvas id="successConfettiCanvas" class="absolute inset-0 pointer-events-none w-full h-full z-0"></canvas>
+    <div class="w-full max-w-lg bg-white rounded-[32px] overflow-hidden shadow-2xl relative border border-slate-200 z-10 flex flex-col scale-95 transition-all duration-300">
+      <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-6 text-white text-center">
+        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 shadow-divine">
+          <span class="material-symbols-outlined text-3xl text-white">volunteer_activism</span>
+        </div>
+        <h3 class="text-2xl font-black uppercase tracking-wider">Divine Receipt</h3>
+        <p class="text-xs text-white/80 mt-1">Thank you for your generous contribution</p>
+      </div>
+      <div class="p-6 md:p-8 flex-1 relative bg-gradient-to-b from-amber-50/20 to-white">
+        <!-- Physical Certificate Design -->
+        <div class="border-4 border-double border-amber-200 rounded-2xl p-5 md:p-6 text-center bg-white relative">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white">
+            Official E-Receipt
+          </div>
+          <p id="receiptTempleName" class="text-xl font-black text-slate-800 uppercase tracking-wide mt-2"></p>
+          <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mt-0.5">Divya Darshan Platform</p>
+          
+          <div class="my-5 border-t border-b border-dashed border-slate-200 py-4 grid gap-3 text-sm text-left">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Donor Name:</span>
+              <span id="receiptDonor" class="font-extrabold text-slate-700"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Cause Supported:</span>
+              <span id="receiptCause" class="font-extrabold text-slate-700"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Amount Contributed:</span>
+              <span id="receiptAmount" class="font-black text-amber-600 text-lg"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">UTR / Reference ID:</span>
+              <span id="receiptRef" class="font-bold text-slate-500 text-xs"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Transaction Date:</span>
+              <span id="receiptDate" class="font-bold text-slate-600"></span>
+            </div>
+          </div>
+
+          <div class="text-[10px] text-slate-400 leading-normal bg-slate-50 rounded-xl p-3 border border-slate-100">
+            ❇️ Certified contribution under Section 80G of the Income Tax Act. Exemption details will be mailed to your registered credentials.
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-6">
+          <button onclick="downloadReceipt()" type="button" class="bg-amber-500 hover:bg-amber-600 text-white py-3.5 rounded-xl font-extrabold text-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/10">
+            <span class="material-symbols-outlined text-base">download</span> Download Pass
+          </button>
+          <button onclick="closeSuccessModal()" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-3.5 rounded-xl font-extrabold text-sm transition-all cursor-pointer">
+            Return to Site
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PREMIUM PARKING BOOKING MODAL ==================== -->
+  <div id="parkingBookingModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+    <div class="w-full max-w-md surface-card rounded-[32px] overflow-hidden shadow-2xl border border-slate-200/50 scale-95 transition-all duration-300">
+      <div class="bg-[color:var(--primary)] p-6 text-white relative">
+        <h3 class="text-2xl font-extrabold flex items-center gap-2"><span class="material-symbols-outlined">local_parking</span> Reserve Slot</h3>
+        <p class="text-xs text-white/80 mt-1">Book EV or Regular Spots Instantly</p>
+        <button onclick="closeParkingModal()" class="absolute right-4 top-5 material-symbols-outlined text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-1 cursor-pointer">close</button>
+      </div>
+      <form id="parkingForm" class="p-6 grid gap-4" onsubmit="event.preventDefault(); submitParkingReservation();">
+        <input type="hidden" id="parkingSlotId" />
+        <input type="hidden" id="parkingZoneId" />
+        
+        <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 flex items-center justify-between text-sm">
+          <div>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Selected Slot</p>
+            <p id="parkingSlotLabel" class="text-xl font-black text-slate-800 mt-0.5">A-01</p>
+          </div>
+          <div id="parkingTypeIndicator" class="px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+            🚗 Standard Spot
+          </div>
+        </div>
+
+        <label class="grid gap-1.5">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">License Plate / Vehicle No.</span>
+          <input type="text" id="parkingVehicleNo" class="field" placeholder="e.g. KA-01-MJ-1234" required />
+        </label>
+        
+        <label class="grid gap-1.5">
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Pilgrim Full Name</span>
+          <input type="text" id="parkingPilgrimName" class="field" placeholder="Enter driver or pilgrim name" required />
+        </label>
+
+        <div class="grid grid-cols-2 gap-3">
+          <label class="grid gap-1.5">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Vehicle Type</span>
+            <select id="parkingVehicleType" class="field">
+              <option value="car">🚗 4-Wheeler Car</option>
+              <option value="bike">🏍️ 2-Wheeler Bike</option>
+              <option value="ev">⚡ EV Charging Car</option>
+            </select>
+          </label>
+          <label class="grid gap-1.5">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Expected Arrival</span>
+            <input type="time" id="parkingArrivalTime" class="field" required />
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-[color:var(--primary)] hover:translate-y-[-2px] active:translate-y-0 text-white py-4 rounded-xl font-extrabold text-base shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2 shadow-[color:var(--primary)]/20">
+          <span class="material-symbols-outlined text-lg">directions_car</span> Confirm Reservation
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== PREMIUM PARKING TICKET MODAL ==================== -->
+  <div id="parkingTicketModal" class="hidden fixed inset-0 z-[110] flex items-center justify-center bg-black/75 backdrop-blur-lg p-4">
+    <div class="w-full max-w-sm bg-white rounded-[32px] overflow-hidden shadow-2xl relative border border-slate-200 scale-95 transition-all duration-300">
+      <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white text-center relative">
+        <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 shadow-divine">
+          <span class="material-symbols-outlined text-2xl text-white">local_parking</span>
+        </div>
+        <h3 class="text-xl font-black uppercase tracking-wider">Parking Booking Pass</h3>
+        <p class="text-[10px] text-white/80 mt-0.5">Present at the entry checkpoint</p>
+        <button onclick="closeParkingTicketModal()" class="absolute right-4 top-4 material-symbols-outlined text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-1 cursor-pointer">close</button>
+      </div>
+      <div class="p-6 text-center bg-gradient-to-b from-blue-50/20 to-white">
+        <!-- Physical Receipt Design with tear cuts -->
+        <div class="border-2 border-slate-200 border-dashed rounded-2xl p-5 text-center bg-white relative">
+          <p id="ticketTempleName" class="text-base font-black text-slate-800 uppercase tracking-wide"></p>
+          <div id="ticketSlotBadge" class="inline-block mt-2 bg-blue-500 text-white text-lg font-black px-4 py-1.5 rounded-2xl shadow-sm">
+            SLOT A-01
+          </div>
+          
+          <div class="my-4 border-t border-dashed border-slate-100 pt-3 grid gap-2 text-xs text-left text-slate-600">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Driver:</span>
+              <span id="ticketDriver" class="font-bold text-slate-800"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Vehicle No:</span>
+              <span id="ticketVehicle" class="font-extrabold text-slate-800 uppercase"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Vehicle Class:</span>
+              <span id="ticketClass" class="font-bold text-slate-700"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Arrival Time:</span>
+              <span id="ticketArrival" class="font-bold text-slate-800"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Security Gate Code:</span>
+              <span class="font-black text-blue-600">GATE-${Math.floor(Math.random() * 8 + 1)}</span>
+            </div>
+          </div>
+
+          <!-- High-Quality Virtual Barcode -->
+          <div class="mt-4 p-3 bg-slate-50 border border-slate-100 rounded-xl flex flex-col items-center justify-center">
+            <div class="flex gap-0.5 justify-center bg-white py-2.5 px-4 border border-slate-200/50 rounded-lg w-full">
+              <!-- Inline barcode lines dynamically styled -->
+              <span class="w-[3px] h-9 bg-slate-900"></span><span class="w-[1px] h-9 bg-slate-900"></span><span class="w-[2px] h-9 bg-slate-900"></span>
+              <span class="w-[4px] h-9 bg-slate-900"></span><span class="w-[1px] h-9 bg-slate-900"></span><span class="w-[3px] h-9 bg-slate-900"></span>
+              <span class="w-[2px] h-9 bg-slate-900"></span><span class="w-[4px] h-9 bg-slate-900"></span><span class="w-[1px] h-9 bg-slate-900"></span>
+              <span class="w-[3px] h-9 bg-slate-900"></span><span class="w-[2px] h-9 bg-slate-900"></span><span class="w-[4px] h-9 bg-slate-900"></span>
+              <span class="w-[1px] h-9 bg-slate-900"></span><span class="w-[3px] h-9 bg-slate-900"></span><span class="w-[2px] h-9 bg-slate-900"></span>
+              <span class="w-[4px] h-9 bg-slate-900"></span><span class="w-[1px] h-9 bg-slate-900"></span><span class="w-[3px] h-9 bg-slate-900"></span>
+              <span class="w-[2px] h-9 bg-slate-900"></span><span class="w-[4px] h-9 bg-slate-900"></span><span class="w-[1px] h-9 bg-slate-900"></span>
+            </div>
+            <span class="text-[9px] tracking-[0.4em] font-mono text-slate-400 mt-1 uppercase">DD-PK-${Math.random().toString(36).substr(2, 6)}</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-5">
+          <button onclick="window.print()" type="button" class="bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-bold text-sm transition-all cursor-pointer flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-base">print</span> Print Ticket
+          </button>
+          <button onclick="cancelActiveParkingReservation()" type="button" class="bg-rose-50 hover:bg-rose-100 text-rose-600 py-3 rounded-xl font-bold text-sm transition-all cursor-pointer border border-rose-100 flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-base">cancel</span> Cancel Spot
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="floatingBookNow" type="button" class="floating-book-btn lg:hidden fixed bottom-4 left-4 right-4 z-40 rounded-2xl bg-[color:var(--primary)] px-5 py-4 text-sm font-semibold text-white shadow-divine">Book Now</button>
+  <div id="galleryLightbox" class="hidden fixed inset-0 z-50 lightbox-backdrop p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto h-full flex flex-col">
+      <div class="flex items-center justify-between gap-4 text-white">
+        <p id="lightboxCounter" class="text-sm font-semibold">1 / 1</p>
+        <div class="flex items-center gap-3">
+          <a id="lightboxDownload" href="#" download class="rounded-full bg-white/14 px-4 py-2 text-sm font-semibold">Download</a>
+          <button id="closeLightboxBtn" type="button" class="rounded-full bg-white/14 px-4 py-2 text-sm font-semibold">Close</button>
+        </div>
+      </div>
+      <div class="flex-1 flex items-center justify-center gap-3 mt-4">
+        <button id="lightboxPrev" type="button" class="rounded-full bg-white/14 px-4 py-3 text-white">◀</button>
+        <img id="lightboxImage" src="" alt="Temple gallery preview" class="max-h-[82vh] w-auto rounded-[28px] object-contain" />
+        <button id="lightboxNext" type="button" class="rounded-full bg-white/14 px-4 py-3 text-white">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pathParts = window.location.pathname.split("/").filter(Boolean);
+    const slug = pathParts[1] || "";
+    const requestedPage = pathParts[2] || "home";
+    const authKey = `templeAdminToken:${slug}`;
+    let profile = window.preloadedTempleProfile || null;
+    let bookingSlots = [];
+    let cart = [];
+    let bookingControlState = { paused: false, reason: "", resumeAt: null };
+    let nearbyTemples = [];
+    let templeMap = null;
+    let templeMarker = null;
+    let nearbyLayer = null;
+    let lightboxImages = [];
+    let lightboxIndex = 0;
+    let selectedBookingSlot = "";
+    let activeReviewFilter = 0;
+
+    // Global fetch interceptor for offline high-fidelity mock layer
+    const originalFetch = window.fetch;
+    window.fetch = async function(url, options = {}) {
+      const urlStr = String(url);
+      const isOffline = window.location.protocol === 'file:' || !navigator.onLine || window.preloadedTempleProfile;
+      
+      if (isOffline) {
+        try {
+          const res = await originalFetch(url, options);
+          if (res.ok || res.status < 500) return res;
+        } catch (e) {
+          // fetch failed, proceed to mock
+        }
+        
+        console.log(`[Offline Mock Fetch] Intercepting request to: ${urlStr}`);
+        
+        if (urlStr.includes('/slots?date=')) {
+          const urlObj = new URL(urlStr, window.location.origin);
+          const date = urlObj.searchParams.get('date') || new Date().toISOString().slice(0, 10);
+          const timeLabel = new Date(date).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
+          const timing = (profile?.darshan_timings || []).find(t => t.day === timeLabel && !t.closed) || { open: "06:00", close: "20:00" };
+          const slots = [];
+          if (timing) {
+            const [sh, sm] = timing.open.split(':').map(Number);
+            const [eh, em] = timing.close.split(':').map(Number);
+            let current = sh * 60 + sm;
+            const end = eh * 60 + em;
+            const duration = Number(profile?.slot_duration || 30);
+            while (current + duration <= end) {
+              const hs = String(Math.floor(current / 60)).padStart(2, '0');
+              const ms = String(current % 60).padStart(2, '0');
+              const he = String(Math.floor((current + duration) / 60)).padStart(2, '0');
+              const me = String((current + duration) % 60).padStart(2, '0');
+              const label = `${hs}:${ms} - ${he}:${me}`;
+              slots.push({
+                slot: label,
+                available: Math.floor(Math.random() * 20) + 5,
+                max_visitors: Number(profile?.max_visitors_per_slot || 100)
+              });
+              current += duration;
+            }
+          }
+          return new Response(JSON.stringify({ slots }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        if (urlStr.includes('/bookings')) {
+          const body = JSON.parse(options.body || '{}');
+          const ticketId = 'TKT-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+          const totalAmount = body.ticket_type === 'vip' ? (profile?.entry_fee_vip || 0) * body.qty : (body.ticket_type === 'child' ? (profile?.entry_fee_child || 0) * body.qty : (profile?.entry_fee_general || 0) * body.qty);
+          return new Response(JSON.stringify({
+            id: ticketId,
+            visit_date: body.visit_date,
+            slot: body.slot,
+            ticket_type: body.ticket_type,
+            qty: body.qty,
+            total_amount: totalAmount,
+            temple_address: [profile?.address_line1, profile?.city, profile?.state].filter(Boolean).join(', '),
+            qr_code_url: `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=${encodeURIComponent(ticketId)}`
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        if (urlStr.includes('/prasadam/order')) {
+          const body = JSON.parse(options.body || '{}');
+          const orderId = 'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+          const total = (body.items || []).reduce((sum, item) => sum + (item.qty * item.price), 0);
+          return new Response(JSON.stringify({
+            id: orderId,
+            total,
+            status: 'Confirmed'
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        if (urlStr.includes('/donation')) {
+          const body = JSON.parse(options.body || '{}');
+          const donationId = 'DON-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+          return new Response(JSON.stringify({
+            id: donationId,
+            amount: body.amount,
+            cause: body.cause
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        if (urlStr.includes('/travel/plan')) {
+          const body = JSON.parse(options.body || '{}');
+          return new Response(JSON.stringify({
+            summary: `A delightful spiritual journey planned for visiting the holy ${profile?.temple_name || 'temple'} on ${body.date} at ${body.timeOfDay} with ${body.pilgrims} pilgrim(s).`,
+            itinerary: [
+              { time: "08:00 AM", activity: `Departure from ${body.origin || "nearest station"} with morning prayers.` },
+              { time: "10:30 AM", activity: `Arrival at the holy shrine of ${profile?.temple_name || 'temple'} for sacred darshan.` },
+              { time: "12:30 PM", activity: "Participation in the divine prasadam lunch service." },
+              { time: "02:30 PM", activity: `Rest and spiritual reflection at the temple garden area.` },
+              { time: "05:00 PM", activity: "Evening Aarti and shopping for local sacred memorabilia." }
+            ]
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        if (urlStr.includes('/booking-control')) {
+          return new Response(JSON.stringify({ paused: false }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+
+        if (urlStr.includes(`/temple/${slug}`)) {
+          return new Response(JSON.stringify(profile || {}), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+        
+        if (urlStr.includes('/temples/map')) {
+          return new Response(JSON.stringify({ temples: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
+      }
+      
+      return originalFetch(url, options);
+    };
+
+    const pageMeta = [
+      { page: "home", label: "Home", icon: "temple_hindu", description: "Overview, visitor menu, highlights, and temple identity.", sections: ["home", "temple-search", "page-menu", "about"] },
+      { page: "booking", label: "Booking", icon: "confirmation_number", description: "Live slot availability, booking confirmation, sevas, and special pujas.", sections: ["booking", "sevas", "special-pujas"] },
+      { page: "prasadam", label: "Prasadam", icon: "restaurant", description: "Counter items, pickup cart, and order confirmation.", sections: ["prasadam"] },
+      { page: "location", label: "Location", icon: "map", description: "Map, directions, transport, route planner, and travel help.", sections: ["reach", "travel", "parking-layout"] },
+      { page: "events", label: "Events & Gallery", icon: "event", description: "Festival calendar, upcoming programs, images, and lightbox.", sections: ["events", "gallery"] },
+      { page: "donate", label: "Donate", icon: "volunteer_activism", description: "Donation causes, receipt recording, and temple support details.", sections: ["donate"] },
+      { page: "live", label: "Live & Tour", icon: "videocam", description: "Live stream, crowd watch, and virtual tour where enabled.", sections: ["live", "virtual-tour"] },
+      { page: "contact", label: "Contact & Reviews", icon: "reviews", description: "Temple contact, social links, and visitor feedback.", sections: ["contact", "reviews"] },
+      { page: "admin", label: "Admin Panel", icon: "admin_panel_settings", description: "Temple administration panel and console.", sections: ["admin-panel"] }
+    ];
+    const sectionToPage = pageMeta.reduce((map, page) => {
+      page.sections.forEach((section) => { map[section] = page.page; });
+      return map;
+    }, {});
+
+    const byId = (id) => document.getElementById(id);
+
+    function showToast(message, kind = "info") {
+      const el = document.createElement("div");
+      const bg = kind === "success" ? "bg-emerald-500" : kind === "error" ? "bg-rose-500" : "bg-[color:var(--primary)]";
+      el.className = `toast rounded-2xl ${bg} text-white px-4 py-3 shadow-divine max-w-sm`;
+      el.textContent = message;
+      byId("toastStack").appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(8px)";
+        setTimeout(() => el.remove(), 180);
+      }, 3000);
+    }
+
+    function currency(value) {
+      const currencyCode = profile?.entry_fee_currency || "INR";
+      return `${currencyCode} ${Number(value || 0).toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+    }
+
+    function formatResumeDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+    }
+
+    async function pollQueuedRequest(requestId) {
+      while (true) {
+        await new Promise((resolve) => window.setTimeout(resolve, 400));
+        const res = await fetch(`/api/queue/status/${encodeURIComponent(requestId)}`);
+        const data = await res.json();
+        if (data.status === "ready" || data.status === "processed") return data;
+        showToast(`High traffic detected. Queue position #${data.position || 0}. Estimated wait: ${data.estimatedWaitSeconds || 0}s.`, "info");
+      }
+    }
+
+    async function fetchWithQueue(url, options = {}) {
+      const response = await fetch(url, options);
+      if (response.status !== 202) return response;
+      const payload = await response.json();
+      showToast(`High traffic detected. You are position #${payload.position}. Estimated wait: ${payload.estimatedWaitSeconds}s.`, "info");
+      await pollQueuedRequest(payload.requestId);
+      return fetch(url, options);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function reviewStorageKey() {
+      return `dd_temple_reviews:${slug}`;
+    }
+
+    function loadStoredReviews() {
+      try {
+        return JSON.parse(localStorage.getItem(reviewStorageKey()) || "[]");
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveStoredReviews(items) {
+      localStorage.setItem(reviewStorageKey(), JSON.stringify(items));
+    }
+
+    function availableSectionIds() {
+      const base = pageMeta.flatMap((page) => page.sections);
+      const enabled = profile?.features_enabled || {};
+      return base.filter((id) => {
+        if (id === "prasadam") return profile?.prasadam_online_order || profile?.prasadam_counter_open;
+        if (id === "donate") return profile?.donation_enabled || enabled.donation;
+        if (id === "travel") return enabled.travel_planner !== false;
+        if (id === "live") return enabled.live_crowd || profile?.live_stream_url;
+        if (id === "virtual-tour") return enabled.virtual_tour || profile?.virtual_tour_url;
+        if (id === "events") {
+          return enabled.events_calendar !== false ||
+            (profile?.events || []).length ||
+            (profile?.major_annual_festivals || []).length ||
+            (profile?.weekly_special_prayers || []).length ||
+            Boolean(profile?.special_events_text);
+        }
+        if (id === "special-pujas") return (profile?.special_puja_bookings || []).length > 0;
+        if (id === "parking-layout") return profile?.facilities?.parking || (profile?.parking_layout?.zones || []).length > 0;
+        return true;
+      });
+    }
+
+    function pagesForProfile() {
+      const available = new Set(availableSectionIds());
+      return pageMeta.filter((page) => {
+        if (page.page === "admin") {
+          const hasToken = sessionStorage.getItem(authKey) || localStorage.getItem(authKey);
+          return hasToken || requestedPage === "admin";
+        }
+        return page.sections.some((id) => available.has(id));
+      });
+    }
+
+    function pathForPage(page) {
+      return page === "home" ? `/temple/${slug}` : `/temple/${slug}/${page}`;
+    }
+
+    function currentPage() {
+      const available = new Set(pagesForProfile().map((page) => page.page));
+      return available.has(requestedPage) ? requestedPage : "home";
+    }
+
+    function renderTabs() {
+      const active = currentPage();
+      byId("tabNav").innerHTML = pagesForProfile().map((page) => `
+        <a href="${pathForPage(page.page)}" data-i18n="micro-tab-${page.page}" class="tab-pill ${page.page === active ? "active" : ""} rounded-full bg-white/80 px-4 py-2 text-sm font-semibold text-[color:var(--muted)] whitespace-nowrap shadow-divine">${page.label}</a>
+      `).join("");
+      if (typeof changeLanguage === 'function') {
+        changeLanguage(localStorage.getItem('dd-lang') || 'en');
+      }
+    }
+
+    function scrollToSection(id) {
+      const page = sectionToPage[id] || "home";
+      if (page !== currentPage()) {
+        window.location.href = `${pathForPage(page)}#${id}`;
+        return;
+      }
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function applyPageRoute() {
+      const active = currentPage();
+      const activeMeta = pageMeta.find((page) => page.page === active) || pageMeta[0];
+      const activeSections = new Set(activeMeta.sections);
+      const available = new Set(availableSectionIds());
+      Array.from(document.querySelectorAll("#contentShell > section")).forEach((section) => {
+        if (section.id === "bookingPauseBanner") return;
+        const visible = activeSections.has(section.id) && available.has(section.id);
+        section.classList.toggle("hidden", !visible);
+      });
+      byId("bookingPauseBanner").classList.toggle("hidden", active !== "booking" || !(bookingControlState.paused || profile?.booking_enabled === false));
+      byId("floatingBookNow").classList.toggle("hidden", active === "booking");
+      document.title = `${profile.temple_name} — ${activeMeta.label} | Divya Darshan`;
+      window.setTimeout(() => {
+        if (window.location.hash) {
+          document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 80);
+    }
+
+    function openDirections() {
+      if (profile?.google_maps_url) {
+        window.open(profile.google_maps_url, "_blank", "noopener");
+        return;
+      }
+      if (profile?.latitude && profile?.longitude) {
+        window.open(`https://www.google.com/maps?q=${profile.latitude},${profile.longitude}`, "_blank", "noopener");
+      }
+    }
+
+    function updateSeoMeta() {
+      const title = `${profile.temple_name} — ${profile.city || "Temple City"} | Book Tickets & Timings`;
+      const description = (profile.historical_significance || profile.tagline || `${profile.temple_name} temple microsite on Divya Darshan.`).slice(0, 160);
+      document.title = title;
+      const ensureMeta = (selector, attrs) => {
+        let el = document.head.querySelector(selector);
+        if (!el) {
+          el = document.createElement("meta");
+          Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+          document.head.appendChild(el);
+        }
+        return el;
+      };
+      ensureMeta('meta[name="description"]', { name: "description" }).setAttribute("content", description);
+      ensureMeta('meta[property="og:title"]', { property: "og:title" }).setAttribute("content", title);
+      ensureMeta('meta[property="og:description"]', { property: "og:description" }).setAttribute("content", description);
+      ensureMeta('meta[property="og:image"]', { property: "og:image" }).setAttribute("content", profile.hero_image_url || profile.logo_url || "");
+      ensureMeta('meta[property="og:url"]', { property: "og:url" }).setAttribute("content", window.location.href);
+      ensureMeta('meta[name="geo.position"]', { name: "geo.position" }).setAttribute("content", `${profile.latitude || ""};${profile.longitude || ""}`);
+      ensureMeta('meta[name="geo.placename"]', { name: "geo.placename" }).setAttribute("content", [profile.city, profile.state].filter(Boolean).join(", "));
+    }
+
+    function applyTheme() {
+      const themeVars = profile.theme_vars || {};
+      document.documentElement.style.setProperty("--primary", themeVars["--primary"] || profile.primary_color || "#4c56af");
+      document.documentElement.style.setProperty("--secondary", themeVars["--secondary"] || profile.secondary_color || "#f5a623");
+      document.documentElement.style.setProperty("--accent", themeVars["--accent"] || profile.accent_color || "#2ecc71");
+      document.documentElement.style.setProperty("--bg-style", themeVars["--bg-style"] || "linear-gradient(180deg, #fbfcff 0%, #f4f6fd 100%)");
+      document.documentElement.style.setProperty("--bg", themeVars["--bg"] || "#f7f8fd");
+      document.documentElement.style.setProperty("--text-primary", themeVars["--text-primary"] || "#1f2749");
+      document.documentElement.style.setProperty("--text-secondary", themeVars["--text-secondary"] || "#66708f");
+      document.documentElement.style.setProperty("--card-bg", themeVars["--card-bg"] || "rgba(255,255,255,0.92)");
+      document.documentElement.style.setProperty("--border", themeVars["--border"] || "rgba(76,86,175,0.15)");
+      document.documentElement.style.setProperty("--shadow", themeVars["--shadow"] || "rgba(76,86,175,0.18)");
+      document.documentElement.style.setProperty("--btn-text", themeVars["--btn-text"] || "#ffffff");
+      document.documentElement.style.setProperty("--ink", themeVars["--text-primary"] || "#1f2749");
+      document.documentElement.style.setProperty("--muted", themeVars["--text-secondary"] || "#66708f");
+      document.body.classList.toggle("iskcon-curated", slug === "iskcon-temple-bengaluru");
+    }
+
+    const DEFAULT_TEMPLE_LOGO_IMAGES = {
+      'iskcon-temple-bengaluru': '../../assets/news/iskcon-bangalore-logo-n.png',
+      'kashi-vishwanath-full-demo': 'https://images.unsplash.com/photo-1605640840605-14ac1855827b?auto=format&fit=crop&w=1200&q=80',
+      'virupaksha-temple-hampi': 'https://images.unsplash.com/photo-1509976197830-19a501e2a034?auto=format&fit=crop&w=1200&q=80'
+    };
+
+    function getDefaultTempleLogo(slug) {
+      return DEFAULT_TEMPLE_LOGO_IMAGES[slug] || 'https://images.unsplash.com/photo-1605640840605-14ac1855827b?auto=format&fit=crop&w=1400&q=80';
+    }
+
+    function renderHero() {
+      byId("navTempleName").textContent = profile.temple_name;
+      byId("heroTempleName").textContent = profile.temple_name;
+      byId("heroTagline").textContent = profile.tagline || `${profile.temple_name} welcomes devotees with a temple-specific digital journey.`;
+      byId("heroDeity").textContent = profile.deity_name || "Temple deity";
+      byId("heroYear").textContent = profile.established_year || "Traditional";
+      byId("heroCity").textContent = [profile.city, profile.state].filter(Boolean).join(", ") || "India";
+      byId("heroFee").textContent = Number(profile.entry_fee_general || 0) > 0 ? currency(profile.entry_fee_general) : "Free";
+      byId("religionBadge").textContent = profile.religion || "Temple";
+      const heroVisual = profile.hero_image_url || profile.gallery_urls?.[0] || getDefaultTempleLogo(profile.slug);
+      
+      // Preload hero image for faster display
+      if (heroVisual) {
+        const preloadLink = document.createElement('link');
+        preloadLink.rel = 'preload';
+        preloadLink.as = 'image';
+        preloadLink.href = heroVisual;
+        document.head.appendChild(preloadLink);
+        byId("home").style.background = `linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 40%, transparent 100%), url('${heroVisual}') center/cover no-repeat`;
+      } else {
+        byId("home").style.background = `linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 72%, var(--accent)))`;
+      }
+        
+      const logo = profile.logo_url || getDefaultTempleLogo(profile.slug);
+      byId("navLogo").innerHTML = `<img src="${logo}" alt="${profile.temple_name}" class="w-full h-full object-cover rounded-2xl" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${getDefaultTempleLogo(profile.slug)}';this.className='w-full h-full object-contain rounded-2xl'" />`;
+      if (profile.features_enabled?.live_crowd) {
+        byId("crowdBadge").classList.remove("hidden");
+        byId("crowdBadge").textContent = `${Math.max(12, Number(profile.total_bookings || 0))} recent pilgrims`;
+      }
+    }
+
+    function renderTempleSearchBar() {
+      const chips = [
+        ["booking", "Book a Slot"],
+        ["events", "Festivals"],
+        ["gallery", "Gallery"],
+        ["reach", "Location"],
+        ["contact", "Contact"],
+        ["special-pujas", "Special Pujas"],
+      ];
+      byId("quickFilterChips").innerHTML = chips
+        .filter(([id]) => document.getElementById(id))
+        .map(([id, label]) => `<button type="button" class="rounded-full bg-white px-4 py-3 text-sm font-semibold text-[color:var(--primary)] shadow-divine whitespace-nowrap" onclick="scrollToSection('${id}')">${label}</button>`)
+        .join("");
+    }
+
+    function renderPageMenu() {
+      const enabled = pagesForProfile().filter((page) => page.page !== "home");
+      byId("pageMenuAdminLink").href = `/temple/${slug}/admin/login`;
+      byId("pageMenuGrid").innerHTML = enabled.map((page) => `
+        <a href="${pathForPage(page.page)}" class="rounded-[24px] bg-[#eef1fb] p-5 shadow-divine hover:bg-white transition-colors">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <span class="material-symbols-outlined text-[28px] text-[color:var(--primary)]">${page.icon}</span>
+              <h4 class="text-xl font-extrabold mt-4">${page.label}</h4>
+              <p class="text-sm leading-7 text-[color:var(--muted)] mt-2">${page.description}</p>
+            </div>
+            <span class="material-symbols-outlined text-[20px] text-[color:var(--primary)]">arrow_forward</span>
+          </div>
+        </a>
+      `).join("");
+    }
+
+    function performTempleSearch(query) {
+      const normalized = String(query || "").trim().toLowerCase();
+      const sections = Array.from(document.querySelectorAll("#contentShell section")).filter((section) => section.id !== "temple-search");
+      sections.forEach((section) => section.classList.remove("content-search-hit"));
+      if (!normalized) return;
+
+      const match = sections.find((section) => section.textContent.toLowerCase().includes(normalized));
+      if (!match) {
+        showToast(`No temple-page matches found for "${query}".`, "info");
+        return;
+      }
+      match.classList.add("content-search-hit");
+      match.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderAbout() {
+      byId("trustChip").textContent = profile.trust_name || "Temple Trust";
+      byId("aboutCopy").textContent = profile.historical_significance || profile.tagline || `${profile.temple_name} is a registered partner temple on Divya Darshan. Use this microsite for temple-specific timings, seva details, booking, donation, and live planning tools.`;
+      byId("aboutIdentity").textContent = [
+        profile.religion,
+        profile.sect_denomination,
+        profile.deity_name,
+        profile.established_year ? `Established ${profile.established_year}` : ""
+      ].filter(Boolean).join(" • ") || "Temple identity details will be updated soon.";
+      byId("aboutAddress").textContent = [profile.address_line1, profile.address_line2, profile.city, profile.state, profile.pincode, profile.country].filter(Boolean).join(", ");
+      byId("aboutReachRail").textContent = profile.nearest_railway ? `Nearest railway station: ${profile.nearest_railway}` : "Nearest railway station information will be updated soon.";
+      byId("aboutReachBus").textContent = profile.nearest_bus_stop ? `Nearest bus stop: ${profile.nearest_bus_stop}` : "Nearest bus stop information will be updated soon.";
+      byId("aboutReachAirport").textContent = profile.nearest_airport ? `Nearest airport: ${profile.nearest_airport}` : "Nearest airport information will be updated soon.";
+      const rail = (profile.gallery_urls || []).slice(0, 3);
+      byId("galleryRail").innerHTML = rail.length
+        ? rail.map((src) => `<img src="${src}" alt="" class="w-full h-36 object-cover rounded-[22px]" />`).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">Gallery images will appear here after temple upload.</div>`;
+    }
+
+    function renderVisitPlan() {
+      const highlights = profile.visit_highlights || [];
+      const advisories = profile.visitor_advisories || [];
+      const section = byId("visit-plan");
+      if (!highlights.length && !advisories.length) {
+        section?.classList.add("hidden");
+        return;
+      }
+      section?.classList.remove("hidden");
+      byId("visitPlanTitle").textContent = profile.visit_plan_title || "Plan the visit in clear stages";
+      byId("visitHighlights").innerHTML = highlights.length
+        ? highlights.map((item, index) => `
+          <article class="visit-card rounded-[24px] p-5">
+            <div class="flex items-center justify-between gap-3">
+              <span class="w-10 h-10 rounded-2xl bg-[color:var(--primary)] text-white flex items-center justify-center font-extrabold">${index + 1}</span>
+              <span class="text-xs uppercase tracking-[0.2em] font-bold text-[color:var(--primary)]">${escapeHtml(item.label || "Stage")}</span>
+            </div>
+            <h4 class="text-xl font-extrabold mt-5">${escapeHtml(item.title || "Visit detail")}</h4>
+            <p class="text-sm leading-7 text-[color:var(--muted)] mt-3">${escapeHtml(item.description || "")}</p>
+          </article>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-5 text-sm text-[color:var(--muted)]">Visit highlights will be added soon.</div>`;
+      byId("visitorAdvisories").innerHTML = advisories.length
+        ? advisories.map((item) => `
+          <div class="advisory-strip rounded-[22px] p-4">
+            <p class="font-extrabold">${escapeHtml(item.title || "Visitor note")}</p>
+            <p class="text-sm leading-6 text-[color:var(--muted)] mt-2">${escapeHtml(item.description || "")}</p>
+          </div>
+        `).join("")
+        : `<div class="rounded-[22px] bg-[#eef1fb] p-4 text-sm text-[color:var(--muted)]">Visitor notes will be updated soon.</div>`;
+    }
+
+    function renderTimings() {
+      const todayName = new Date().toLocaleDateString("en-US", { weekday: "long" });
+      const specialDay = (profile.special_days || []).find((item) => item.date === new Date().toISOString().slice(0, 10));
+      if (specialDay) {
+        byId("specialDayAlert").classList.remove("hidden");
+        byId("specialDayAlert").textContent = `${specialDay.name}: ${specialDay.extended_hours || "Special darshan hours in effect"}`;
+      }
+      byId("timingsTable").innerHTML = (profile.darshan_timings || []).map((day) => `
+        <div class="rounded-[24px] ${day.day === todayName ? "bg-[color:var(--primary)]/10" : "bg-[#eef1fb]"} p-5">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <p class="text-xl font-extrabold">${day.day}</p>
+              <p class="text-sm text-[color:var(--muted)] mt-1">${day.closed ? "Closed" : `${day.open || "--"} to ${day.close || "--"}`}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              ${(day.sessions || []).map((session) => `<span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${session.label}: ${session.start}-${session.end}</span>`).join("")}
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function currentDaySchedule(dateStr) {
+      const date = dateStr ? new Date(dateStr) : new Date();
+      const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+      return (profile.darshan_timings || []).find((item) => item.day === dayName && !item.closed) || null;
+    }
+
+    async function updateBookingSlots() {
+      const selectedDate = byId("bookingDate").value;
+      try {
+        const res = await fetchWithQueue(`/api/temples/${encodeURIComponent(slug)}/slots?date=${encodeURIComponent(selectedDate)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to load booking slots");
+        bookingControlState = {
+          paused: Boolean(data.bookingPaused),
+          reason: data.reason || "",
+          resumeAt: data.resumeAt || null,
+        };
+        bookingSlots = Array.isArray(data.slots) ? data.slots : [];
+      } catch (error) {
+        const schedule = currentDaySchedule(selectedDate);
+        bookingSlots = schedule?.sessions?.length ? schedule.sessions : [];
+      }
+      byId("bookingSlot").innerHTML = bookingSlots.length
+        ? bookingSlots.map((slot) => {
+          const label = slot.label && slot.start ? `${slot.label} • ${slot.start}-${slot.end}` : `${slot.label} (${slot.start}-${slot.end})`;
+          const value = slot.key || (slot.label && slot.start ? `${slot.label} (${slot.start}-${slot.end})` : "");
+          return `<option value="${value}">${label}</option>`;
+        }).join("")
+        : `<option value="">No slots available for this date</option>`;
+      selectedBookingSlot = bookingSlots[0]?.key || "";
+      if (selectedBookingSlot) byId("bookingSlot").value = selectedBookingSlot;
+      renderBookingSlotsGrid();
+      renderBookingPauseState();
+    }
+
+    function renderBookingSlotsGrid() {
+      const selectedValue = byId("bookingSlot").value || selectedBookingSlot || "";
+      byId("bookingSlotHint").textContent = bookingSlots.length
+        ? `${bookingSlots.length} live slot${bookingSlots.length > 1 ? "s" : ""} loaded`
+        : "No live slots available for this date";
+      byId("bookingSlotsGrid").innerHTML = bookingSlots.length
+        ? bookingSlots.map((slot) => {
+          const isActive = (slot.key || "") === selectedValue;
+          const occupancy = slot.total ? Math.min(100, Math.round((Number(slot.booked || 0) / Number(slot.total || 1)) * 100)) : 0;
+          return `
+            <button
+              type="button"
+              class="slot-card ${slot.isFull ? "disabled" : ""} ${isActive ? "active" : ""} rounded-[22px] bg-[#eef1fb] p-4 text-left"
+              onclick="selectBookingSlot('${escapeHtml(slot.key || "")}')"
+            >
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p class="text-base font-extrabold">${slot.label || "Darshan"}${slot.start ? ` • ${slot.start}-${slot.end}` : ""}</p>
+                  <p class="mt-1 text-sm text-[color:var(--muted)]">${slot.isFull ? "Full" : slot.nearlyFull ? "Filling Fast" : slot.availableLabel || "Available"}</p>
+                </div>
+                <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${slot.available || 0}/${slot.total || 0}</span>
+              </div>
+              <div class="mt-4 h-2 rounded-full bg-white overflow-hidden">
+                <div class="h-full rounded-full" style="width:${occupancy}%;background:${occupancy > 84 ? '#ef4444' : occupancy > 54 ? 'var(--accent)' : 'var(--primary)'}"></div>
+              </div>
+            </button>
+          `;
+        }).join("")
+        : `<div class="rounded-[22px] bg-[#eef1fb] p-4 text-sm text-[color:var(--muted)]">No slots available for the selected date.</div>`;
+    }
+
+    function bookingUnitPrice() {
+      const type = byId("bookingTicketType").value.toLowerCase();
+      if (type === "vip") return Number(profile.entry_fee_vip || 0);
+      if (type === "child") return Number(profile.entry_fee_child || 0);
+      return Number(profile.entry_fee_general || 0);
+    }
+
+    function updateBookingTotal() {
+      byId("bookingTotal").textContent = currency(bookingUnitPrice() * Number(byId("bookingQty").value || 0));
+    }
+
+    function renderSevas() {
+      const sevas = profile.sevas || [];
+      const specialPujas = profile.special_puja_bookings || [];
+      const cards = [
+        ...sevas.map((seva) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-xl font-extrabold">${seva.name}</h4>
+                <p class="text-sm text-[color:var(--muted)] mt-2">${seva.description || "Temple seva details are updated by the admin."}</p>
+              </div>
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${currency(seva.price || 0)}</span>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${Number(seva.duration_min || 0)} min</span>
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${Number(seva.slots_per_day || 0)} slots/day</span>
+            </div>
+            <button type="button" onclick="scrollToSection('booking')" class="mt-5 rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Book via Darshan Flow</button>
+          </article>
+        `),
+        ...specialPujas.map((puja) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">Special Ceremony</p>
+                <h4 class="text-xl font-extrabold mt-2">${puja.name}</h4>
+                <p class="text-sm text-[color:var(--muted)] mt-2">Premium puja or ceremony booking configured by the temple admin.</p>
+              </div>
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${currency(puja.fee || 0)}</span>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${Number(puja.duration_min || 0)} min</span>
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${Number(puja.max_participants || 1)} participants</span>
+            </div>
+            <button type="button" onclick="scrollToSection('booking')" class="mt-5 rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Request Booking</button>
+          </article>
+        `),
+      ];
+      byId("sevasGrid").innerHTML = cards.length
+        ? cards.join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">No sevas are published yet for this temple.</div>`;
+    }
+
+    function renderPrasadam() {
+      const open = profile.prasadam_counter_open;
+      byId("prasadamStatus").textContent = open ? "Counter Open" : "Counter Closed";
+      byId("prasadamGrid").innerHTML = (profile.prasadam_items || []).length
+        ? profile.prasadam_items.map((item, index) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" class="w-full h-40 object-cover rounded-[22px]" />` : ""}
+            <div class="mt-4 flex items-start justify-between gap-4">
+              <div>
+                <h4 class="text-xl font-extrabold">${item.name}</h4>
+                <p class="text-sm text-[color:var(--muted)] mt-2">${item.unit || "Temple pack"}</p>
+              </div>
+              <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${currency(item.price || 0)}</span>
+            </div>
+            <div class="mt-5 flex items-center justify-between gap-3">
+              <span class="text-sm font-semibold">${item.available === false ? "Currently unavailable" : "Available"}</span>
+              <button type="button" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine" onclick="addToCart(${index})" ${item.available === false ? "disabled" : ""}>Add to Cart</button>
+            </div>
+          </article>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">No prasadam items have been published yet.</div>`;
+      renderCart();
+    }
+
+    function addToCart(index) {
+      const item = profile.prasadam_items[index];
+      if (!item) return;
+      const existing = cart.find((entry) => entry.name === item.name);
+      if (existing) existing.qty += 1;
+      else cart.push({ name: item.name, qty: 1, price: Number(item.price || 0), unit: item.unit || "" });
+      renderCart();
+      showToast(`${item.name} added to cart.`, "success");
+    }
+
+    function renderCart() {
+      if (!cart.length) {
+        byId("cartItems").innerHTML = `<div class="rounded-[20px] bg-[#eef1fb] p-4 text-[color:var(--muted)]">Your prasadam cart is empty.</div>`;
+        byId("cartTotal").textContent = currency(0);
+        return;
+      }
+      byId("cartItems").innerHTML = cart.map((item, index) => `
+        <div class="rounded-[20px] bg-[#eef1fb] p-4 flex items-center justify-between gap-3">
+          <div>
+            <p class="font-semibold">${item.name}</p>
+            <p class="text-xs text-[color:var(--muted)] mt-1">${item.unit || "Temple pack"}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button type="button" class="rounded-full bg-white w-8 h-8 shadow-divine" onclick="changeCartQty(${index}, -1)">-</button>
+            <span class="font-semibold">${item.qty}</span>
+            <button type="button" class="rounded-full bg-white w-8 h-8 shadow-divine" onclick="changeCartQty(${index}, 1)">+</button>
+          </div>
+        </div>
+      `).join("");
+      byId("cartTotal").textContent = currency(cart.reduce((sum, item) => sum + item.qty * item.price, 0));
+    }
+
+    function changeCartQty(index, delta) {
+      if (!cart[index]) return;
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      renderCart();
+    }
+
+    function renderReach() {
+      const address = [profile.address_line1, profile.address_line2, profile.city, profile.state, profile.pincode, profile.country].filter(Boolean).join(", ");
+      byId("reachAddress").textContent = address || "Temple address will be updated soon.";
+      byId("reachRail").textContent = profile.nearest_railway ? `Nearest rail: ${profile.nearest_railway}` : "Nearest rail information will be updated.";
+      byId("reachBus").textContent = profile.nearest_bus_stop ? `Nearest bus stop: ${profile.nearest_bus_stop}` : "Nearest bus stop information will be updated.";
+      byId("reachAirport").textContent = profile.nearest_airport ? `Nearest airport: ${profile.nearest_airport}` : "Nearest airport information will be updated.";
+      byId("mapsLink").href = profile.google_maps_url || `https://www.google.com/maps?q=${profile.latitude},${profile.longitude}`;
+      byId("streetViewLink").href = profile.latitude && profile.longitude
+        ? `https://www.google.com/maps?q=&layer=c&cbll=${profile.latitude},${profile.longitude}`
+        : byId("mapsLink").href;
+      byId("copyAddressBtn").onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(address || byId("mapsLink").href);
+          showToast("Temple address copied.", "success");
+        } catch (error) {
+          showToast("Unable to copy address right now.", "error");
+        }
+      };
+      initTempleMap();
+    }
+
+    function renderBookingPauseState() {
+      const banner = byId("bookingPauseBanner");
+      const bookingButton = byId("bookingForm").querySelector('button[type="submit"]');
+      const bookingDisabled = Boolean(bookingControlState.paused || profile?.booking_enabled === false);
+
+      banner.classList.add("hidden");
+      if (bookingDisabled) {
+        banner.classList.remove("hidden");
+        banner.className = "surface-card rounded-[24px] p-5 bg-rose-50 text-rose-700";
+        banner.innerHTML = `
+          <p class="text-xs uppercase tracking-[0.24em] font-bold">Booking Temporarily Paused</p>
+          <p class="mt-2 text-sm">${bookingControlState.reason || (profile?.booking_enabled === false ? "This temple has not enabled online bookings yet." : "Bookings are temporarily unavailable.")}${bookingControlState.resumeAt ? ` Resumes: ${formatResumeDate(bookingControlState.resumeAt)}.` : ""}</p>
+        `;
+      }
+
+      bookingButton.disabled = bookingDisabled;
+      bookingButton.classList.toggle("opacity-60", bookingDisabled);
+      bookingButton.textContent = bookingDisabled ? "Booking Paused" : "Confirm Booking";
+    }
+
+    function bindBookingControlStream() {
+      if (!window.EventSource) return;
+      const stream = new EventSource("/api/admin/booking-control/stream");
+      stream.addEventListener("booking-control", (event) => {
+        try {
+          const payload = JSON.parse(event.data);
+          bookingControlState = payload.state || bookingControlState;
+          renderBookingPauseState();
+        } catch (error) {}
+      });
+    }
+
+    async function fetchBookingControlState() {
+      try {
+        const res = await fetch("/api/admin/booking-control");
+        const data = await res.json();
+        if (res.ok) {
+          bookingControlState = {
+            paused: Boolean(data.paused),
+            reason: data.reason || "",
+            resumeAt: data.resumeAt || null,
+          };
+        }
+      } catch (error) {}
+    }
+
+    async function loadNearbyTemples() {
+      try {
+        const res = await fetch("/api/temples/map");
+        const data = await res.json();
+        if (res.ok) nearbyTemples = (data.temples || []).filter((item) => item.slug !== slug);
+      } catch (error) {
+        nearbyTemples = [];
+      }
+    }
+
+    function initTempleMap() {
+      const lat = Number(profile?.latitude);
+      const lng = Number(profile?.longitude);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng) || typeof L === "undefined") return;
+
+      if (!templeMap) {
+        templeMap = L.map("leafletMap");
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(templeMap);
+        nearbyLayer = L.layerGroup().addTo(templeMap);
+        byId("expandMapBtn").addEventListener("click", () => {
+          templeMap.invalidateSize();
+          byId("leafletMap").scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+      }
+
+      templeMap.setView([lat, lng], 14);
+      if (!templeMarker) {
+        templeMarker = L.marker([lat, lng]).addTo(templeMap);
+      } else {
+        templeMarker.setLatLng([lat, lng]);
+      }
+      templeMarker.bindPopup(`<strong>${profile.temple_name}</strong><br>${[profile.city, profile.state].filter(Boolean).join(", ")}`).openPopup();
+
+      nearbyLayer.clearLayers();
+      nearbyTemples
+        .filter((item) => Number.isFinite(Number(item.latitude)) && Number.isFinite(Number(item.longitude)))
+        .forEach((item) => {
+          L.circleMarker([Number(item.latitude), Number(item.longitude)], {
+            radius: 7,
+            color: item.primary_color || "#4c56af",
+            fillColor: item.primary_color || "#4c56af",
+            fillOpacity: 0.85,
+          })
+            .bindPopup(`<strong>${item.name || item.temple_name}</strong><br>${item.deity ? `${item.deity}<br>` : ""}${[item.city, item.state].filter(Boolean).join(", ")}<br><a href="/temple/${item.slug}" target="_blank">Open microsite</a>`)
+            .addTo(nearbyLayer);
+        });
+    }
+
+    function renderFacilities() {
+      const names = {
+        parking: "Parking",
+        ev_charging: "EV Charging",
+        cloak_room: "Cloak Room",
+        wheelchair: "Wheelchair Access",
+        annadanam: "Annadanam",
+        accommodation: "Accommodation",
+        medical: "Medical Aid",
+        atm: "ATM",
+        drinking_water: "Drinking Water",
+        restrooms: "Restrooms",
+        devadasimath: "Devasthanam Math"
+      };
+      const facilities = profile.facilities || {};
+      const keys = Object.keys(names);
+      byId("facilitiesBadges").innerHTML = keys.length
+        ? keys.map((key) => {
+          const enabled = Boolean(facilities[key]);
+          return `<div class="rounded-[24px] ${enabled ? "bg-[#eef1fb] text-[color:var(--ink)]" : "bg-slate-100 text-slate-400 line-through"} p-5 font-semibold">${names[key] || key}</div>`;
+        }).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">Facility details will be updated by the temple shortly.</div>`;
+      if (Array.isArray(profile.service_languages) && profile.service_languages.length) {
+        byId("facilitiesBadges").insertAdjacentHTML("beforeend", `<div class="rounded-[24px] bg-white p-5 md:col-span-2 xl:col-span-4"><p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">Languages of Prayer</p><div class="mt-4 flex flex-wrap gap-2">${profile.service_languages.map((item) => `<span class="rounded-full bg-[#eef1fb] px-3 py-2 text-xs font-bold shadow-divine">${escapeHtml(item)}</span>`).join("")}</div></div>`);
+      }
+    }
+
+    function renderParkingLayout() {
+      const container = byId("parkingZonesContainer");
+      if (!container) return;
+
+      initParkingLayout();
+      const pKey = `dd_parking_reservations:${slug}`;
+      const layout = JSON.parse(localStorage.getItem(pKey)) || profile.parking_layout || { zones: [] };
+
+      if (!layout.zones || !layout.zones.length) {
+        container.innerHTML = `
+          <div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">
+            No real-time parking slot details are configured for this temple yet.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = layout.zones.map((zone) => {
+        const slots = zone.slots || [];
+        const cols = Number(zone.cols || 6);
+        const rows = Number(zone.rows || 4);
+        
+        // Calculate dynamic zone metrics
+        const total = slots.length;
+        const available = slots.filter(s => s.status === 'available').length;
+        const occupied = slots.filter(s => s.status === 'occupied').length;
+        const reserved = slots.filter(s => s.status === 'reserved').length;
+        const ev = slots.filter(s => s.status === 'ev').length;
+
+        // Render slots in a grid layout
+        const slotGridHtml = Array.from({ length: total }).map((_, index) => {
+          const slot = slots[index];
+          if (!slot) return '';
+          
+          let statusBg = 'bg-emerald-500 text-white';
+          let statusSymbol = '';
+          if (slot.status === 'occupied') {
+            statusBg = 'bg-rose-500 text-white';
+          } else if (slot.status === 'reserved') {
+            statusBg = 'bg-blue-500 text-white';
+          } else if (slot.status === 'ev') {
+            statusBg = 'bg-amber-400 text-white font-bold';
+            statusSymbol = '⚡';
+          }
+
+          let icon = '🚗';
+          if (slot.type === 'bike') icon = '🏍️';
+          else if (slot.type === 'ev') icon = '⚡';
+
+          return `
+            <div onclick="handleParkingSlotClick('${escapeHtml(zone.name)}', '${escapeHtml(slot.id)}')" class="flex flex-col items-center justify-between p-3 rounded-2xl bg-white border border-slate-200/50 shadow-divine relative hover:translate-y-[-2px] transition-all duration-200 cursor-pointer" title="${slot.label || slot.id} (${slot.status})">
+              <span class="text-xl mb-1">${icon}</span>
+              <span class="text-[10px] font-black uppercase text-slate-400">${slot.id}</span>
+              <span class="mt-2 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${statusBg}">
+                ${statusSymbol}${slot.status}
+              </span>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="rounded-[28px] bg-slate-50 border border-slate-200/50 p-6 shadow-sm">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-200/60 pb-4 mb-6">
+              <div>
+                <h4 class="text-xl font-extrabold text-slate-800">${escapeHtml(zone.name)}</h4>
+                <p class="text-xs text-slate-500 mt-1">Grid dimensions: ${rows} rows × ${cols} columns</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="rounded-full bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 px-3 py-1.5 text-xs font-bold">
+                  ${available} Available
+                </span>
+                <span class="rounded-full bg-rose-50 text-rose-700 ring-1 ring-inset ring-rose-600/20 px-3 py-1.5 text-xs font-bold">
+                  ${occupied} Occupied
+                </span>
+                <span class="rounded-full bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20 px-3 py-1.5 text-xs font-bold">
+                  ${reserved} Reserved
+                </span>
+                <span class="rounded-full bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-600/20 px-3 py-1.5 text-xs font-bold">
+                  ${ev} EV Active
+                </span>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              ${slotGridHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDonations() {
+      byId("donationUpi").textContent = profile.donation_upi_id ? `UPI: ${profile.donation_upi_id}` : "UPI details will be available soon.";
+      byId("donationBank").textContent = profile.donation_bank_name ? `Bank: ${profile.donation_bank_name} • A/C ${profile.donation_account_no || "-"}` : "";
+      byId("donationIfsc").textContent = profile.donation_ifsc ? `IFSC: ${profile.donation_ifsc}` : "";
+      const causes = profile.donation_causes || [];
+      byId("donationCause").innerHTML = causes.length
+        ? causes.map((cause) => `<option value="${cause.name}">${cause.name}</option>`).join("")
+        : `<option value="">General Temple Donation</option>`;
+      byId("causeCards").innerHTML = causes.length
+        ? causes.map((cause) => {
+          const target = Number(cause.target_amount || 0);
+          const raised = Number(cause.raised || 0);
+          const pct = target ? Math.min(100, Math.round((raised / target) * 100)) : 0;
+          return `
+            <div class="rounded-[24px] bg-[#eef1fb] p-5">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h4 class="text-xl font-extrabold">${cause.name}</h4>
+                  <p class="text-sm text-[color:var(--muted)] mt-2">${currency(raised)} raised${target ? ` of ${currency(target)}` : ""}</p>
+                </div>
+                <span class="rounded-full bg-white px-3 py-2 text-xs font-bold shadow-divine">${pct}%</span>
+              </div>
+              <div class="mt-4 h-3 rounded-full bg-white overflow-hidden">
+                <div class="h-full rounded-full" style="width:${pct}%;background:linear-gradient(90deg,var(--primary),var(--secondary));"></div>
+              </div>
+            </div>
+          `;
+        }).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">General donations are currently accepted by the temple.</div>`;
+    }
+
+    function renderEvents() {
+      const events = [...(profile.events || [])].sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+      const festivals = profile.major_annual_festivals || [];
+      const weeklyPrayers = profile.weekly_special_prayers || [];
+      const notes = profile.special_events_text;
+      const cards = [
+        ...festivals.map((festival) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            <p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">${festival.month || "Annual Festival"}</p>
+            <h4 class="text-2xl font-extrabold mt-2">${festival.name || "Temple Festival"}</h4>
+            <p class="text-sm text-[color:var(--muted)] mt-3">Recurring annual celebration highlighted by the temple administration.</p>
+          </article>
+        `),
+        ...weeklyPrayers.map((prayer) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            <p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">${prayer.day || "Weekly Prayer"}</p>
+            <h4 class="text-2xl font-extrabold mt-2">${prayer.time || "Temple Service"}</h4>
+            <p class="text-sm text-[color:var(--muted)] mt-3">Weekly special prayer or service scheduled on the temple calendar.</p>
+          </article>
+        `),
+        ...(notes ? [`
+          <article class="rounded-[24px] bg-[#eef1fb] p-5 md:col-span-2 xl:col-span-3">
+            <p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">Special Events Notes</p>
+            <p class="text-sm text-[color:var(--muted)] mt-3 leading-7">${notes}</p>
+          </article>
+        `] : []),
+        ...events.map((event) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            ${event.image_url ? `<img src="${event.image_url}" alt="${event.title}" class="w-full h-44 object-cover rounded-[22px]" />` : ""}
+            <p class="mt-4 text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">${event.date || "Upcoming"}</p>
+            <h4 class="text-2xl font-extrabold mt-2">${event.title}</h4>
+            <p class="text-sm text-[color:var(--muted)] mt-3">${event.description || "Temple event details will be shared soon."}</p>
+          </article>
+        `),
+      ];
+      byId("eventsGrid").innerHTML = cards.length
+        ? cards.join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">No events have been published yet.</div>`;
+    }
+
+    function renderSpecialPujas() {
+      const pujas = profile.special_puja_bookings || [];
+      byId("specialPujasGrid").innerHTML = pujas.length
+        ? pujas.map((puja, index) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            <p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">Temple Ceremony</p>
+            <h4 class="text-2xl font-extrabold mt-2">${puja.name || `Special Puja ${index + 1}`}</h4>
+            <div class="mt-4 grid gap-2 text-sm text-[color:var(--muted)]">
+              <p>Duration: ${Number(puja.duration_min || 0)} minutes</p>
+              <p>Fee: ${currency(puja.fee || 0)}</p>
+              <p>Max Participants: ${Number(puja.max_participants || 1)}</p>
+            </div>
+            <button type="button" class="mt-5 rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine" onclick="prefillSpecialPuja(${index})">Book This Puja</button>
+          </article>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">No special pujas are configured for this temple yet.</div>`;
+    }
+
+    function renderGallery() {
+      const images = [profile.hero_image_url, ...(profile.gallery_urls || [])].filter(Boolean);
+      lightboxImages = images;
+      byId("galleryMasonry").innerHTML = images.length
+        ? images.map((src, index) => `<img src="${src}" alt="" class="w-full rounded-[24px] shadow-divine cursor-pointer" onclick="openGalleryLightbox(${index})" loading="lazy" />`).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">Gallery uploads will appear here.</div>`;
+    }
+
+    function renderFaqs() {
+      byId("faqAccordion").innerHTML = (profile.faqs || []).length
+        ? profile.faqs.map((faq) => `
+          <details class="rounded-[24px] bg-[#eef1fb] p-5">
+            <summary class="cursor-pointer list-none flex items-center justify-between gap-4">
+              <span class="font-semibold">${faq.question}</span>
+              <span class="material-symbols-outlined">expand_more</span>
+            </summary>
+            <p class="mt-4 text-sm leading-7 text-[color:var(--muted)]">${faq.answer}</p>
+          </details>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">Temple FAQs will be published soon.</div>`;
+    }
+
+    function renderLive() {
+      const hasStream = Boolean(profile.live_stream_url);
+      const liveEnabled = profile.features_enabled?.live_crowd;
+      byId("liveSectionContent").innerHTML = `
+        ${hasStream ? `<iframe src="${profile.live_stream_url}" class="w-full min-h-[360px] rounded-[24px]" loading="lazy" title="Temple live stream"></iframe>` : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">Live stream link not available yet.</div>`}
+        <div class="rounded-[24px] bg-[#eef1fb] p-5">
+          <p class="text-sm font-semibold">Crowd watch</p>
+          <p class="mt-2 text-sm text-[color:var(--muted)]">${liveEnabled ? `${Math.max(20, Number(profile.total_bookings || 0))} recent temple interactions are reflected in the live badge.` : "Live crowd tracking is not enabled for this temple yet."}</p>
+        </div>
+      `;
+    }
+
+    function renderVirtualTour() {
+      byId("virtualTourContent").innerHTML = profile.virtual_tour_url
+        ? `<iframe src="${profile.virtual_tour_url}" class="w-full min-h-[420px] rounded-[24px]" loading="lazy" title="Temple virtual tour"></iframe>`
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">Virtual tour will be added by the temple admin when available.</div>`;
+    }
+
+    function renderContact() {
+      byId("contactCopy").innerHTML = `
+        <p>${profile.admin_phone ? `Phone: ${profile.admin_phone}` : "Phone details will be published by the temple admin."}</p>
+        <p>${profile.admin_email ? `Email: ${profile.admin_email}` : "Email details will be published by the temple admin."}</p>
+        <p>${profile.website_url ? `Website: ${profile.website_url}` : "Temple website not added yet."}</p>
+      `;
+      const links = [
+        ["Facebook", profile.social_facebook],
+        ["Instagram", profile.social_instagram],
+        ["YouTube", profile.social_youtube]
+      ].filter(([, value]) => value);
+      byId("socialLinks").innerHTML = links.length
+        ? links.map(([label, value]) => `<a href="${/^https?:\/\//i.test(value) ? value : `https://${value}`}" target="_blank" class="rounded-full bg-white px-4 py-3 text-sm font-semibold text-[color:var(--primary)] shadow-divine">${label}</a>`).join("")
+        : `<p class="text-sm text-[color:var(--muted)]">Social links will be added by the temple admin.</p>`;
+    }
+
+    function renderReviews() {
+      const baseReviews = [
+        {
+          id: "seed-1",
+          name: "Pilgrim Visitor",
+          rating: 5,
+          text: `A calm and well-managed visit to ${profile.temple_name}. The timings, directions, and facilities were clearly presented.`,
+          created_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+        },
+        {
+          id: "seed-2",
+          name: "Devotee Family",
+          rating: 4,
+          text: "Smooth entry and temple details were easy to follow. Booking and planning felt much clearer before arrival.",
+          created_at: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
+        },
+      ];
+      const stored = loadStoredReviews();
+      let reviews = [...baseReviews, ...stored];
+      if (activeReviewFilter) reviews = reviews.filter((review) => Number(review.rating) === Number(activeReviewFilter));
+      const sortValue = byId("reviewSort")?.value || "recent";
+      reviews.sort((left, right) => {
+        if (sortValue === "highest") return Number(right.rating || 0) - Number(left.rating || 0);
+        if (sortValue === "lowest") return Number(left.rating || 0) - Number(right.rating || 0);
+        return new Date(right.created_at).getTime() - new Date(left.created_at).getTime();
+      });
+
+      const allReviews = [...baseReviews, ...stored];
+      const average = allReviews.length
+        ? (allReviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / allReviews.length).toFixed(1)
+        : "0.0";
+      byId("reviewAverage").textContent = average;
+      byId("reviewCountLabel").textContent = `${allReviews.length} review${allReviews.length === 1 ? "" : "s"} for this temple page`;
+      byId("reviewBreakdown").innerHTML = [5, 4, 3, 2, 1].map((star) => {
+        const count = allReviews.filter((review) => Number(review.rating) === star).length;
+        const pct = allReviews.length ? Math.round((count / allReviews.length) * 100) : 0;
+        return `
+          <button type="button" onclick="filterReviews(${star})" class="grid grid-cols-[56px_1fr_42px] items-center gap-3 text-left">
+            <span class="text-sm font-semibold">${star}★</span>
+            <span class="h-2 rounded-full bg-white overflow-hidden"><span class="block h-full rounded-full" style="width:${pct}%;background:linear-gradient(90deg,var(--primary),var(--accent));"></span></span>
+            <span class="text-xs font-semibold text-[color:var(--muted)]">${pct}%</span>
+          </button>
+        `;
+      }).join("");
+      byId("reviewsGrid").innerHTML = reviews.length
+        ? reviews.map((review) => `
+          <article class="rounded-[24px] bg-[#eef1fb] p-5">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p class="font-extrabold">${escapeHtml(review.name || "Temple Visitor")}</p>
+                <p class="mt-1 text-xs text-[color:var(--muted)]">${new Date(review.created_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
+              </div>
+              <div class="review-star text-sm">${"★".repeat(Number(review.rating || 0))}${"☆".repeat(Math.max(0, 5 - Number(review.rating || 0)))}</div>
+            </div>
+            <p class="mt-4 text-sm leading-7 text-[color:var(--ink)]">${escapeHtml(review.text || "")}</p>
+          </article>
+        `).join("")
+        : `<div class="rounded-[24px] bg-[#eef1fb] p-6 text-sm text-[color:var(--muted)]">No reviews match the current filter yet.</div>`;
+    }
+
+    function openGalleryLightbox(index) {
+      if (!lightboxImages.length) return;
+      lightboxIndex = Math.max(0, Math.min(lightboxImages.length - 1, Number(index || 0)));
+      const src = lightboxImages[lightboxIndex];
+      byId("lightboxImage").src = src;
+      byId("lightboxDownload").href = src;
+      byId("lightboxCounter").textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+      byId("galleryLightbox").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeGalleryLightbox() {
+      byId("galleryLightbox").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    function shiftGalleryLightbox(delta) {
+      if (!lightboxImages.length) return;
+      lightboxIndex = (lightboxIndex + delta + lightboxImages.length) % lightboxImages.length;
+      openGalleryLightbox(lightboxIndex);
+    }
+
+    function renderAdminBadge() {
+      const token = sessionStorage.getItem(authKey);
+      if (!token) return;
+      byId("adminBadge").classList.remove("hidden");
+      byId("adminBadge").href = `/temple/${slug}/admin`;
+    }
+
+    function selectBookingSlot(value) {
+      selectedBookingSlot = value;
+      byId("bookingSlot").value = value;
+      renderBookingSlotsGrid();
+    }
+
+    function prefillSpecialPuja(index) {
+      scrollToSection("booking");
+      const puja = (profile.special_puja_bookings || [])[index];
+      if (!puja) return;
+      const hint = byId("bookingSlotHint");
+      if (hint) hint.textContent = `Special puja selected: ${puja.name}. Choose a live slot to continue.`;
+    }
+
+    function filterReviews(star) {
+      activeReviewFilter = activeReviewFilter === star ? 0 : star;
+      renderReviews();
+    }
+
+    async function cancelTempleBooking(bookingId) {
+      if (!bookingId) return;
+      const confirmed = window.confirm("Cancel this temple booking?");
+      if (!confirmed) return;
+      try {
+        const res = await fetch(`/api/booking/${encodeURIComponent(bookingId)}`, { method: "DELETE" });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to cancel booking");
+        byId("bookingConfirmation").innerHTML = `<div class="w-full text-left"><p class="text-xs uppercase tracking-[0.22em] font-bold text-rose-600">Booking Cancelled</p><h4 class="text-2xl font-extrabold mt-2">${bookingId}</h4><p class="mt-4 text-sm text-[color:var(--muted)]">The booking has been cancelled and seat availability has been restored.</p></div>`;
+        await updateBookingSlots();
+        showToast("Booking cancelled.", "success");
+      } catch (error) {
+        showToast(error.message, "error");
+      }
+    }
+
+    async function handleBookingSubmit(event) {
+      event.preventDefault();
+      try {
+        if (bookingControlState.paused) {
+          throw new Error(bookingControlState.reason || "Booking is temporarily paused.");
+        }
+        const payload = {
+          visit_date: byId("bookingDate").value,
+          slot: byId("bookingSlot").value,
+          ticket_type: byId("bookingTicketType").value,
+          qty: Number(byId("bookingQty").value || 1),
+          phone: byId("bookingPhone").value,
+          source: "Temple Microsite"
+        };
+        const res = await fetchWithQueue(`/api/temple/${slug}/bookings`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Booking failed");
+        byId("bookingConfirmation").innerHTML = `
+          <div class="w-full text-left">
+            <p class="text-xs uppercase tracking-[0.22em] font-bold text-[color:var(--primary)]">Temple Ticket Confirmed</p>
+            <h4 class="text-2xl font-extrabold mt-2">${data.id}</h4>
+            <div class="grid gap-2 mt-4 text-sm">
+              <p><span class="font-semibold">Temple:</span> ${profile.temple_name}</p>
+              <p><span class="font-semibold">Date:</span> ${data.visit_date || "-"}</p>
+              <p><span class="font-semibold">Slot:</span> ${data.slot || "-"}</p>
+              <p><span class="font-semibold">Type:</span> ${data.ticket_type}</p>
+              <p><span class="font-semibold">Qty:</span> ${data.qty}</p>
+              <p><span class="font-semibold">Total:</span> ${currency(data.total_amount)}</p>
+              <p><span class="font-semibold">Address:</span> ${data.temple_address || "-"}</p>
+            </div>
+            <img src="${data.qr_code_url}" alt="Ticket QR" class="w-44 h-44 rounded-[24px] bg-white p-3 mt-5 shadow-divine" />
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="/booking/${data.id}" target="_blank" class="rounded-xl bg-[color:var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-divine">Download Ticket</a>
+              <button type="button" onclick="cancelTempleBooking('${data.id}')" class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[color:var(--primary)] shadow-divine">Cancel Booking</button>
+            </div>
+          </div>
+        `;
+        await updateBookingSlots();
+        // Push ticket into admin queue so it appears in Admin Console immediately
+        const adminQueueKey = `dd_admin_bookings:${slug}`;
+        const adminQueue = JSON.parse(localStorage.getItem(adminQueueKey) || "[]");
+        adminQueue.unshift({
+          id: data.id,
+          phone: byId("bookingPhone").value || "—",
+          type: (data.ticket_type || "General").charAt(0).toUpperCase() + (data.ticket_type || "General").slice(1),
+          date: data.visit_date || new Date().toISOString().slice(0,10),
+          slot: data.slot || "—",
+          qty: data.qty || 1,
+          status: "Pending",
+          ts: Date.now()
+        });
+        localStorage.setItem(adminQueueKey, JSON.stringify(adminQueue.slice(0, 200)));
+        showToast("Temple booking confirmed.", "success");
+      } catch (error) {
+        showToast(error.message, "error");
+      }
+    }
+
+    async function placePrasadamOrder() {
+      if (!cart.length) return showToast("Add at least one prasadam item to the cart.", "error");
+      try {
+        const res = await fetchWithQueue(`/api/temple/${slug}/prasadam/order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            items: cart,
+            phone: byId("prasadamPhone").value,
+            pickup_slot: byId("prasadamPickupSlot").value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Prasadam order failed");
+        cart = [];
+        renderCart();
+        byId("prasadamConfirmation").textContent = `Order ${data.id} placed successfully for ${currency(data.total)}. Status: ${data.status}.`;
+        showToast("Prasadam order placed.", "success");
+      } catch (error) {
+        showToast(error.message, "error");
+      }
+    }
+
+    async function handleDonationSubmit(event) {
+      event.preventDefault();
+      try {
+        const res = await fetchWithQueue(`/api/temple/${slug}/donation`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            donor_name: byId("donorName").value,
+            cause: byId("donationCause").value,
+            amount: Number(byId("donationAmount").value || 0),
+            payment_ref: byId("paymentRef").value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Donation failed");
+        byId("donationConfirmation").textContent = `Donation recorded. Receipt ${data.id} • ${currency(data.amount)} toward ${data.cause || "Temple Donation"}.`;
+        showToast("Donation recorded successfully.", "success");
+      } catch (error) {
+        showToast(error.message, "error");
+      }
+    }
+
+    async function generateTravelPlan() {
+      try {
+        byId("travelOutput").innerHTML = `<div class="skeleton h-52 rounded-[24px]"></div>`;
+        const res = await fetch("/api/travel/plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            templeKey: slug,
+            templeName: profile.temple_name,
+            date: byId("travelDate").value,
+            timeOfDay: byId("travelTime").value,
+            pilgrims: Number(byId("travelPilgrims").value || 2),
+            budget: "mid",
+            nights: 1,
+            origin: byId("travelOrigin").value,
+            extraStops: [],
+            special: {}
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to generate travel plan");
+        const itinerary = Array.isArray(data.itinerary) ? data.itinerary : [];
+        byId("travelOutput").innerHTML = `
+          <div class="grid gap-4 text-sm">
+            <div class="rounded-[20px] bg-white p-4 shadow-divine">
+              <p class="font-semibold text-[color:var(--primary)]">Summary</p>
+              <p class="mt-2 text-[color:var(--ink)]">${data.summary || "Travel plan generated."}</p>
+            </div>
+            ${itinerary.map((item) => `
+              <div class="rounded-[20px] bg-white p-4 shadow-divine">
+                <p class="font-semibold">${item.time}</p>
+                <p class="mt-2 text-[color:var(--ink)]">${item.activity}</p>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      } catch (error) {
+        byId("travelOutput").textContent = error.message;
+      }
+    }
+
+    /* =====================================================================
+       DONATION PRESET & UPI CHECKOUT ENGINE
+       ===================================================================== */
+    let _upiTimerInterval = null;
+
+    function setDonationAmount(amount, buttonEl) {
+      byId("donationAmount").value = amount;
+      document.querySelectorAll(".preset-amt-btn").forEach((btn) => {
+        btn.classList.remove("border-[color:var(--primary)]", "bg-[color:var(--primary)]/10", "text-[color:var(--primary)]");
+      });
+      if (buttonEl) {
+        buttonEl.classList.add("border-[color:var(--primary)]", "bg-[color:var(--primary)]/10", "text-[color:var(--primary)]");
+      }
+    }
+
+    function openUpiDonationModal() {
+      const amount = Number(byId("donationAmount").value || 0);
+      const cause = byId("donationCause").value || "General Temple Donation";
+      const donorName = byId("donorName").value || "Anonymous Devotee";
+      if (!amount || amount < 1) {
+        showToast("Please select or enter a donation amount.", "error");
+        return;
+      }
+      const upiId = profile.donation_upi_id || "divyadarshan@upi";
+      const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(profile.temple_name || 'Temple')}&am=${amount}&cu=INR&tn=${encodeURIComponent(cause)}`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=${encodeURIComponent(upiUri)}`;
+      byId("upiModalAmount").textContent = `₹${Number(amount).toLocaleString("en-IN")}`;
+      byId("upiModalCause").textContent = `Toward: ${cause}`;
+      byId("upiQrImg").src = qrUrl;
+      byId("upiCheckoutModal").classList.remove("hidden");
+      byId("upiCheckoutModal").querySelector("div").classList.add("scale-100");
+      byId("upiCheckoutModal").dataset.amount = amount;
+      byId("upiCheckoutModal").dataset.cause = cause;
+      byId("upiCheckoutModal").dataset.donorName = donorName;
+      // Start 2-minute countdown
+      clearInterval(_upiTimerInterval);
+      let seconds = 120;
+      const timerEl = byId("upiTimer");
+      function tick() {
+        const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const s = String(seconds % 60).padStart(2, "0");
+        if (timerEl) timerEl.textContent = `${m}:${s}`;
+        if (seconds <= 0) {
+          clearInterval(_upiTimerInterval);
+          closeUpiDonationModal();
+          showToast("UPI session expired. Please try again.", "error");
+        }
+        seconds--;
+      }
+      tick();
+      _upiTimerInterval = setInterval(tick, 1000);
+    }
+
+    function closeUpiDonationModal() {
+      clearInterval(_upiTimerInterval);
+      byId("upiCheckoutModal").classList.add("hidden");
+    }
+
+    function simulateUpiSuccess() {
+      clearInterval(_upiTimerInterval);
+      const modal = byId("upiCheckoutModal");
+      const amount = Number(modal.dataset.amount || 0);
+      const cause = modal.dataset.cause || "General Temple Donation";
+      const donorName = modal.dataset.donorName || "Anonymous Devotee";
+      closeUpiDonationModal();
+      // Generate reference & date
+      const ref = "UTR" + Date.now().toString().slice(-10);
+      const dateStr = new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+      // Populate receipt fields
+      byId("receiptTempleName").textContent = profile.temple_name || "Temple";
+      byId("receiptDonor").textContent = donorName;
+      byId("receiptCause").textContent = cause;
+      byId("receiptAmount").textContent = `₹${Number(amount).toLocaleString("en-IN")}`;
+      byId("receiptRef").textContent = ref;
+      byId("receiptDate").textContent = dateStr;
+      // Persist donation locally
+      const dKey = `dd_donations:${slug}`;
+      const donations = JSON.parse(localStorage.getItem(dKey) || "[]");
+      donations.unshift({ id: ref, donor: donorName, amount, cause, date: dateStr });
+      localStorage.setItem(dKey, JSON.stringify(donations.slice(0, 100)));
+      // Update admin KPI if session active
+      updateAdminDashboardData();
+      // Show success modal
+      byId("donationSuccessModal").classList.remove("hidden");
+      startConfetti();
+      byId("donationConfirmation").textContent = `Donation recorded! Receipt ${ref} • ₹${Number(amount).toLocaleString("en-IN")} toward ${cause}.`;
+      byId("donationForm").reset();
+      document.querySelectorAll(".preset-amt-btn").forEach(b => b.classList.remove("border-[color:var(--primary)]", "bg-[color:var(--primary)]/10", "text-[color:var(--primary)]"));
+      showToast("Jai Shri! Your offering has been recorded.", "success");
+    }
+
+    function closeSuccessModal() {
+      byId("donationSuccessModal").classList.add("hidden");
+      stopConfetti();
+    }
+
+    function downloadReceipt() {
+      const name = byId("receiptDonor").textContent;
+      const cause = byId("receiptCause").textContent;
+      const amount = byId("receiptAmount").textContent;
+      const ref = byId("receiptRef").textContent;
+      const date = byId("receiptDate").textContent;
+      const temple = byId("receiptTempleName").textContent;
+      const content = [
+        "============================================",
+        "         DIVYA DARSHAN - DIVINE E-RECEIPT",
+        "============================================",
+        `Temple:     ${temple}`,
+        `Donor:      ${name}`,
+        `Cause:      ${cause}`,
+        `Amount:     ${amount}`,
+        `UTR/Ref:    ${ref}`,
+        `Date:       ${date}`,
+        "--------------------------------------------",
+        "Section 80G Tax Exemption Certified.",
+        "Exemption details will be communicated via",
+        "your registered credentials.",
+        "============================================",
+        "         Divya Darshan Platform",
+        "============================================"
+      ].join("\n");
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `DivyaDarshan_Receipt_${ref}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    /* =====================================================================
+       VANILLA CANVAS CONFETTI ENGINE
+       ===================================================================== */
+    let _confettiFrame = null;
+    let _confettiParticles = [];
+
+    function startConfetti() {
+      const canvas = byId("successConfettiCanvas");
+      if (!canvas) return;
+      canvas.width = canvas.offsetWidth || window.innerWidth;
+      canvas.height = canvas.offsetHeight || window.innerHeight;
+      const ctx = canvas.getContext("2d");
+      const colors = ["#f59e0b","#fbbf24","#f97316","#10b981","#6366f1","#ec4899","#a78bfa","#34d399"];
+      _confettiParticles = Array.from({ length: 110 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 5,
+        h: Math.random() * 5 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 7,
+        speedX: (Math.random() - 0.5) * 2.4,
+        speedY: Math.random() * 3.5 + 1.5,
+        opacity: Math.random() * 0.5 + 0.6
+      }));
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        _confettiParticles.forEach((p) => {
+          ctx.save();
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = p.color;
+          ctx.translate(p.x + p.w / 2, p.y + p.h / 2);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.rotation += p.rotSpeed;
+          if (p.y > canvas.height) {
+            p.y = -20;
+            p.x = Math.random() * canvas.width;
+          }
+        });
+        _confettiFrame = requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function stopConfetti() {
+      if (_confettiFrame) {
+        cancelAnimationFrame(_confettiFrame);
+        _confettiFrame = null;
+      }
+      const canvas = byId("successConfettiCanvas");
+      if (canvas) canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+      _confettiParticles = [];
+    }
+
+    /* =====================================================================
+       INTERACTIVE PARKING RESERVATION ENGINE
+       ===================================================================== */
+    function initParkingLayout() {
+      const pKey = `dd_parking_reservations:${slug}`;
+      if (localStorage.getItem(pKey)) return; // Already seeded
+      const profileLayout = profile.parking_layout;
+      if (profileLayout && profileLayout.zones && profileLayout.zones.length) {
+        localStorage.setItem(pKey, JSON.stringify(profileLayout));
+        return;
+      }
+      // Seed a default layout: 1 EV zone + 1 Regular zone
+      const makeSlots = (prefix, count, type, status) =>
+        Array.from({ length: count }, (_, i) => ({
+          id: `${prefix}-${String(i + 1).padStart(2, "0")}`,
+          label: `${prefix}-${String(i + 1).padStart(2, "0")}`,
+          type,
+          status: i < Math.floor(count * 0.35) ? "occupied" : status
+        }));
+      const defaultLayout = {
+        zones: [
+          {
+            name: "Zone A — EV Charging Bay",
+            cols: 6, rows: 3,
+            slots: makeSlots("EV", 18, "ev", "ev")
+          },
+          {
+            name: "Zone B — Car Parking",
+            cols: 8, rows: 4,
+            slots: makeSlots("CP", 32, "car", "available")
+          },
+          {
+            name: "Zone C — Bike Parking",
+            cols: 6, rows: 3,
+            slots: makeSlots("BP", 18, "bike", "available")
+          }
+        ]
+      };
+      localStorage.setItem(pKey, JSON.stringify(defaultLayout));
+    }
+
+    function handleParkingSlotClick(zoneName, slotId) {
+      const pKey = `dd_parking_reservations:${slug}`;
+      const layout = JSON.parse(localStorage.getItem(pKey)) || { zones: [] };
+      const zone = layout.zones.find(z => z.name === zoneName);
+      if (!zone) return;
+      const slot = zone.slots.find(s => s.id === slotId);
+      if (!slot) return;
+      if (slot.status === "occupied") {
+        showToast("This slot is already occupied.", "error");
+        return;
+      }
+      // Check if user already has an active booking
+      const bKey = `dd_user_parking_booking:${slug}`;
+      const existing = JSON.parse(localStorage.getItem(bKey) || "null");
+      if (existing && existing.slotId === slotId && existing.zoneName === zoneName) {
+        openParkingTicketModal(existing);
+        return;
+      }
+      if (slot.status === "reserved" || slot.status === "ev") {
+        const isEv = slot.type === "ev";
+        openParkingBookingModal(zoneName, slotId, isEv ? "ev" : "car");
+        return;
+      }
+      openParkingBookingModal(zoneName, slotId, slot.type || "car");
+    }
+
+    function openParkingBookingModal(zoneName, slotId, type) {
+      byId("parkingSlotId").value = slotId;
+      byId("parkingZoneId").value = zoneName;
+      byId("parkingSlotLabel").textContent = slotId;
+      const typeLabel = type === "ev" ? "⚡ EV Charging Spot" : type === "bike" ? "🏍️ Bike Spot" : "🚗 Standard Spot";
+      byId("parkingTypeIndicator").textContent = typeLabel;
+      byId("parkingVehicleType").value = type === "ev" ? "ev" : type === "bike" ? "bike" : "car";
+      // Pre-fill arrival time with current time
+      const now = new Date();
+      byId("parkingArrivalTime").value = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+      byId("parkingBookingModal").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeParkingModal() {
+      byId("parkingBookingModal").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    function submitParkingReservation() {
+      const slotId = byId("parkingSlotId").value;
+      const zoneName = byId("parkingZoneId").value;
+      const vehicleNo = byId("parkingVehicleNo").value.trim().toUpperCase();
+      const pilgrimName = byId("parkingPilgrimName").value.trim();
+      const vehicleType = byId("parkingVehicleType").value;
+      const arrivalTime = byId("parkingArrivalTime").value;
+      if (!vehicleNo || !pilgrimName || !arrivalTime) {
+        showToast("Please fill all parking reservation fields.", "error");
+        return;
+      }
+      // Update parking layout in localStorage
+      const pKey = `dd_parking_reservations:${slug}`;
+      const layout = JSON.parse(localStorage.getItem(pKey)) || { zones: [] };
+      const zone = layout.zones.find(z => z.name === zoneName);
+      if (zone) {
+        const slot = zone.slots.find(s => s.id === slotId);
+        if (slot) slot.status = "reserved";
+      }
+      localStorage.setItem(pKey, JSON.stringify(layout));
+      // Save user booking
+      const booking = { slotId, zoneName, vehicleNo, pilgrimName, vehicleType, arrivalTime, ts: Date.now() };
+      localStorage.setItem(`dd_user_parking_booking:${slug}`, JSON.stringify(booking));
+      closeParkingModal();
+      renderParkingLayout();
+      showToast(`Slot ${slotId} reserved for ${vehicleNo}! Show your pass at the gate.`, "success");
+      openParkingTicketModal(booking);
+    }
+
+    function openParkingTicketModal(booking) {
+      byId("ticketTempleName").textContent = profile.temple_name || "Temple";
+      byId("ticketSlotBadge").textContent = `SLOT ${booking.slotId}`;
+      byId("ticketDriver").textContent = booking.pilgrimName;
+      byId("ticketVehicle").textContent = booking.vehicleNo;
+      const typeMap = { car: "🚗 4-Wheeler Car", bike: "🏍️ 2-Wheeler Bike", ev: "⚡ EV Charging Car" };
+      byId("ticketClass").textContent = typeMap[booking.vehicleType] || "Vehicle";
+      byId("ticketArrival").textContent = booking.arrivalTime;
+      byId("parkingTicketModal").classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeParkingTicketModal() {
+      byId("parkingTicketModal").classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    function cancelActiveParkingReservation() {
+      const bKey = `dd_user_parking_booking:${slug}`;
+      const booking = JSON.parse(localStorage.getItem(bKey) || "null");
+      if (!booking) {
+        showToast("No active parking reservation found.", "error");
+        return;
+      }
+      if (!confirm(`Cancel reservation for slot ${booking.slotId}?`)) return;
+      // Free the slot in layout
+      const pKey = `dd_parking_reservations:${slug}`;
+      const layout = JSON.parse(localStorage.getItem(pKey)) || { zones: [] };
+      const zone = layout.zones.find(z => z.name === booking.zoneName);
+      if (zone) {
+        const slot = zone.slots.find(s => s.id === booking.slotId);
+        if (slot) slot.status = slot.type === "ev" ? "ev" : "available";
+      }
+      localStorage.setItem(pKey, JSON.stringify(layout));
+      localStorage.removeItem(bKey);
+      closeParkingTicketModal();
+      renderParkingLayout();
+      showToast("Parking reservation cancelled successfully.", "success");
+    }
+
+    /* =====================================================================
+       EMBEDDED ADMIN DASHBOARD ENGINE
+       ===================================================================== */
+    function initAdminBookings() {
+      const key = `dd_admin_bookings:${slug}`;
+      if (localStorage.getItem(key)) return;
+      // Seed 3 demo bookings
+      const demo = [
+        { id: "TKT-DEMO01", phone: "+91-98XXXXX001", type: "General", date: new Date().toISOString().slice(0,10), slot: "09:00 - 09:30", qty: 2, status: "Pending", ts: Date.now() - 7200000 },
+        { id: "TKT-DEMO02", phone: "+91-98XXXXX002", type: "VIP",     date: new Date().toISOString().slice(0,10), slot: "10:00 - 10:30", qty: 1, status: "Approved", ts: Date.now() - 3600000 },
+        { id: "TKT-DEMO03", phone: "+91-98XXXXX003", type: "Child",   date: new Date().toISOString().slice(0,10), slot: "11:00 - 11:30", qty: 4, status: "Pending", ts: Date.now() - 1800000 },
+      ];
+      localStorage.setItem(key, JSON.stringify(demo));
+    }
+
+    function checkAdminSessionOnLoad() {
+      const token = sessionStorage.getItem(authKey) || localStorage.getItem(authKey);
+      if (!token) return;
+      // Show dashboard directly, skip login
+      byId("adminLoginForm") && (byId("adminLoginForm").classList.add("hidden"));
+      byId("adminDashboardContent") && (byId("adminDashboardContent").classList.remove("hidden"));
+      const email = localStorage.getItem(`${authKey}:email`) || "admin";
+      const statusEl = byId("adminStatusText");
+      if (statusEl) statusEl.textContent = `Logged in as ${email} • Session active`;
+      initAdminBookings();
+      updateAdminDashboardData();
+      // Pre-fill profile editor
+      prefillAdminProfileEditor();
+    }
+
+    function handleAdminLogin() {
+      const email = byId("adminEmail").value.trim();
+      const password = byId("adminPassword").value;
+      // Simulated auth: any email + password "admin" grants access
+      if (!email || password !== "admin") {
+        showToast("Invalid credentials. Try password: admin", "error");
+        return;
+      }
+      sessionStorage.setItem(authKey, "1");
+      localStorage.setItem(authKey, "1");
+      localStorage.setItem(`${authKey}:email`, email);
+      byId("adminLoginForm").classList.add("hidden");
+      byId("adminDashboardContent").classList.remove("hidden");
+      const statusEl = byId("adminStatusText");
+      if (statusEl) statusEl.textContent = `Logged in as ${email} • Session active`;
+      initAdminBookings();
+      updateAdminDashboardData();
+      prefillAdminProfileEditor();
+      renderTabs();
+      showToast("Welcome to the Temple Admin Console.", "success");
+    }
+
+    function handleAdminLogout() {
+      sessionStorage.removeItem(authKey);
+      localStorage.removeItem(authKey);
+      localStorage.removeItem(`${authKey}:email`);
+      byId("adminDashboardContent").classList.add("hidden");
+      byId("adminLoginForm").classList.remove("hidden");
+      byId("adminEmail") && (byId("adminEmail").value = "");
+      byId("adminPassword") && (byId("adminPassword").value = "");
+      renderTabs();
+      showToast("Signed out from Admin Console.", "info");
+    }
+
+    function updateAdminDashboardData() {
+      const adminContent = byId("adminDashboardContent");
+      if (!adminContent || adminContent.classList.contains("hidden")) return;
+      const today = new Date().toISOString().slice(0, 10);
+      // Bookings
+      const bookings = JSON.parse(localStorage.getItem(`dd_admin_bookings:${slug}`) || "[]");
+      const todayBookings = bookings.filter(b => (b.date || "").startsWith(today));
+      const kpiToday = byId("kpiTodayBookings");
+      const kpiTotal = byId("kpiTotalBookings");
+      if (kpiToday) kpiToday.textContent = todayBookings.length;
+      if (kpiTotal) kpiTotal.textContent = bookings.length;
+      // Donations
+      const donations = JSON.parse(localStorage.getItem(`dd_donations:${slug}`) || "[]");
+      const totalDonated = donations.reduce((s, d) => s + Number(d.amount || 0), 0);
+      const kpiDon = byId("kpiTotalDonations");
+      if (kpiDon) kpiDon.textContent = `₹${totalDonated.toLocaleString("en-IN")}`;
+      // Active scans (parking reservations count)
+      const layout = JSON.parse(localStorage.getItem(`dd_parking_reservations:${slug}`) || '{"zones":[]}');
+      const reservedCount = (layout.zones || []).flatMap(z => z.slots || []).filter(s => s.status === "reserved").length;
+      const kpiScans = byId("kpiActiveScans");
+      if (kpiScans) kpiScans.textContent = reservedCount;
+      // Render booking queue table
+      renderAdminBookingsTable(bookings);
+      // Update count badge
+      const badge = byId("bookingCountBadge");
+      if (badge) badge.textContent = `${bookings.length} bookings`;
+    }
+
+    function renderAdminBookingsTable(bookings) {
+      const tbody = byId("adminBookingsTableBody");
+      if (!tbody) return;
+      if (!bookings.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-semibold">No bookings in the queue yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = bookings.slice().reverse().map((b) => {
+        const statusColor = b.status === "Approved" ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+          : b.status === "Visited" ? "bg-blue-50 text-blue-700 ring-blue-600/20"
+          : b.status === "Cancelled" ? "bg-rose-50 text-rose-700 ring-rose-600/20"
+          : "bg-amber-50 text-amber-700 ring-amber-600/20";
+        return `<tr class="border-b border-slate-50 hover:bg-slate-50/60 transition-colors">
+          <td class="p-3 font-mono font-bold text-slate-700">${escapeHtml(b.id)}</td>
+          <td class="p-3 text-slate-500">${escapeHtml(b.phone)}</td>
+          <td class="p-3 font-semibold text-slate-700">${escapeHtml(b.type)}</td>
+          <td class="p-3 text-slate-500">${escapeHtml(b.date)} • ${escapeHtml(b.slot)}</td>
+          <td class="p-3 text-center font-bold text-slate-800">${escapeHtml(String(b.qty))}</td>
+          <td class="p-3 text-center">
+            <span class="rounded-full ring-1 ring-inset px-2 py-1 text-[10px] font-extrabold uppercase tracking-wider ${statusColor}">${escapeHtml(b.status)}</span>
+          </td>
+          <td class="p-3">
+            <div class="flex items-center justify-center gap-1.5">
+              ${b.status === "Pending" ? `<button onclick="changeBookingStatus('${escapeHtml(b.id)}','Approved')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white text-[10px] font-bold cursor-pointer hover:bg-emerald-600 transition-colors">✓ Approve</button>` : ""}
+              ${b.status !== "Visited" && b.status !== "Cancelled" ? `<button onclick="changeBookingStatus('${escapeHtml(b.id)}','Visited')" class="px-2.5 py-1.5 rounded-lg bg-blue-500 text-white text-[10px] font-bold cursor-pointer hover:bg-blue-600 transition-colors">✔ Visited</button>` : ""}
+              ${b.status !== "Cancelled" ? `<button onclick="changeBookingStatus('${escapeHtml(b.id)}','Cancelled')" class="px-2.5 py-1.5 rounded-lg bg-rose-100 text-rose-600 text-[10px] font-bold cursor-pointer hover:bg-rose-200 transition-colors border border-rose-200">✕</button>` : ""}
+            </div>
+          </td>
+        </tr>`;
+      }).join("");
+    }
+
+    function changeBookingStatus(bookingId, newStatus) {
+      const key = `dd_admin_bookings:${slug}`;
+      const bookings = JSON.parse(localStorage.getItem(key) || "[]");
+      const booking = bookings.find(b => b.id === bookingId);
+      if (!booking) return;
+      booking.status = newStatus;
+      localStorage.setItem(key, JSON.stringify(bookings));
+      updateAdminDashboardData();
+      showToast(`Booking ${bookingId} marked as ${newStatus}.`, "success");
+    }
+
+    function toggleBookingStatusAdmin(checkbox) {
+      const pauseOptions = byId("bookingPauseOptions");
+      const label = byId("bookingSwitchLabel");
+      if (checkbox.checked) {
+        pauseOptions && pauseOptions.classList.remove("hidden");
+        if (label) { label.textContent = "Paused — Online bookings disabled"; label.className = "text-xs text-rose-600 font-semibold mt-0.5"; }
+        bookingControlState.paused = true;
+        bookingControlState.reason = byId("pauseReasonSelect")?.value || "Paused by admin";
+      } else {
+        pauseOptions && pauseOptions.classList.add("hidden");
+        if (label) { label.textContent = "Active & Open"; label.className = "text-xs text-emerald-600 font-semibold mt-0.5"; }
+        bookingControlState.paused = false;
+        bookingControlState.reason = "";
+      }
+      renderBookingPauseState();
+      showToast(checkbox.checked ? "Online bookings paused." : "Online bookings reopened.", checkbox.checked ? "error" : "success");
+    }
+
+    function changeCrowdLevelAdmin(level) {
+      const crowdBadge = byId("crowdBadge");
+      if (!crowdBadge) return;
+      const levelMap = {
+        Low: { label: "🟢 Low Crowd", cls: "bg-emerald-500/80" },
+        Moderate: { label: "🟡 Moderate Crowd", cls: "bg-amber-500/80" },
+        High: { label: "🟠 High Crowd", cls: "bg-orange-500/80" },
+        Critical: { label: "🔴 Critical Crowd", cls: "bg-rose-600/80" },
+      };
+      const info = levelMap[level] || levelMap.Moderate;
+      crowdBadge.textContent = info.label;
+      crowdBadge.className = `rounded-full ${info.cls} backdrop-blur-md px-4 py-2 text-xs font-bold uppercase tracking-[0.26em] text-white`;
+      crowdBadge.classList.remove("hidden");
+      showToast(`Crowd level updated to: ${level}`, "success");
+    }
+
+    function prefillAdminProfileEditor() {
+      const overrideKey = `dd_temple_profile:${slug}`;
+      const override = JSON.parse(localStorage.getItem(overrideKey) || "null");
+      const src = override || profile;
+      if (byId("adminTagline")) byId("adminTagline").value = src.tagline || "";
+      if (byId("adminWebsite")) byId("adminWebsite").value = src.website || "";
+      if (byId("adminPhone")) byId("adminPhone").value = src.phone || src.contact_phone || "";
+      if (byId("adminEmailField")) byId("adminEmailField").value = src.email || src.contact_email || "";
+      if (byId("adminUpiId")) byId("adminUpiId").value = src.donation_upi_id || "";
+    }
+
+    function saveProfileAdmin() {
+      const overrideKey = `dd_temple_profile:${slug}`;
+      const existing = JSON.parse(localStorage.getItem(overrideKey) || "null") || { ...profile };
+      const updated = {
+        ...existing,
+        tagline: byId("adminTagline")?.value || existing.tagline,
+        website: byId("adminWebsite")?.value || existing.website,
+        phone: byId("adminPhone")?.value || existing.phone,
+        email: byId("adminEmailField")?.value || existing.email,
+        donation_upi_id: byId("adminUpiId")?.value || existing.donation_upi_id,
+      };
+      localStorage.setItem(overrideKey, JSON.stringify(updated));
+      // Apply changes live
+      Object.assign(profile, updated);
+      renderDonations();
+      const taglineEl = byId("heroTagline");
+      if (taglineEl) taglineEl.textContent = updated.tagline;
+      showToast("Temple profile settings saved & applied.", "success");
+    }
+
+    function scheduleNonCriticalTask(fn) {
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(fn, { timeout: 1000 });
+      } else {
+        setTimeout(fn, 200);
+      }
+    }
+
+    async function loadMicrosite() {
+      try {
+        let data = window.preloadedTempleProfile || null;
+        let bookingControlStateData = { paused: false, reason: "" };
+
+        if (!data) {
+          try {
+            const [profileRes, bookingControlRes] = await Promise.all([
+              fetch(`/api/temple/${slug}`),
+              fetch("/api/admin/booking-control").catch(() => null)
+            ]);
+            if (profileRes && profileRes.ok) {
+              data = await profileRes.json();
+            } else if (profileRes) {
+              const errData = await profileRes.json().catch(() => ({}));
+              throw new Error(errData.error || "Temple profile not found");
+            } else {
+              throw new Error("Unable to reach server");
+            }
+            if (bookingControlRes && bookingControlRes.ok) {
+              const pauseData = await bookingControlRes.json().catch(() => null);
+              if (pauseData) {
+                bookingControlStateData = {
+                  paused: Boolean(pauseData.paused),
+                  reason: pauseData.reason || "",
+                  resumeAt: pauseData.resumeAt || null,
+                };
+              }
+            }
+          } catch (fetchErr) {
+            console.warn("[divyadarshan] Fetch failed, checking local preloaded status:", fetchErr);
+            if (window.preloadedTempleProfile) {
+              data = window.preloadedTempleProfile;
+            } else {
+              throw fetchErr;
+            }
+          }
+        }
+        
+        if (!data) {
+          throw new Error("Temple profile not loaded");
+        }
+        
+        // Apply any admin-saved profile overrides from localStorage first
+        const profileOverride = JSON.parse(localStorage.getItem(`dd_temple_profile:${slug}`) || "null");
+        if (profileOverride) Object.assign(data, profileOverride);
+
+        profile = data;
+        bookingControlState = bookingControlStateData;
+
+        applyTheme();
+        updateSeoMeta();
+        renderTabs();
+        renderHero();
+        renderTempleSearchBar();
+        renderPageMenu();
+        renderTimings();
+        renderBookingPauseState();
+        byId("bookingDate").min = new Date().toISOString().slice(0, 10);
+        byId("bookingDate").value = new Date().toISOString().slice(0, 10);
+        updateBookingTotal();
+        applyPageRoute();
+        checkAdminSessionOnLoad();
+        byId("loadingShell").classList.add("hidden");
+        byId("contentShell").classList.remove("hidden");
+
+        // Non-critical renders - defer for faster initial load
+        scheduleNonCriticalTask(async () => {
+          renderAbout();
+          renderReach();
+        });
+        scheduleNonCriticalTask(async () => {
+          await updateBookingSlots();
+        });
+        scheduleNonCriticalTask(async () => {
+          await loadNearbyTemples();
+        });
+        scheduleNonCriticalTask(async () => {
+          renderSevas();
+          renderPrasadam();
+          renderFacilities();
+          renderParkingLayout();
+          renderDonations();
+          renderEvents();
+          renderSpecialPujas();
+        });
+        scheduleNonCriticalTask(async () => {
+          renderGallery();
+          renderFaqs();
+          renderReviews();
+          renderLive();
+          renderVirtualTour();
+          renderContact();
+          renderAdminBadge();
+          
+          if (profile.is_preview === true) {
+            renderPreviewBanner();
+          } else if (String(profile.status || '').toLowerCase() === 'pending') {
+            renderPendingApprovalBanner();
+          }
+        });
+      } catch (error) {
+        byId("loadingShell").innerHTML = `<div class="surface-card rounded-[28px] p-8 text-sm text-[color:var(--muted)]">${error.message}</div>`;
+      }
+    }
+
+    function renderPreviewBanner() {
+      if (document.getElementById("previewBanner")) return;
+
+      const banner = document.createElement("div");
+      banner.id = "previewBanner";
+      banner.className = "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-4xl backdrop-blur-xl bg-white/80 border border-white/20 shadow-divine rounded-3xl p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 transform scale-100 hover:scale-[1.01] animate-bounce-subtle";
+      
+      banner.innerHTML = `
+        <div class="flex items-center gap-4 text-left">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white text-xl shadow-lg shrink-0">✨</div>
+          <div>
+            <h4 class="text-base font-extrabold text-slate-800 flex items-center gap-2">
+              Live Preview Active
+              <span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-600/10">Active & Live</span>
+            </h4>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+              This microsite is fully functional! Make it permanent on Divya Darshan, download a self-contained offline ZIP, or clear/delete it completely.
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 shrink-0">
+          <button id="btnKeepSite" type="button" onclick="keepSite()" class="rounded-xl bg-[color:var(--primary)] hover:opacity-90 px-4 py-3 text-sm font-bold text-white shadow-md transition-all duration-200 active:scale-95">
+            Keep Site
+          </button>
+          <button id="btnDownloadZip" type="button" onclick="downloadZip()" class="rounded-xl bg-white hover:bg-slate-50 border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-200 flex items-center gap-2 active:scale-95">
+            <span class="material-symbols-outlined text-sm">download_for_offline</span>
+            Download ZIP
+          </button>
+          <button id="btnDeleteSite" type="button" onclick="clearSite()" class="rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 px-4 py-3 text-sm font-bold text-rose-600 shadow-sm transition-all duration-200 active:scale-95">
+            Delete Site
+          </button>
+        </div>
+      `;
+      document.body.appendChild(banner);
+    }
+
+    function renderPendingApprovalBanner() {
+      if (document.getElementById("pendingApprovalBanner")) return;
+      const banner = document.createElement("div");
+      banner.id = "pendingApprovalBanner";
+      banner.className = "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-3xl backdrop-blur-xl bg-amber-50/90 border border-amber-200/60 shadow-2xl rounded-3xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 animate-bounce-subtle";
+      banner.innerHTML = `
+        <div class="flex items-center gap-4 text-left">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center text-white text-xl shadow-lg shrink-0">⏳</div>
+          <div>
+            <h4 class="text-sm font-extrabold text-amber-900 flex items-center gap-2">
+              Awaiting Admin Approval
+              <span class="inline-flex items-center rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800 ring-1 ring-inset ring-amber-600/20 uppercase tracking-wide">Pending</span>
+            </h4>
+            <p class="text-xs text-amber-700 mt-1 leading-relaxed">
+              Your microsite is ready to preview at this URL. It will appear on the DivyaDarshan homepage once a platform admin approves your registration.
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <a href="/dashboard/index.html" class="rounded-xl bg-white border border-amber-200 px-4 py-2.5 text-xs font-bold text-amber-800 shadow-sm hover:bg-amber-50 transition-all duration-200">← Back to Home</a>
+        </div>
+      `;
+      document.body.appendChild(banner);
+    }
+
+    async function keepSite() {
+      const btn = document.getElementById("btnKeepSite");
+      if (btn) btn.disabled = true;
+      showToast("Saving your temple site permanently...", "info");
+      
+      const isOffline = window.location.protocol === 'file:' || !navigator.onLine || window.preloadedTempleProfile;
+      if (isOffline) {
+        setTimeout(() => {
+          profile.is_preview = false;
+          const banner = document.getElementById("previewBanner");
+          if (banner) banner.remove();
+          showToast("Simulated offline: Site saved permanently!", "success");
+        }, 1000);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/temple/${slug}/keep`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to save site");
+        profile.is_preview = false;
+        const banner = document.getElementById("previewBanner");
+        if (banner) banner.remove();
+        showToast("Success! Your temple site is now permanent.", "success");
+      } catch (error) {
+        showToast(error.message, "error");
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function clearSite() {
+      const confirmed = window.confirm("Are you absolutely sure you want to delete this preview site? This will wipe all data and redirect you to registration.");
+      if (!confirmed) return;
+      
+      const btn = document.getElementById("btnDeleteSite");
+      if (btn) btn.disabled = true;
+      showToast("Deleting temple site...", "info");
+
+      const isOffline = window.location.protocol === 'file:' || !navigator.onLine || window.preloadedTempleProfile;
+      if (isOffline) {
+        setTimeout(() => {
+          showToast("Simulated offline: Site deleted. Redirecting...", "success");
+          setTimeout(() => {
+            window.location.href = "/dashboard/registration/register_temple.html";
+          }, 1500);
+        }, 1000);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/temple/${slug}`, {
+          method: "DELETE"
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Unable to delete site");
+        showToast("Site deleted successfully. Redirecting...", "success");
+        setTimeout(() => {
+          window.location.href = "/dashboard/registration/register_temple.html";
+        }, 1500);
+      } catch (error) {
+        showToast(error.message, "error");
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    async function downloadZip() {
+      showToast("Preparing your offline-ready microsite code...", "info");
+      
+      if (typeof JSZip === "undefined") {
+        try {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+            script.onload = resolve;
+            script.onerror = () => reject(new Error("Failed to load JSZip dependency. Are you online?"));
+            document.head.appendChild(script);
+          });
+        } catch (err) {
+          showToast(err.message, "error");
+          return;
+        }
+      }
+      
+      try {
+        const zip = new JSZip();
+        
+        let docHtml = document.documentElement.outerHTML;
+        const preloadedProfile = { ...profile, is_preview: false };
+        
+        const parser = new DOMParser();
+        const cleanDoc = parser.parseFromString(docHtml, "text/html");
+        
+        const bannerEl = cleanDoc.getElementById("previewBanner");
+        if (bannerEl) bannerEl.remove();
+        
+        const scriptTag = cleanDoc.createElement("script");
+        scriptTag.textContent = `window.preloadedTempleProfile = ${JSON.stringify(preloadedProfile, null, 2)};`;
+        cleanDoc.head.insertBefore(scriptTag, cleanDoc.head.firstChild);
+        
+        const finalHtml = "<!DOCTYPE html>\n" + cleanDoc.documentElement.outerHTML;
+        
+        zip.file("index.html", finalHtml);
+        
+        zip.file("README.md", `# Offline Temple Microsite - ${profile.temple_name}\n\nThis is your fully offline-ready temple microsite powered by Divya Darshan.\n\n### How to Run:\nSimply open \`index.html\` in any web browser! All features, including slots, bookings, prasadam, donations, and travel planning, work offline using smart simulated local mocks.\n`);
+        
+        const content = await zip.generateAsync({ type: "blob" });
+        
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = `${profile.slug}-microsite.zip`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast("Microsite ZIP downloaded successfully!", "success");
+      } catch (error) {
+        showToast("Zip compilation failed: " + error.message, "error");
+      }
+    }
+
+    window.scrollToSection = scrollToSection;
+    window.openDirections = openDirections;
+    window.addToCart = addToCart;
+    window.changeCartQty = changeCartQty;
+    window.openGalleryLightbox = openGalleryLightbox;
+    window.selectBookingSlot = selectBookingSlot;
+    window.prefillSpecialPuja = prefillSpecialPuja;
+    window.filterReviews = filterReviews;
+    window.cancelTempleBooking = cancelTempleBooking;
+    window.keepSite = keepSite;
+    window.clearSite = clearSite;
+    window.downloadZip = downloadZip;
+    // Donation
+    window.setDonationAmount = setDonationAmount;
+    window.openUpiDonationModal = openUpiDonationModal;
+    window.closeUpiDonationModal = closeUpiDonationModal;
+    window.simulateUpiSuccess = simulateUpiSuccess;
+    window.closeSuccessModal = closeSuccessModal;
+    window.downloadReceipt = downloadReceipt;
+    // Parking
+    window.handleParkingSlotClick = handleParkingSlotClick;
+    window.closeParkingModal = closeParkingModal;
+    window.submitParkingReservation = submitParkingReservation;
+    window.closeParkingTicketModal = closeParkingTicketModal;
+    window.cancelActiveParkingReservation = cancelActiveParkingReservation;
+    // Admin
+    window.handleAdminLogin = handleAdminLogin;
+    window.handleAdminLogout = handleAdminLogout;
+    window.changeBookingStatus = changeBookingStatus;
+    window.toggleBookingStatusAdmin = toggleBookingStatusAdmin;
+    window.changeCrowdLevelAdmin = changeCrowdLevelAdmin;
+    window.saveProfileAdmin = saveProfileAdmin;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      bindBookingControlStream();
+      loadMicrosite();
+      byId("bookingDate").addEventListener("change", updateBookingSlots);
+      byId("bookingSlot").addEventListener("change", renderBookingSlotsGrid);
+      byId("bookingTicketType").addEventListener("change", updateBookingTotal);
+      byId("bookingQty").addEventListener("input", updateBookingTotal);
+      byId("bookingForm").addEventListener("submit", handleBookingSubmit);
+      byId("placePrasadamOrder").addEventListener("click", placePrasadamOrder);
+      byId("donationForm").addEventListener("submit", handleDonationSubmit);
+      byId("generateTravelPlan").addEventListener("click", generateTravelPlan);
+      byId("donationAmount").addEventListener("input", () => {
+        document.querySelectorAll(".preset-amt-btn").forEach((btn) => {
+          btn.classList.remove("border-[color:var(--primary)]", "bg-[color:var(--primary)]/10", "text-[color:var(--primary)]");
+        });
+      });
+      byId("floatingBookNow").addEventListener("click", () => scrollToSection("booking"));
+      byId("writeReviewBtn").addEventListener("click", () => byId("reviewFormWrap").classList.remove("hidden"));
+      byId("cancelReviewBtn").addEventListener("click", () => byId("reviewFormWrap").classList.add("hidden"));
+      byId("submitReviewBtn").addEventListener("click", () => {
+        const text = byId("reviewText").value.trim();
+        if (!text) return showToast("Write a short review before submitting.", "error");
+        const next = loadStoredReviews();
+        next.unshift({
+          id: `review-${Date.now()}`,
+          name: byId("reviewName").value.trim() || "Temple Visitor",
+          rating: Number(byId("reviewRating").value || 5),
+          text,
+          created_at: new Date().toISOString(),
+        });
+        saveStoredReviews(next);
+        byId("reviewFormWrap").classList.add("hidden");
+        byId("reviewText").value = "";
+        renderReviews();
+        showToast("Review submitted for this temple page.", "success");
+      });
+      byId("reviewSort").addEventListener("change", renderReviews);
+      let searchTimer = null;
+      byId("pageSearchInput").addEventListener("input", (event) => {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => performTempleSearch(event.target.value), 300);
+      });
+      byId("closeLightboxBtn").addEventListener("click", closeGalleryLightbox);
+      byId("lightboxPrev").addEventListener("click", () => shiftGalleryLightbox(-1));
+      byId("lightboxNext").addEventListener("click", () => shiftGalleryLightbox(1));
+      byId("galleryLightbox").addEventListener("click", (event) => {
+        if (event.target === byId("galleryLightbox")) closeGalleryLightbox();
+      });
+      window.addEventListener("keydown", (event) => {
+        if (byId("galleryLightbox").classList.contains("hidden")) return;
+        if (event.key === "Escape") closeGalleryLightbox();
+        if (event.key === "ArrowLeft") shiftGalleryLightbox(-1);
+        if (event.key === "ArrowRight") shiftGalleryLightbox(1);
+      });
+    });
+  </script>
+</body>
+</html>

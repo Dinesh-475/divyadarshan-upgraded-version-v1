@@ -1,0 +1,193 @@
+{
+  "slug": "kedarnath-temple",
+  "status": "active",
+  "created_at": "2026-05-23T12:00:00.000Z",
+  "updated_at": "2026-05-23T12:00:00.000Z",
+  "temple_name": "Kedarnath Temple",
+  "religion": "Hinduism",
+  "temple_type": "Shaiva",
+  "deity_name": "Lord Kedarnath (Shiva)",
+  "sect_denomination": "Shaivism",
+  "established_year": 800,
+  "trust_name": "Shri Badrinath Kedarnath Temple Committee",
+  "tagline": "An ancient stone shrine set against majestic snow-capped Himalayan peaks — one of the sacred Char Dhams.",
+  "historical_significance": "Built of massive grey stone slabs on a ridge in the Garhwal Himalayas at 3,583m altitude. According to legend, the Pandavas built the temple to seek Lord Shiva's penance. It was later revived by Adi Shankaracharya in the 8th century. The temple successfully survived the devastating 2013 floods, standing strong behind a massive boulder (Bhim Shila).",
+  "address_line1": "Kedarnath Valley",
+  "address_line2": "Rudraprayag",
+  "city": "Kedarnath",
+  "state": "Uttarakhand",
+  "pincode": "246445",
+  "country": "India",
+  "latitude": 30.735,
+  "longitude": 79.066,
+  "google_maps_url": "https://maps.google.com/?q=Kedarnath+Temple+Uttarakhand",
+  "nearest_railway": "Rishikesh Railway Station (216 km)",
+  "nearest_airport": "Jolly Grant Airport Dehradun (238 km)",
+  "nearest_bus_stop": "Sonprayag Bus Station (20 km trek/local taxi)",
+  "admin_email": "admin@badrinath-kedarnath.gov.in",
+  "admin_phone": "+91 135 2741600",
+  "admin_password_hash": "$2b$12$6RgRmWJjwRB7W3KmD.c47eGEUwM1Nt8hRl9FB/cGwk1X077IiTwPO",
+  "website_url": "https://badrinath-kedarnath.gov.in",
+  "social_facebook": "",
+  "social_instagram": "",
+  "social_youtube": "",
+  "theme_preset": "Celestial Cool",
+  "background_style": "Snow Caps",
+  "primary_color": "#1e3a8a",
+  "secondary_color": "#3b82f6",
+  "accent_color": "#f59e0b",
+  "logo_url": "https://images.unsplash.com/photo-1626625414467-42b951e60d1b?q=80&w=300&auto=format&fit=crop",
+  "hero_image_url": "https://images.unsplash.com/photo-1626625414467-42b951e60d1b?q=80&w=1600&auto=format&fit=crop",
+  "gallery_urls": [
+    "https://images.unsplash.com/photo-1626625414467-42b951e60d1b?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1200&auto=format&fit=crop"
+  ],
+  "darshan_timings": [
+    { "day": "Sunday",    "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] },
+    { "day": "Monday",    "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] },
+    { "day": "Tuesday",   "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] },
+    { "day": "Wednesday", "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] },
+    { "day": "Thursday",  "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] },
+    { "day": "Friday",    "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] },
+    { "day": "Saturday",  "open": "04:00", "close": "21:00", "closed": false, "sessions": [ { "label": "Morning Darshan", "start": "04:00", "end": "15:00" }, { "label": "Evening Darshan", "start": "17:00", "end": "21:00" } ] }
+  ],
+  "special_days": [
+    { "date": "2026-05-15", "name": "Akshaya Tritiya Opening", "extended_hours": "Grand door opening ceremony. Extended hours apply." }
+  ],
+  "closed_days": [
+    { "start_month": 11, "start_day": 1, "end_month": 4, "end_day": 30, "reason": "Severe winter snowfall makes high altitude valley completely inaccessible. Deities moved to Ukhimath." }
+  ],
+  "entry_fee_general": 0,
+  "entry_fee_vip": 2100,
+  "entry_fee_child": 0,
+  "entry_fee_currency": "INR",
+  "dress_code_mode": "Modest Warm",
+  "dress_code": "Devotees should wear modest clothes. High-altitude winter/thermal wear is strongly advised due to rapid changes in weather.",
+  "special_entry_rules": "Compulsory bio-metric or QR registration is required before starting the trek from Sonprayag. Ponies, palanquins, and helicopters require separate TTD/Govt validation booking.",
+  "service_languages": ["Hindi", "Garhwali", "Sanskrit", "English"],
+  "id_required": true,
+  "photography_allowed": false,
+  "mobile_allowed": true,
+  "sevas": [
+    { "name": "Maha Abhishek Pooja", "description": "Early morning sacred bathing ritual and Panchamrut abhishek performed by the chief priest.", "price": 1700, "duration_min": 60, "slots_per_day": 15 },
+    { "name": "Shiva Sahasranama Archana", "description": "Recitation of Lord Shiva's 1000 names offering sacred bilva leaves.", "price": 250, "duration_min": 30, "slots_per_day": 40 }
+  ],
+  "prasadam_items": [
+    { "name": "Kedarnath Bhabhuti Prasadam", "price": 50, "unit": "packet", "available": true, "image_url": "" }
+  ],
+  "prasadam_counter_open": true,
+  "prasadam_online_order": false,
+  "facilities": {
+    "parking": true,
+    "wheelchair": false,
+    "annadanam": false,
+    "accommodation": true,
+    "drinking_water": true,
+    "restrooms": true,
+    "medical": true,
+    "cloak_room": true,
+    "ev_charging": false
+  },
+  "parking_capacity": 100,
+  "parking_fee_2w": 20,
+  "parking_fee_4w": 80,
+  "accommodation_details": "Base shelters and tents managed by GMVN (Garhwal Mandal Vikas Nigam) are available at Kedarnath base camp. Advance reservation is mandatory.",
+  "annadanam_timings": "",
+  "features_enabled": {
+    "darshan_booking": true,
+    "prasadam_order": false,
+    "donation": false,
+    "travel_planner": true,
+    "live_crowd": true,
+    "virtual_tour": false,
+    "news_updates": true,
+    "volunteer_signup": false,
+    "events_calendar": true
+  },
+  "booking_enabled": true,
+  "slot_duration": 30,
+  "max_visitors_per_slot": 150,
+  "advance_booking_window": 60,
+  "special_puja_bookings": [],
+  "live_stream_url": "",
+  "virtual_tour_url": "",
+  "donation_enabled": false,
+  "major_annual_festivals": [
+    { "name": "Maha Shivaratri", "month": "February/March" },
+    { "name": "Badri-Kedar Utsav", "month": "June" }
+  ],
+  "weekly_special_prayers": [],
+  "special_events_text": "Kedarnath Temple doors open on Akshaya Tritiya (April/May) and close on Yama Dwitiya (Bhai Dooj, October/November) for the winter season.",
+  "events": [],
+  "faqs": [
+    { "question": "How to register for Kedarnath Yatra?", "answer": "Register on the official Uttarakhand Tourism website to get your Yatra QR code." },
+    { "question": "Is accommodation available at the top?", "answer": "Yes, GMVN cottages and local tents can be booked, but availability is highly limited." }
+  ],
+  "visit_plan_title": "Plan Your High Himalayan Pilgrimage",
+  "visit_highlights": [
+    { "label": "Trek", "title": "16 km Himalayan Trek", "description": "Trek starts from Gaurikund. Ponies and local helicoptor transfers are available for booking." },
+    { "label": "Advisory", "title": "Acclimatize Correctly", "description": "Perform medical checkups at Sonprayag. Carry rainwear and portable oxygen cylinders." }
+  ],
+  "visitor_advisories": [
+    { "title": "Extreme Weather Conditions", "description": "Himalayan weather changes rapidly. Check official weather status before starting." }
+  ],
+  "qr_code_url": "https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=https%3A%2F%2F127.0.0.1%3A3001%2Ftemple%2Fkedarnath-temple",
+  "total_scans": 18450,
+  "total_bookings": 84000,
+  "total_donations": 0,
+  "parking_layout": {
+    "zones": [
+      {
+        "id": "lot-gk",
+        "name": "Gaurikund Base Lot",
+        "rows": 3,
+        "cols": 5,
+        "slots": [
+          { "id": "G1", "status": "occupied", "type": "car", "label": "Taxis G-1" },
+          { "id": "G2", "status": "occupied", "type": "car", "label": "Taxis G-2" },
+          { "id": "G3", "status": "available", "type": "car", "label": "Slot G-3" },
+          { "id": "G4", "status": "available", "type": "car", "label": "Slot G-4" },
+          { "id": "G5", "status": "available", "type": "car", "label": "Slot G-5" },
+          { "id": "H1", "status": "occupied", "type": "car", "label": "SUV H-1" },
+          { "id": "H2", "status": "occupied", "type": "car", "label": "SUV H-2" },
+          { "id": "H3", "status": "occupied", "type": "car", "label": "SUV H-3" },
+          { "id": "H4", "status": "available", "type": "car", "label": "Slot H-4" },
+          { "id": "H5", "status": "available", "type": "car", "label": "Slot H-5" },
+          { "id": "I1", "status": "available", "type": "car", "label": "Slot I-1" },
+          { "id": "I2", "status": "available", "type": "car", "label": "Slot I-2" },
+          { "id": "I3", "status": "occupied", "type": "car", "label": "SUV I-3" },
+          { "id": "I4", "status": "occupied", "type": "car", "label": "SUV I-4" },
+          { "id": "I5", "status": "available", "type": "car", "label": "Slot I-5" }
+        ]
+      },
+      {
+        "id": "lot-sp",
+        "name": "Sonprayag Helipad Lot",
+        "rows": 4,
+        "cols": 5,
+        "slots": [
+          { "id": "S1", "status": "occupied", "type": "car", "label": "Car S-1" },
+          { "id": "S2", "status": "occupied", "type": "car", "label": "Car S-2" },
+          { "id": "S3", "status": "available", "type": "car", "label": "Slot S-3" },
+          { "id": "S4", "status": "available", "type": "car", "label": "Slot S-4" },
+          { "id": "S5", "status": "available", "type": "car", "label": "Slot S-5" },
+          { "id": "T1", "status": "occupied", "type": "car", "label": "Car T-1" },
+          { "id": "T2", "status": "occupied", "type": "car", "label": "Car T-2" },
+          { "id": "T3", "status": "available", "type": "car", "label": "Slot T-3" },
+          { "id": "T4", "status": "reserved", "type": "car", "label": "Helipad VIP" },
+          { "id": "T5", "status": "available", "type": "car", "label": "Slot T-5" },
+          { "id": "U1", "status": "available", "type": "car", "label": "Slot U-1" },
+          { "id": "U2", "status": "available", "type": "car", "label": "Slot U-2" },
+          { "id": "U3", "status": "available", "type": "car", "label": "Slot U-3" },
+          { "id": "U4", "status": "available", "type": "car", "label": "Slot U-4" },
+          { "id": "U5", "status": "available", "type": "car", "label": "Slot U-5" },
+          { "id": "V1", "status": "occupied", "type": "car", "label": "Car V-1" },
+          { "id": "V2", "status": "occupied", "type": "car", "label": "Car V-2" },
+          { "id": "V3", "status": "available", "type": "car", "label": "Slot V-3" },
+          { "id": "V4", "status": "available", "type": "car", "label": "Slot V-4" },
+          { "id": "V5", "status": "available", "type": "car", "label": "Slot V-5" }
+        ]
+      }
+    ]
+  }
+}

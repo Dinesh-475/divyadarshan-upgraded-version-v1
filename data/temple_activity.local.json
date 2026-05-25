@@ -1,0 +1,41 @@
+{
+  "bookings": [],
+  "donations": [],
+  "prasadam_orders": [
+    {
+      "id": "PRAS-MOWAXYO1",
+      "temple_slug": "virupaksha-temple-hampi",
+      "items": [
+        {
+          "name": "Temple Prasadam",
+          "qty": 1,
+          "price": 0,
+          "unit": "available at counter after darshan"
+        }
+      ],
+      "total": 0,
+      "phone": null,
+      "pickup_slot": null,
+      "status": "pending",
+      "created_at": "2026-05-08T02:34:44.545Z"
+    },
+    {
+      "id": "PRAS-MOWAY3BI",
+      "temple_slug": "virupaksha-temple-hampi",
+      "items": [
+        {
+          "name": "Temple Prasadam",
+          "qty": 1,
+          "price": 0,
+          "unit": "available at counter after darshan"
+        }
+      ],
+      "total": 0,
+      "phone": "09538999829",
+      "pickup_slot": "3",
+      "status": "pending",
+      "created_at": "2026-05-08T02:34:50.574Z"
+    }
+  ],
+  "qr_scans": []
+}
